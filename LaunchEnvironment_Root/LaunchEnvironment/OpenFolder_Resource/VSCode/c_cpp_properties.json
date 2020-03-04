@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "name": "win32",
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}\\include",
+                "${workspaceFolder}\\src",
+                "${env.CPATH}"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "intelliSenseMode":"clang-x64",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${workspaceFolder}\\include",
+                    "${workspaceFolder}\\src",
+                    "${env.CPATH}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

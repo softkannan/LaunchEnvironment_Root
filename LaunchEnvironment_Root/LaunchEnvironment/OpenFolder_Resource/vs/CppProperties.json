@@ -1,0 +1,28 @@
+﻿{
+	"configurations": [
+		{
+			"name": "VCC",
+			"defines": [ "_DEBUG" ],
+			"compilerSwitches": "/std:c++14",
+			"intelliSenseMode": "windows-msvc-x64",
+			"forcedInclude": [ "pch.h" ],
+			"includePath": [
+				// local include folder
+				"${workspaceRoot}\\include",
+				// Windows SDK and CRT headers
+				"${env.INCLUDE}"
+			]
+		},
+		{
+			"name": "GCC",
+			"intelliSenseMode": "linux-gcc-x64",
+			"defines": [ "_DEBUG" ],
+			"includePath": [
+				// local include folder
+				"${workspaceRoot}\\include",
+				// GCC Include path
+				"${env.CPATH}"
+			]
+		}
+	]
+}

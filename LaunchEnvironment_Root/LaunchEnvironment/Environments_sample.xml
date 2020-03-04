@@ -1,0 +1,704 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+
+Known Environment Variable Lists
+
+***Visual Studio***
+
+DEVPATH -> https://docs.microsoft.com/en-us/dotnet/framework/configure-apps/how-to-locate-assemblies-by-using-devpath
+
+CL and _CL_, if defined. The CL tool prepends the options and arguments defined in the CL environment variable to the command line arguments, and appends the options and arguments defined in _CL_, before processing.
+
+LINK and _LINK_, if defined. The LINK tool prepends the options and arguments defined in the LINK environment variable and appends the options and arguments defined in the _LINK_ environment variable to the command line arguments before processing.
+
+Executable Directories (PATH)
+  Directories in which to search for executable files. Corresponds to the PATH environment variable.
+
+Include Directories (INCLUDE)
+  Directories in which to search for include files that are referenced in the source code. Corresponds to the INCLUDE environment variable.
+
+Reference Directories (LIBPATH)
+  Directories in which to search for assembly and module (metadata) files that are referenced in the source code by the #using directive. 
+  Corresponds to the LIBPATH environment variable.
+
+Library Directories (LIB)
+  Directories in which to search for libraries (.lib) files; this includes run-time libraries. 
+  Corresponds to the LIB environment variable. This setting does not apply to .obj files; to link to an .obj file, 
+  on the LinkerGeneral property page, select Additional Library Dependencies and then specify the relative path of the file.
+
+Source Directories
+  Directories in which to search for source files to use for IntelliSense.
+
+Exclude Directories
+  Directories not to search when checking for build dependencies.
+
+TMP, to specify a directory when linking OMF or .res files.
+
+***For Perl***
+
+PATH
+
+***Python***
+
+PATH
+
+ValueType
+    {
+        //RegistryValueKind the numbers must come from "Microsoft.Win32.RegistryValueKind"
+        //
+        // Summary:
+        //     No data type.
+        None = -1,
+        //
+        // Summary:
+        //     An unsupported registry data type. For example, the Microsoft Win32 API registry
+        //     data type REG_RESOURCE_LIST is unsupported. Use this value to specify that the
+        //     Microsoft.Win32.RegistryKey.SetValue(System.String,System.Object) method should
+        //     determine the appropriate registry data type when storing a name/value pair.
+        Unknown = 0,
+        //
+        // Summary:
+        //     A null-terminated string. This value is equivalent to the Win32 API registry
+        //     data type REG_SZ.
+        String = 1,
+        //
+        // Summary:
+        //     A null-terminated string that contains unexpanded references to environment variables,
+        //     such as %PATH%, that are expanded when the value is retrieved. This value is
+        //     equivalent to the Win32 API registry data type REG_EXPAND_SZ.
+        ExpandString = 2,
+        //
+        // Summary:
+        //     Binary data in any form. This value is equivalent to the Win32 API registry data
+        //     type REG_BINARY.
+        Binary = 3,
+        //
+        // Summary:
+        //     A 32-bit binary number. This value is equivalent to the Win32 API registry data
+        //     type REG_DWORD.
+        DWord = 4,
+        //
+        // Summary:
+        //     An array of null-terminated strings, terminated by two null characters. This
+        //     value is equivalent to the Win32 API registry data type REG_MULTI_SZ.
+        MultiString = 7,
+        //
+        // Summary:
+        //     A 64-bit binary number. This value is equivalent to the Win32 API registry data
+        //     type REG_QWORD.
+        QWord = 11,
+
+
+        Path = 4000 (Expandable / Relative Path)
+    }
+
+
+Action
+    {
+        //Append value to existing environment value / registry value
+        Append,
+        //ovrwrite the existing environment value / registry value
+        Overwrite,
+        //prefix value to existing environment value / registry value
+        Prefix
+    }
+
+-->
+<Configs_Root>
+  <HomePath>G:\csharp</HomePath>
+  <Configs>
+    <Config>
+      <Name>System Default</Name>
+      <Type>none</Type>
+    </Config>
+    <!--ActivePython 3.5-->
+    <Config>
+      <Name>ActivePython 3.5</Name>
+      <Type>python</Type>
+      <InstallPath>%ToolDir%\activepython35</InstallPath>
+      <RegConfigs>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython35\3.5</Key>
+          <RegValues>
+            <RegValue Type="String" >
+              <Name>DisplayName</Name>
+              <Value>activepython35</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SupportUrl</Name>
+              <Value>http://www.python.org/</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>Version</Name>
+              <Value>3.5</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SysVersion</Name>
+              <Value>3.5.4</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SysArchitecture</Name>
+              <Value>64bit</Value>
+            </RegValue>
+          </RegValues>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython35\3.5\InstallPath</Key>
+          <Value>%ToolDir%\activepython35\</Value>
+          <RegValues>
+            <RegValue>
+              <Name>ExecutablePath</Name>
+              <Value>%ToolDir%\activepython35\python.exe</Value>
+            </RegValue>
+            <RegValue>
+              <Name>WindowedExecutablePath</Name>
+              <Value>%ToolDir%\activepython35\pythonw.exe</Value>
+            </RegValue>
+          </RegValues>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython35\3.5\PythonPath</Key>
+          <Value>%ToolDir%\activepython35\;%ToolDir%\activepython35\Lib\;%ToolDir%\activepython35\DLLs\</Value>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython35\3.5\Idle</Key>
+          <Value>%ToolDir%\activepython35\Lib\idlelib\idle.pyw</Value>
+        </RegKey>
+      </RegConfigs>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ToolDir%\activepython35;%ToolDir%\activepython35\Scripts</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--ActivePython 2.7-->
+    <Config>
+      <Name>ActivePython 2.7</Name>
+      <Type>python</Type>
+      <InstallPath>%ToolDir%\activepython27</InstallPath>
+      <RegConfigs>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython27\2.7</Key>
+          <RegValues>
+            <RegValue Type="String" >
+              <Name>DisplayName</Name>
+              <Value>activepython27</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SupportUrl</Name>
+              <Value>http://www.python.org/</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>Version</Name>
+              <Value>2.7</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SysVersion</Name>
+              <Value>2.7.14</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SysArchitecture</Name>
+              <Value>64bit</Value>
+            </RegValue>
+          </RegValues>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython27\2.7\InstallPath</Key>
+          <Value>%ToolDir%\activepython27\</Value>
+          <RegValues>
+            <RegValue>
+              <Name>ExecutablePath</Name>
+              <Value>%ToolDir%\activepython27\python.exe</Value>
+            </RegValue>
+            <RegValue>
+              <Name>WindowedExecutablePath</Name>
+              <Value>%ToolDir%\activepython27\pythonw.exe</Value>
+            </RegValue>
+          </RegValues>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython27\2.7\PythonPath</Key>
+          <Value>%ToolDir%\activepython27\;%ToolDir%\activepython27\Lib\;%ToolDir%\activepython27\DLLs\</Value>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython27\2.7\Idle</Key>
+          <Value>%ToolDir%\activepython27\Lib\idlelib\idle.pyw</Value>
+        </RegKey>
+      </RegConfigs>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ToolDir%\activepython27;%ToolDir%\activepython27\Scripts</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+    <!--Miniconda 3.7-->
+    <Config>
+      <Name>Miniconda3</Name>
+      <Type>python</Type>
+      <InstallPath>%ToolDir%\Miniconda3</InstallPath>
+      <RegConfigs>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\Miniconda3\3.7</Key>
+          <RegValues>
+            <RegValue Type="String" >
+              <Name>DisplayName</Name>
+              <Value>Miniconda3</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SupportUrl</Name>
+              <Value>http://www.python.org/</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>Version</Name>
+              <Value>3.7</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SysVersion</Name>
+              <Value>3.7.0</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SysArchitecture</Name>
+              <Value>64bit</Value>
+            </RegValue>
+          </RegValues>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\Miniconda3\3.7\InstallPath</Key>
+          <Value>%ToolDir%\Miniconda3\</Value>
+          <RegValues>
+            <RegValue>
+              <Name>ExecutablePath</Name>
+              <Value>%ToolDir%\Miniconda3\python.exe</Value>
+            </RegValue>
+            <RegValue>
+              <Name>WindowedExecutablePath</Name>
+              <Value>%ToolDir%\Miniconda3\pythonw.exe</Value>
+            </RegValue>
+          </RegValues>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\Miniconda3\3.7\PythonPath</Key>
+          <Value>%ToolDir%\Miniconda3\;%ToolDir%\Miniconda3\Lib\;%ToolDir%\Miniconda3\DLLs\</Value>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\ActivePython35\3.7\Idle</Key>
+          <Value>%ToolDir%\Miniconda3\Lib\idlelib\idle.pyw</Value>
+        </RegKey>
+      </RegConfigs>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ToolDir%\Miniconda3;%ToolDir%\Miniconda3\Scripts</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--Python 3.7-->
+    <Config>
+      <Name>Python37</Name>
+      <Type>python</Type>
+      <InstallPath>%ToolDir%\Python37</InstallPath>
+      <RegConfigs>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\Python37\3.7</Key>
+          <RegValues>
+            <RegValue Type="String" >
+              <Name>DisplayName</Name>
+              <Value>Python37</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SupportUrl</Name>
+              <Value>http://www.python.org/</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>Version</Name>
+              <Value>3.7</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SysVersion</Name>
+              <Value>3.7.0</Value>
+            </RegValue>
+            <RegValue Type="String" >
+              <Name>SysArchitecture</Name>
+              <Value>64bit</Value>
+            </RegValue>
+          </RegValues>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\Python37\3.7\InstallPath</Key>
+          <Value>%ToolDir%\Python37\</Value>
+          <RegValues>
+            <RegValue>
+              <Name>ExecutablePath</Name>
+              <Value>%ToolDir%\Python37\python.exe</Value>
+            </RegValue>
+            <RegValue>
+              <Name>WindowedExecutablePath</Name>
+              <Value>%ToolDir%\Python37\pythonw.exe</Value>
+            </RegValue>
+          </RegValues>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\Python37\3.7\PythonPath</Key>
+          <Value>%ToolDir%\Python37\;%ToolDir%\Python37\Lib\;%ToolDir%\Python37\DLLs\</Value>
+        </RegKey>
+        <RegKey>
+          <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Python\Python37\3.7\Idle</Key>
+          <Value>%ToolDir%\Python37\Lib\idlelib\idle.pyw</Value>
+        </RegKey>
+      </RegConfigs>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ToolDir%\Python37;%ToolDir%\Python37\Scripts</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+
+    <!--ActivePerl 5.24-->
+    <Config>
+      <Name>ActivePerl 5.24</Name>
+      <Type>perl</Type>
+      <InstallPath>%ToolDir%\activeperl64_5_24</InstallPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ToolDir%\activeperl64_5_24\site\bin;%ToolDir%\activeperl64_5_24\bin</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--ActiveTCL-->
+    <Config>
+      <Name>ActiveTCL</Name>
+      <Type>tcl</Type>
+      <InstallPath>%ToolDir%\activetcl</InstallPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ToolDir%\activetcl\bin</Value>
+        </EnviromentVariable>
+        <EnviromentVariable Action="Overwrite">
+          <Name>AppData</Name>
+          <Value>%ToolDir%</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--Portable Apps-->
+    <Config>
+      <Name>Portable Apps</Name>
+      <Type>app</Type>
+      <InstallPath>%MyTools%\PortableAppCreators</InstallPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%MyTools%\PortableAppCreators\VMware_Thinapp_Enterprise_5.2.3_Build_6945559\App\ThinApp;%MyTools%\PortableAppCreators\Turbo_Studio_18.4.1080\App\Studio;%MyTools%\PortableAppCreators\Turbo_Studio_18.4.1080;%MyTools%\PortableAppCreators\VMware_Thinapp_Enterprise_5.2.3_Build_6945559</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>THINSTALL_BIN</Name>
+          <Value>%MyTools%\PortableAppCreators\VMware_Thinapp_Enterprise_5.2.3_Build_6945559\App\ThinApp</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--VCCommand-->
+    <Config>
+      <Name>VisualStudio Command Prompt</Name>
+      <Type>vcc</Type>
+      <InstallPath>%VS140COMNTOOLS%</InstallPath>
+      <Arguments>/k ""%VS140COMNTOOLS%VsDevCmd.bat""</Arguments>
+    </Config>
+
+    <!--GCC esp8266-->
+    <Config>
+      <Name>GCC esp8266</Name>
+      <Type>gcc_linux</Type>
+      <InstallPath>%SysGCC%\esp8266</InstallPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%SysGCC%\esp8266</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%SysGCC%\esp8266\bin;%SysGCC%\esp8266\xtensa-lx106-elf\bin</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CPATH</Name>
+          <Value>%SysGCC%\esp8266\include;%SysGCC%\esp8266\xtensa-lx106-elf\include;%SysGCC%\esp8266\xtensa-lx106-elf\sys-include;%SysGCC%\esp8266\lib\gcc\xtensa-lx106-elf\5.2.0\include</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LIB</Name>
+          <Value>%SysGCC%\esp8266\xtensa-lx106-elf\lib;%SysGCC%\esp8266\lib</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CPATH</Name>
+          <Value>%INCLUDE%</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LIBRARY_PATH</Name>
+          <Value>%LIB%</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LIBPATH</Name>
+          <Value>%LIB%</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CC</Name>
+          <Value>g++</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LINK</Name>
+          <Value>g++</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>TARGET_ARCHITECTURE</Name>
+          <Value>ARM</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>TARGET_PLATFORM</Name>
+          <Value>LINUX</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CCFLAGS</Name>
+          <Value>-c</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LINKFLAGS</Name>
+          <Value></Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>DEBUGFLAGS</Name>
+          <Value>-g</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--GCC mingw64-->
+    <Config>
+      <Name>GCC mingw64</Name>
+      <InstallPath>%SysGCC%\mingw64</InstallPath>
+      <Type>gcc</Type>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%SysGCC%\mingw64</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%SysGCC%\mingw64\bin;%SysGCC%\mingw64\x86_64-w64-mingw32\bin</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CPATH</Name>
+          <Value>%SysGCC%\mingw64\include;%SysGCC%\mingw64\include\c++\4.7.1;%SysGCC%\mingw64\x86_64-w64-mingw32\include</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LIBRARY_PATH</Name>
+          <Value>%SysGCC%\mingw64\lib;%SysGCC%\mingw64\x86_64-w64-mingw32\lib</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CC</Name>
+          <Value>g++</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LINK</Name>
+          <Value>g++</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>TARGET_ARCHITECTURE</Name>
+          <Value>AMD64</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>TARGET_PLATFORM</Name>
+          <Value>WIN32</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CCFLAGS</Name>
+          <Value>-c</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LINKFLAGS</Name>
+          <Value></Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>DEBUGFLAGS</Name>
+          <Value>-g</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--GCC mingw32-->
+    <Config>
+      <Name>GCC mingw32</Name>
+      <InstallPath>%MyTools%\compilers\mingw32</InstallPath>
+      <Type>gcc</Type>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%MyTools%\compilers\mingw32</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%MyTools%\compilers\mingw32\bin;%MyTools%\compilers\mingw32\i686-w64-mingw32\bin</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CPATH</Name>
+          <Value>%MyTools%\compilers\mingw32\lib\gcc\i686-w64-mingw32\6.1.0\include;%MyTools%\compilers\mingw32\lib\gcc\i686-w64-mingw32\6.1.0\include\c++;%MyTools%\compilers\mingw32\include;%MyTools%\compilers\mingw32\i686-w64-mingw32\include</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LIBRARY_PATH</Name>
+          <Value>%MyTools%\compilers\mingw32\lib\gcc\i686-w64-mingw32\6.1.0;%MyTools%\compilers\mingw32\lib;%MyTools%\compilers\mingw32\i686-w64-mingw32\lib</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CC</Name>
+          <Value>g++</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LINK</Name>
+          <Value>g++</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>TARGET_ARCHITECTURE</Name>
+          <Value>WIN32</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>TARGET_PLATFORM</Name>
+          <Value>WIN32</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CCFLAGS</Name>
+          <Value>-c</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LINKFLAGS</Name>
+          <Value></Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>DEBUGFLAGS</Name>
+          <Value>-g</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--GCC raspberrypi-->
+    <Config>
+      <Name>GCC Raspberry</Name>
+      <InstallPath>%SysGCC%\Raspberry</InstallPath>
+      <Type>gcc_linux</Type>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%SysGCC%\Raspberry</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%SysGCC%\Raspberry\bin;%SysGCC%\Raspberry\arm-linux-gnueabihf\bin</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CPATH</Name>
+          <Value>%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\usr\include\c++\4.9;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\usr\include;%SysGCC%\Raspberry\arm-linux-gnueabihf\include;%SysGCC%\Raspberry\arm-linux-gnueabihf\include\c++\4.9;%SysGCC%\Raspberry\lib\gcc\arm-linux-gnueabihf\4.9\include</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LIBRARY_PATH</Name>
+          <Value>%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\lib\arm-linux-gnueabihf;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\lib;%SysGCC%\Raspberry\lib;%SysGCC%\Raspberry\arm-linux-gnueabihf\lib;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\lib;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\usr\lib;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\usr\local\lib</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CC</Name>
+          <Value>g++</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LINK</Name>
+          <Value>g++</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>TARGET_ARCHITECTURE</Name>
+          <Value>ARM</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>TARGET_PLATFORM</Name>
+          <Value>LINUX</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>CCFLAGS</Name>
+          <Value>-c</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>LINKFLAGS</Name>
+          <Value></Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>DEBUGFLAGS</Name>
+          <Value>-g</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--nodejs-->
+    <Config>
+      <Name>Node Js</Name>
+      <Type>nodejs</Type>
+      <InstallPath>%MyTools%\compilers\nodejs</InstallPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%MyTools%\compilers\nodejs</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--WinDbg-->
+    <Config>
+      <Name>Windbg</Name>
+      <Type>windbg</Type>
+      <InstallPath>%ToolDir%\Debuggers\Windbg</InstallPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ToolDir%\Debuggers\Scripts</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>Scripts</Name>
+          <Value>%ToolDir%\Debuggers\Scripts</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>_NT_SYMBOL_PATH</Name>
+          <Value>srv*C:\DebugSymbols\Microsoft*https://msdl.microsoft.com/download/symbols</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+    
+    <!--Arduino-->
+    <Config>
+      <Name>Arduino</Name>
+      <Type>arduino</Type>
+      <InstallPath>%ToolDir%\arduino\tool</InstallPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ToolDir%\arduino\tool</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+    
+    <!--VirtualBox-->
+    <Config>
+      <Name>VirtualBox</Name>
+      <Type>app</Type>
+      <InstallPath>%ProgramFiles%\Oracle\VirtualBox</InstallPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ProgramFiles%\Oracle\VirtualBox</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+  
+
+  </Configs>
+</Configs_Root>

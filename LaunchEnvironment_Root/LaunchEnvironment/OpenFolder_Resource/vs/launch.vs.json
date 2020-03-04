@@ -1,0 +1,139 @@
+﻿{
+	"version": "0.2.1",
+	"defaults": {},
+	"configurations": [
+    {
+      "type": "cppdbg",
+      "project": "makefile",
+      "name": "makefile-gdb",
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceRoot}\\bin\\${OUTPUTNAME}.exe",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb.exe",
+      "externalConsole": true,
+      "args": []
+    },
+		{
+			"type": "mixed",
+			"name": "makefile-vcc",
+			"project": "makefile"
+		},
+    {
+      "type": "cppdbg",
+      "name": "makefile-attach-gdb",
+      "project": "makefile",
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceRoot}\\bin\\${OUTPUTNAME}.exe",
+      "processId": 0,
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb.exe",
+      "externalConsole": true
+    },
+		{
+			"type": "cppdbg",
+			"name": "makefile-linux",
+			"project": "makefile",
+			"cwd": "${debugInfo.remoteWorkspaceRoot}",
+			"program": "${debugInfo.fullTargetPath}",
+			"MIMode": "gdb",
+			"externalConsole": true,
+			"remoteMachineName": "${debugInfo.remoteMachineName}",
+			"pipeTransport": {
+				"pipeProgram": "${debugInfo.shellexecPath}",
+				"pipeArgs": [
+					"/s",
+					"${debugInfo.remoteMachineId}",
+					"/p",
+					"${debugInfo.parentProcessId}",
+					"/c",
+					"${debuggerCommand}",
+					"--tty=${debugInfo.tty}"
+				],
+				"debuggerPath": "/usr/bin/gdb"
+			},
+			"setupCommands": [
+				{
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			],
+			"visualizerFile": "${debugInfo.linuxNatvisPath}",
+			"showDisplayString": true
+		},
+		{
+			"type": "cppdbg",
+			"name": "makefile-attach-linux",
+			"project": "makefile",
+			"cwd": "${debugInfo.remoteWorkspaceRoot}",
+			"program": "${debugInfo.fullTargetPath}",
+			"processId": 0,
+			"MIMode": "gdb",
+			"externalConsole": true,
+			"remoteMachineName": "${debugInfo.remoteMachineName}",
+			"pipeTransport": {
+				"pipeProgram": "${debugInfo.shellexecPath}",
+				"pipeArgs": [
+					"/s",
+					"${debugInfo.remoteMachineId}",
+					"/p",
+					"${debugInfo.parentProcessId}",
+					"/c",
+					"${debuggerCommand}"
+				],
+				"debuggerPath": "/usr/bin/gdb"
+			},
+			"setupCommands": [
+				{
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			],
+			"visualizerFile": "${debugInfo.linuxNatvisPath}",
+			"showDisplayString": true
+		},
+    {
+      "type": "cppdbg",
+      "name": "makefile-gdbserver",
+      "project": "makefile",
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceRoot}\\BUILD\\${OUTPUTNAME}.elf",
+      "MIMode": "gdb",
+      "externalConsole": true,
+      "inheritEnvironments": [
+        "gcc_arm"
+      ],
+      "miDebuggerPath": "gdb.exe",
+      "setupCommands": [
+        {
+          "text": "Documentation: Learn how to configure embedded debugging",
+          "description": "See here for more info http://aka.ms/vsembeddeddebug",
+          "ignoreFailures": true
+        },
+        {
+          "text": "-file-exec-and-symbols ${workspaceRootFolderName}.elf"
+        },
+        {
+          "text": "-environment-cd ${workspaceRoot}/BUILD"
+        },
+        {
+          "text": "-file-exec-and-symbols ${workspaceRootFolderName}.elf",
+          "description": "load file",
+          "ignoreFailures": false
+        },
+        {
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "visualizerFile": "${debugInfo.linuxNatvisPath}",
+      "showDisplayString": true,
+      "miDebuggerServerAddress": "localhost:3333",
+      "launchCompleteCommand": "None",
+      "debugServerPath": "gdbserver.exe",
+      "debugServerArgs": "-f path-to-your/board.cfg",
+      "serverStarted": "GDB\\ server\\ started",
+      "filterStderr": true,
+      "filterStdout": true
+    }
+	]
+}

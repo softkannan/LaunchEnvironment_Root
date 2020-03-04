@@ -1,0 +1,12 @@
+REGEDIT4
+
+[HKEY_CLASSES_ROOT\Folder\shell\LaunchEnvironment]
+
+[HKEY_CLASSES_ROOT\Folder\shell\LaunchEnvironment\command]
+@="G:\\csharp\\LaunchVisualStudio\\bin\\Release\\LaunchVisualStudio.exe \\\"%1\\\""
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\LaunchEnvironment]
+"NoWorkingDirectory"=""
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\LaunchEnvironment\command]
+@="G:\\csharp\\LaunchVisualStudio\\bin\\Release\\LaunchVisualStudio.exe \\\"%V\\\""

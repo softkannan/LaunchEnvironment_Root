@@ -1,0 +1,34 @@
+﻿{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "makefile-build",
+      "appliesTo": "makefile",
+      "type": "command",
+      "contextType": "build",
+      "command": "make",
+      "args": [
+        "debug"
+      ],
+      "output": "${workspaceRoot}\\bin\\${OUTPUTNAME}.exe"
+    },
+    {
+      "taskName": "build-release",
+      "appliesTo": "makefile",
+      "type": "command",
+      "contextType": "custom",
+      "command": "make",
+      "output": "${workspaceRoot}\\bin\\${OUTPUTNAME}.exe"
+    },
+    {
+      "taskName": "makefile-clean",
+      "appliesTo": "makefile",
+      "type": "command",
+      "contextType": "clean",
+      "command": "make",
+      "args": [
+        "clean"
+      ]
+    }
+  ]
+}
