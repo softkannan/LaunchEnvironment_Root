@@ -5,22 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LaunchEnvironment.Config;
+using System.Reflection;
 
 namespace LaunchEnvironment.RegConfig
 {
     public class RegConfigBase
     {
-        public static RegConfigBase GetConfig(ConfigType type)
+        public static RegConfigBase GetConfig(string type, string suffix = "RegConfig")
         {
-            switch(type)
+            RegConfigBase retVal = null;
+            Type foundType = Assembly.GetExecutingAssembly().GetType(string.Format("LaunchEnvironment.RegConfig.{0}{1}", type, suffix));
+            if(foundType != null)
             {
-                case ConfigType.vcc:
-                    return new VCRegConfig();
-                case ConfigType.python:
-                    return new PythonRegConfig();
-                default:
-                    return new RegConfigBase();
+                retVal = Activator.CreateInstance(foundType) as RegConfigBase;
             }
+            if(retVal == null)
+            {
+                retVal = new RegConfigBase();
+            }
+            return retVal;
         }
 
         protected virtual RegistryKey LocalMachine

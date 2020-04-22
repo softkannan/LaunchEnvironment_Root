@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LaunchEnvironment.Config
 {
-    public enum ConfigType
+    public enum ConfigType23
     {
         none,
         app,

@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaunchEnvironment.VSCode.arduino.boardinfo
+namespace LaunchEnvironment.Config
 {
-    public class help_info
+    public enum ToolType
     {
-        public string online { get; set; }
+        RegularApp,
+        StoreApp,
+        DynamicApp,
+        Action
     }
 }

@@ -31,7 +31,7 @@ namespace LaunchEnvironment
         {
             this.CenterToScreen();
 
-            environmentLabel.Text = string.Format("Select Environment for : {0}", RuntimeInfo.Inst.ToolLaunchDir);
+            _environmentLabel.Text = string.Format("Select Environment for : {0}", RuntimeInfo.Inst.OpenFolder);
 
             if (RuntimeInfo.Inst.IsElevated)
             {
@@ -45,19 +45,19 @@ namespace LaunchEnvironment
 
         private void openToolFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (envList.SelectedItem != null)
+            if (_configListBox.SelectedItem != null)
             {
-                var envName = envList.SelectedItem as string;
+                var envName = _configListBox.SelectedItem as string;
                 var envItem = Configs_Root.Inst.Configs.FirstOrDefault((item) => item.Name == envName);
                 if (envItem != null)
                 {
-                    if (Directory.Exists(ResolveValue.Inst.ResolveFullPath(envItem.InstallPath)))
+                    if (Directory.Exists(ResolveValue.Inst.ResolveFullPath(envItem.ConfigPath)))
                     {
-                        Process.Start(string.Format(@"{0}\explorer.exe", Environment.GetFolderPath(Environment.SpecialFolder.Windows)), string.Format("\"{0}\"", ResolveValue.Inst.ResolveFullPath(envItem.InstallPath)));
+                        Process.Start(string.Format(@"{0}\explorer.exe", Environment.GetFolderPath(Environment.SpecialFolder.Windows)), string.Format("\"{0}\"", ResolveValue.Inst.ResolveFullPath(envItem.ConfigPath)));
                     }
                     else
                     {
-                        ErrorLog.Inst.LogError("Unable to locate folder : {0}", ResolveValue.Inst.ResolveFullPath(envItem.InstallPath));
+                        ErrorLog.Inst.LogError("Unable to locate folder : {0}", ResolveValue.Inst.ResolveFullPath(envItem.ConfigPath));
                     }
                 }
             }
@@ -70,26 +70,13 @@ namespace LaunchEnvironment
             form.ShowDialog();
         }
 
-        private void EditorsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var menuItem = sender as ToolStripItem;
-
-            if(menuItem != null)
-            {
-                var launcher = Editors.EditorFactory.Inst.GetEditor(menuItem.Tag as string);
-
-                var config = BuildLaunchConfig();
-
-                launcher.Launch(config);
-            }
-        }
-
-        private void EditorsToolStripActionMenuItem_Click(object sender, EventArgs e)
+        private void ToolButtonOrContextMenuItem_Click(object sender, EventArgs e)
         {
             var menuItem = sender as ToolStripItem;
 
             if (menuItem != null)
             {
+                // split tag value 
                 var toolNameAndVerb = (menuItem.Tag as string).Split(';');
                 string toolName = "";
                 string verb = "";
@@ -99,23 +86,21 @@ namespace LaunchEnvironment
                     toolName = toolNameAndVerb[0];
                 }
 
+                //Check click comes from RunAs context menu item 
                 if(toolName == "ContextMenu")
                 {
-                    toolName = runAsContext.Tag as string;
+                    //if runs as context menu is clicked then user selected button infromation is stored in root node of the context menu
+                    //the tag value contains the user selected tool name and update the tool name value
+                    toolName = _runAsContext.Tag as string;
                 }
 
+                //if menu item contains verb then update verb part
                 if(toolNameAndVerb.Length > 1)
                 {
                     verb = toolNameAndVerb[1];
                 }
 
-                var launcher = Editors.EditorFactory.Inst.GetEditor(toolName);
-
-                var config = BuildLaunchConfig();
-
-                config.Verb = verb;
-
-                launcher.Launch(config);
+                LaunchTool(toolName, verb);
             }
         }
         private void StripButton_MouseDown(object sender, MouseEventArgs e)
@@ -124,7 +109,7 @@ namespace LaunchEnvironment
             if (e.Button == MouseButtons.Right)
             {
                 int x = 0;
-                foreach(ToolStripItem item in mainToolBar.Items)
+                foreach(ToolStripItem item in _mainToolBar.Items)
                 {
                     x += item.Width;
                     if(item.Tag == stripItem.Tag)
@@ -133,8 +118,8 @@ namespace LaunchEnvironment
                         break;
                     }
                 }
-                runAsContext.Tag = stripItem.Tag;
-                runAsContext.Show(mainToolBar, new Point(x, stripItem.Height),ToolStripDropDownDirection.BelowRight);
+                _runAsContext.Tag = stripItem.Tag;
+                _runAsContext.Show(_mainToolBar, new Point(x, stripItem.Height),ToolStripDropDownDirection.BelowRight);
             }
             else if(e.Button == MouseButtons.Left)
             {
@@ -145,13 +130,30 @@ namespace LaunchEnvironment
                     {
                         return;
                     }
-                    var launcher = Editors.EditorFactory.Inst.GetEditor(stripItem.Tag as string);
 
-                    var config = BuildLaunchConfig();
-
-                    launcher.Launch(config);
+                    LaunchTool(stripItem.Tag as string);
                 }
             }
+        }
+
+        void LaunchTool(string toolName, string verb = "")
+        {
+            var editorObj = Editors.EditorFactory.Inst.GetEditor(toolName);
+
+            if(editorObj == null)
+            {
+                ErrorLog.Inst.ShowError("Unable to find editor for given tool : {0} , verify tools.xml", toolName);
+                return;
+            }
+
+            var config = BuildLaunchConfig();
+
+            if (!string.IsNullOrWhiteSpace(verb))
+            {
+                config.Verb = verb;
+            }
+
+            editorObj.Launch(config);
         }
 
         #endregion

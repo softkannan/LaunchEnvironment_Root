@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LaunchEnvironment.Editors
 {
@@ -11,13 +13,6 @@ namespace LaunchEnvironment.Editors
     {
         private static EditorFactory _inst = new EditorFactory();
         public static EditorFactory Inst  { get => _inst; }
-
-        private Dictionary<string, Func<string, EditorDefault>> _listOfBuilders = new Dictionary<string, Func<string, EditorDefault>>();
-
-        public void AddBuilder(string toolName,Func<string,EditorDefault> buildAction)
-        {
-            _listOfBuilders[toolName] = buildAction;
-        }
 
         public EditorDefault GetEditor(string toolName)
         {
@@ -27,41 +22,36 @@ namespace LaunchEnvironment.Editors
                 lookUpName = toolName.Substring(0, toolName.LastIndexOf("-32Bit"));
             }
 
-            switch (lookUpName)
+            var tool = RuntimeInfo.Inst.GetTool(lookUpName);
+
+            if(tool == null)
             {
-                case RuntimeInfo.Arduino:
-                    return new ArduinoEditor();
-                case RuntimeInfo.CodeBlocks:
-                    return new Editors.CodeBlocksEditor();
-                case RuntimeInfo.CodeLite:
-                    return new Editors.CodeLiteEditor();
-                case RuntimeInfo.Komodo:
-                    return new Editors.KomodoEditor();
-                case RuntimeInfo.MobXTerm:
-                    return new Editors.MobXtermEditor();
-                case RuntimeInfo.Python:
-                    return new Editors.PythonEditor();
-                case RuntimeInfo.VSCode:
-                    return new Editors.VSCodeEditor();
-                case RuntimeInfo.VSStudio:
-                    return new Editors.VisualStudioEditor();
-                case RuntimeInfo.WinDbg:
-                    return new Editors.WinDbgEditor(toolName);
-                case RuntimeInfo.WingIDE:
-                    return new Editors.WingIDEEditor();
-                case RuntimeInfo.OpenSSH:
-                    return new Editors.OpenSSHEditor();
+                ErrorLog.Inst.ShowError("Unable to find Tool : {0}, please verify Tools.xml", lookUpName);
+                return null;
             }
 
-            Func<string, EditorDefault> buildAction;
-            if(_listOfBuilders.TryGetValue(lookUpName,out buildAction))
+            // if custom editor is defined then use defined editor.
+            var tempEditorName = tool.Editor;
+            if(!string.IsNullOrWhiteSpace(tempEditorName))
             {
-                return buildAction(toolName);
+                lookUpName = tempEditorName;
+            }
+
+            EditorDefault retVal = null;
+
+            Type typeObj = Assembly.GetExecutingAssembly().GetType(string.Format("LaunchEnvironment.Editors.{0}Editor",lookUpName));
+            if (typeObj != null)
+            {
+                retVal = Activator.CreateInstance(typeObj) as EditorDefault;
             }
             else
             {
-                return new Editors.EditorDefault(toolName);
+                retVal = new Editors.EditorDefault();
             }
+
+            retVal.Initialize(tool);
+
+            return retVal;
         }
     }
 }

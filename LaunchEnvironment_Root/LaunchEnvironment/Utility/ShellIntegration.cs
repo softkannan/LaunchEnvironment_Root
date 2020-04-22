@@ -26,9 +26,13 @@ namespace LaunchEnvironment.Utility
 
                 return true;
             }
-            else if (!RuntimeInfo.Inst.IsElevated)
+            else if (!Debugger.IsAttached && !RuntimeInfo.Inst.IsElevated)
             {
-                ErrorLog.Inst.ShowError("Open Environment Tool with administrator privilege");
+
+                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\Directory\shell\LaunchEnvironment\command", "", string.Format("{0} \"%V\"", Assembly.GetExecutingAssembly().Location));
+
+                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\LaunchEnvironment", "NoWorkingDirectory", "");
+                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\LaunchEnvironment\command", "", string.Format("{0} \"%V\"", Assembly.GetExecutingAssembly().Location));
             }
 
             return false;

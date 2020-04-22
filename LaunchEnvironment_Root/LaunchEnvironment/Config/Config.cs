@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace LaunchEnvironment.Config
 {
@@ -10,19 +11,24 @@ namespace LaunchEnvironment.Config
     {
         public Config()
         {
-            Type = ConfigType.app;
+            Id = "generic";
             Name = "Unknown";
-            Arguments = "";
+            Arguments = null;
             RegConfigs = null;
             Envs = null;
+            CopyFiles = null;
         }
         public string Name { get; set; }
-        public ConfigType Type { get; set; }
-        public string InstallPath { get; set; }
+        public string Id { get; set; }
+        public string ConfigPath { get; set; }
+        public string DefaultWorkspace { get; set; }
+        public List<FileCopy> CopyFiles { get; set; }
         /// <summary>
         /// If this value present then the tool will use this value, this takes precedence
         /// </summary>
-        public string Arguments { get; set; }
+        [XmlArray("Arguments")]
+        [XmlArrayItem(ElementName = "Arg")]
+        public List<string> Arguments { get; set; }
         public List<RegKey> RegConfigs { get; set; }
         public List<EnviromentVariable> Envs { get; set; }
     }

@@ -10,6 +10,45 @@ namespace LaunchEnvironment.Utility
 {
     public static class Utility
     {
+        public static string MatchReplace(this string pThis,string matchStr, string replaceStr,out bool foundMatch)
+        {
+            foundMatch = false;
+            StringBuilder retVal = null;
+            if (string.IsNullOrWhiteSpace(pThis) || string.IsNullOrWhiteSpace(matchStr) || string.IsNullOrWhiteSpace(replaceStr))
+            {
+                return "";
+            }
+
+            if(matchStr.Length > pThis.Length)
+            {
+                return pThis;
+            }
+
+            int previousIndex = 0;
+            int index = pThis.IndexOf(matchStr, StringComparison.OrdinalIgnoreCase);
+            if (index != -1)
+            {
+                foundMatch = true;
+                retVal = new StringBuilder();
+            }
+
+            while (index != -1)
+            {
+                retVal.Append(pThis.Substring(previousIndex, index - previousIndex));
+                retVal.Append(replaceStr);
+                index += matchStr.Length;
+
+                previousIndex = index;
+                index = pThis.IndexOf(matchStr, index, StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (retVal != null)
+            {
+                retVal.Append(pThis.Substring(previousIndex));
+                return retVal.ToString();
+            }
+            return pThis;
+        }
         public static bool IsExists<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             bool retVal = false;

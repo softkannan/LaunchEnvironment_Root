@@ -80,17 +80,16 @@
     <Compile Include="Config\Action.cs" />
     <Compile Include="Config\EnvironmentAction.cs" />
     <Compile Include="Config\EnvironmentValueType.cs" />
+    <Compile Include="Config\FileCopy.cs" />
     <Compile Include="Config\MenuBar.cs" />
     <Compile Include="Config\ResolveValue.cs" />
     <Compile Include="Config\Tool.cs" />
     <Compile Include="Config\ToolBarItem.cs" />
-    <Compile Include="Editors\ArduinoEditor.cs" />
+    <Compile Include="Config\ToolType.cs" />
     <Compile Include="Editors\CodeBlocksEditor.cs" />
     <Compile Include="Editors\CodeLiteEditor.cs" />
     <Compile Include="Editors\EditorFactory.cs" />
     <Compile Include="Editors\KnownCommandEditor.cs" />
-    <Compile Include="Editors\OpenSSHEditor.cs" />
-    <Compile Include="Editors\WinDbgEditor.cs" />
     <Compile Include="Forms\OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,13 +102,7 @@
     <Compile Include="Config\EnviromentVariable.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\Configs.cs" />
-    <Compile Include="Editors\KomodoEditor.cs" />
-    <Compile Include="Editors\MobXtermEditor.cs" />
-    <Compile Include="Editors\PythonEditor.cs" />
-    <Compile Include="Editors\VSCodeEditor.cs" />
-    <Compile Include="Editors\WingIDEEditor.cs" />
     <Compile Include="Utility\GUIUtility.cs" />
-    <Compile Include="Utility\PythonEnvironment.cs" />
     <Compile Include="ErrorLog.cs" />
     <Compile Include="Config\LaunchConfig.cs" />
     <Compile Include="Editors\EditorDefault.cs" />
@@ -131,7 +124,7 @@
     <Compile Include="Config\RegKey.cs" />
     <Compile Include="RegConfig\RegConfigBase.cs" />
     <Compile Include="Config\ConfigType.cs" />
-    <Compile Include="Editors\VisualStudioEditor.cs" />
+    <Compile Include="Editors\VSStudioEditor.cs" />
     <Compile Include="RegConfig\RegistryHive.cs" />
     <Compile Include="Config\RegValue.cs" />
     <Compile Include="RegConfig\VCRegConfig.cs" />
@@ -139,42 +132,6 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Utility\ShellIntegration.cs" />
     <Compile Include="Utility\Utility.cs" />
-    <Compile Include="VSCode\arduino\arduino_json.cs" />
-    <Compile Include="VSCode\arduino\boardinfo\boardinfo_root.cs" />
-    <Compile Include="VSCode\arduino\boardinfo\board_help.cs" />
-    <Compile Include="VSCode\arduino\boardinfo\board_info.cs" />
-    <Compile Include="VSCode\arduino\boardinfo\package_root.cs" />
-    <Compile Include="VSCode\arduino\boardinfo\platform.cs" />
-    <Compile Include="VSCode\arduino\boardinfo\system_info.cs" />
-    <Compile Include="VSCode\arduino\boardinfo\tool_dependancy.cs" />
-    <Compile Include="VSCode\arduino\boardinfo\tool_info.cs" />
-    <Compile Include="VSCode\c_cpp_properties\browse_json.cs" />
-    <Compile Include="VSCode\c_cpp_properties\configuration_json.cs" />
-    <Compile Include="VSCode\c_cpp_properties\c_cpp_properties_json.cs" />
-    <Compile Include="VSCode\launch\debugger_json.cs" />
-    <Compile Include="VSCode\launch\gcc_config_json.cs" />
-    <Compile Include="VSCode\launch\gcc_launch_json.cs" />
-    <Compile Include="VSCode\launch\launch_config_json.cs" />
-    <Compile Include="VSCode\settings\arduino_settings_json.cs" />
-    <Compile Include="VSCode\settings\FlatFileJsonConverter.cs" />
-    <Compile Include="VSCode\settings\python_settings_autoComplete_json.cs" />
-    <Compile Include="VSCode\settings\python_settings_json.cs" />
-    <Compile Include="VSCode\task\presentation_json.cs" />
-    <Compile Include="VSCode\launch\python_config_json.cs" />
-    <Compile Include="VSCode\launch\python_launch_json.cs" />
-    <Compile Include="VSCode\settings\settings_json.cs" />
-    <Compile Include="VSCode\launch\setupCommands_json.cs" />
-    <Compile Include="VSCode\task\task_json.cs" />
-    <Compile Include="VSCode\task\build_task_json.cs" />
-    <Compile Include="VS\CppProperties\configuration.cs" />
-    <Compile Include="VS\CppProperties\CppProperties.cs" />
-    <Compile Include="VS\launch\configuration.cs" />
-    <Compile Include="VS\launch\default.cs" />
-    <Compile Include="VS\launch\launch.cs" />
-    <Compile Include="VS\launch\python_configuration.cs" />
-    <Compile Include="VS\launch\python_launch.cs" />
-    <Compile Include="VS\task\task.cs" />
-    <Compile Include="VS\task\vstask.cs" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -195,16 +152,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="LaunchEnvironment.exe.manifest" />
-    <None Include="OpenFolder_Resource\makefile">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenFolder_Resource\VSCode\c_cpp_properties.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenFolder_Resource\VSCode\launch.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenFolder_Resource\VSCode\tasks.json">
+    <None Include="Resource\openfolder_files\makefile">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -214,44 +162,43 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="mainicon.ico" />
-    <None Include="OpenFolder_Resource\vs\tasks.vs.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenFolder_Resource\vs\launch.vs.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenFolder_Resource\vs\CppProperties.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Content Include="Resource\Bash.png">
+    <Content Include="Resource\img\Bash.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\ConEmu-32Bit.png">
+    <Content Include="Resource\img\ConEmu-32Bit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\ConEmu.png">
+    <Content Include="Resource\img\ConEmu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\Komodo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\mainicon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\Python.png">
+    <Content Include="Resource\img\eclipse.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\Run.png">
+    <Content Include="Resource\img\Komodo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\img\mainicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\img\Python.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\WinDbg-32Bit.png">
+    <Content Include="Resource\img\Run.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\WinDbg.png">
+    <Content Include="Resource\img\WinDbg-32Bit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\WindbgX.png" />
-    <Content Include="Resource\WingIDE.png">
+    <Content Include="Resource\img\WinDbg.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\img\WinDbgX-32Bit.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\img\WindbgX.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\img\WingIDE.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Tools.xml">
@@ -262,22 +209,22 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Resource\Cmd-32Bit.png">
+    <Content Include="Resource\img\Cmd-32Bit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\PowerShell-32Bit.png">
+    <Content Include="Resource\img\PowerShell-32Bit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\VSCode.png">
+    <Content Include="Resource\img\VSCode.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\PowerShell.png">
+    <Content Include="Resource\img\PowerShell.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\Cmd.png">
+    <Content Include="Resource\img\Cmd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\VSStudio.png">
+    <Content Include="Resource\img\VSStudio.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

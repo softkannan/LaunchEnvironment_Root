@@ -1,10 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LaunchEnvironment.Config
@@ -73,6 +75,7 @@ namespace LaunchEnvironment.Config
             }
             return path;
         }
+                
         public string ResolveEnvironmentValue(in EnvironmentValueType type, in string newValue)
         {
             string retVal="";

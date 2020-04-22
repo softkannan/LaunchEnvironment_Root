@@ -13,21 +13,34 @@ namespace LaunchEnvironment.Config
         {
             ByPassRegistry = false;
             UseShellExecute = false;
-            Arguments = "";
+            Arguments = null;
             Envs = null;
-            BaseDir = "";
-            IsStoreApp = false;
+            ToolPath = "";
+            Path = "";
+            Type = ToolType.RegularApp;
             Script = new List<string>();
         }
 
-        public bool IsStoreApp { get; set; }
-        public string BaseDir { get; set; }
+
+        [XmlAttribute]
+        public ToolType Type { get; set; }
+
+        [XmlAttribute]
+        public string Editor { get; set; }
+
+        [XmlAttribute]
+        public bool ByPassRegistry { get; set; }
+
+        [XmlAttribute]
+        public bool UseShellExecute { get; set; }
+
+        public string ToolPath { get; set; }
         public string Path { get; set; }
         public string Name { get; set; }
-        public string Editor { get; set; }
-        public bool ByPassRegistry { get; set; }
-        public bool UseShellExecute { get; set; }
-        public string Arguments { get; set; }
+
+        [XmlArray("Arguments")]
+        [XmlArrayItem(ElementName = "Arg")]
+        public List<string> Arguments { get; set; }
 
         [XmlArray("Script")]
         [XmlArrayItem(ElementName = "Cmd")]

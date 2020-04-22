@@ -10,14 +10,14 @@ namespace LaunchEnvironment.Editors
 {
     public class CodeLiteEditor : EditorDefault
     {
-        public CodeLiteEditor() : base(RuntimeInfo.CodeLite)
+        public CodeLiteEditor() : base()
         {
         }
 
-        public override void Launch(LaunchConfig config)
+        protected override bool LaunchCustom(LaunchConfig config)
         {
             string openfileName = "";
-            if (RuntimeInfo.Inst.IsOpenFolder)
+            if (Directory.Exists(RuntimeInfo.Inst.OpenFolder))
             {
                 if (string.IsNullOrWhiteSpace(openfileName))
                 {
@@ -39,7 +39,7 @@ namespace LaunchEnvironment.Editors
             }
 
             string toolDir = string.Format("--basedir=\"{0}\"", Path.GetDirectoryName(Tool.Path));
-            string userDataDir = string.Format(@"{0}\userdata", Tool.BaseDir);
+            string userDataDir = string.Format(@"{0}\userdata", Tool.ToolPath);
             if (Directory.Exists(userDataDir))
             {
                 string currentDynamicArg = toolDir;
@@ -56,7 +56,7 @@ namespace LaunchEnvironment.Editors
                 DynamicArgument = string.Format("{0} {1}", currentDynamicArg, openfileName);
             }
 
-            base.Launch(config);
+            return true;
         }
     }
 }

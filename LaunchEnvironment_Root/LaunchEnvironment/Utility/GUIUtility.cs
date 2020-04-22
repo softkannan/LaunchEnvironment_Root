@@ -11,21 +11,22 @@ namespace LaunchEnvironment.Utility
 {
     public class GUIUtility
     {
-        public static void GenerateMenu(ToolStripMenuItem rootMenu, List<Tool> tools, List<ActionVerb> actions, EventHandler toolStripClick, EventHandler toolStripActionClick)
+        public static void GenerateMenu(ToolStripMenuItem rootMenu, List<string> tools, List<ActionVerb> actions, EventHandler toolStripClick)
         {
             foreach (var item in tools)
             {
-                if (File.Exists(item.Path) || !string.IsNullOrWhiteSpace(item.Editor) || item.IsStoreApp)
+                if (RuntimeInfo.Inst.IsToolAvailable(item))
                 {
+                    var tool = RuntimeInfo.Inst.GetTool(item);
                     var toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-                    toolStripMenuItem.Name = string.Format("{0}_{1}", rootMenu.Name, item.Name);
-                    toolStripMenuItem.Text = item.Name;
-                    toolStripMenuItem.Tag = item.Editor == null ? item.Name : item.Editor;
+                    toolStripMenuItem.Name = string.Format("{0}_{1}", rootMenu.Name, tool.Name);
+                    toolStripMenuItem.Text = tool.Name;
+                    toolStripMenuItem.Tag = tool.Name;
                     //toolStripMenuItem.Click += EditorsToolStripMenuItem_Click;
                     toolStripMenuItem.Click += toolStripClick;
                     if (RuntimeInfo.Inst.ShowRunAsForAll)
                     {
-                        var retMenu = GenerateActionMenus(toolStripMenuItem.Name, toolStripMenuItem.Tag as string, actions, toolStripActionClick);
+                        var retMenu = GenerateContextActionMenus(toolStripMenuItem.Name, toolStripMenuItem.Tag as string, actions, toolStripClick);
                         if (retMenu.Length > 0)
                         {
                             toolStripMenuItem.DropDownItems.AddRange(retMenu);
@@ -36,7 +37,7 @@ namespace LaunchEnvironment.Utility
             }
         }
 
-        public static ToolStripItem[] GenerateActionMenus(string name, string tag, List<ActionVerb> actions, EventHandler toolStripActionClick)
+        public static ToolStripItem[] GenerateContextActionMenus(string name, string tag, List<ActionVerb> actions, EventHandler toolStripActionClick)
         {
             List<ToolStripItem> retVal = new List<ToolStripItem>();
             foreach (var item in actions)
@@ -44,6 +45,7 @@ namespace LaunchEnvironment.Utility
                 var toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
                 toolStripMenuItem.Name = string.Format("{0}_{1}", name, item.Name);
                 toolStripMenuItem.Text = item.Name;
+                // Context menu tag item always contains "Editor valus as "ContextMenu" and verb
                 toolStripMenuItem.Tag = string.Format("{0};{1}", tag, item.Verb);
                 //toolStripMenuItem.Click += EditorsToolStripActionMenuItem_Click;
                 toolStripMenuItem.Click += toolStripActionClick;

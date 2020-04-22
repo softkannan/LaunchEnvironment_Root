@@ -11,25 +11,31 @@ using ProcessEx;
 using LaunchEnvironment.Utility;
 using System.Collections.Specialized;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace LaunchEnvironment.Editors
 {
     public class EditorDefault
     {
-        private string toolName;
+        private string _toolName;
+        private Tool _tool;
 
-        protected string ToolName { get => toolName; }
-        protected string EditorArguments { get; set; }
+        protected static Regex _envVarPattern = new Regex("%(?<EnvVar>[a-zA-Z_]+[a-zA-Z0-9_]*)%", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant);
+
+        protected string ToolName { get => _toolName; }
+        protected string LaunchArguments { get; set; }
         protected string DynamicArgument { get; set; }
-        protected string DynamicEditor { get; set; }
 
-
-        public EditorDefault(string toolName)
+        public EditorDefault()
         {
-            this.toolName = toolName;
-            EditorArguments = "";
+            this._tool = null;
+            LaunchArguments = "";
             DynamicArgument = "";
-            DynamicEditor = "";
+        }
+
+        public void Initialize(Tool tool)
+        {
+            this._tool = tool;
         }
 
 
@@ -37,84 +43,188 @@ namespace LaunchEnvironment.Editors
         {
             get
             {
-                return RuntimeInfo.Inst.GetTool(ToolName);
+                if (this._tool == null)
+                {
+                    _tool = RuntimeInfo.Inst.GetTool(ToolName);
+                }
+                return _tool;
             }
         }
 
-        protected void GenerateMakeFile(LaunchConfig config)
+        protected string ResolveSourceFilePath(string file, string configID, string toolId)
         {
-            var activeEnv = config.Configs.FirstOrDefault((item) => item.Type == ConfigType.gcc_linux || item.Type == ConfigType.gcc);
-            if (RuntimeInfo.Inst.IsOpenFolder && activeEnv != null)
+            string retFile = file.MatchReplace("%ConfigId%", configID, out bool foundMatch);
+            retFile = retFile.MatchReplace("%ToolId%", toolId, out bool foundMatch2);
+            return ResolveValue.Inst.ResolveFullPath(retFile);
+        }
+
+        protected virtual void UpdateFiles(LaunchConfig config)
+        {
+            foreach (var tempConfig in config.Configs)
             {
-                string fileName = string.Format(@"{0}\makefile", RuntimeInfo.Inst.ToolLaunchDir);
-                if (!File.Exists(fileName))
+                foreach (var cpFile in tempConfig.CopyFiles)
                 {
-                    string srcFolder = string.Format(@"{0}\src", RuntimeInfo.Inst.ToolLaunchDir);
-                    string goldMakefile = string.Format(@"{0}\OpenFolder_Resource\makefile", RuntimeInfo.Inst.LaunchEnvExeDir);
-                    if (Directory.Exists(srcFolder) && File.Exists(goldMakefile))
+                    bool replaceFile = true;
+                    if (cpFile.DestPath.IndexOf("%OpenFolder%") != -1)
                     {
-                        using (TextWriter writer = new StreamWriter(fileName))
+                        replaceFile = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("OpenFolder"));
+                    }
+                    if (replaceFile)
+                    {
+                        string absSrcFile = ResolveSourceFilePath(cpFile.SrcPath, tempConfig.Id, Tool.Name);
+                        if (File.Exists(absSrcFile))
                         {
-                            using (TextReader reader = new StreamReader(goldMakefile))
+                            string absDestFile = ResolveValue.Inst.ResolveFullPath(cpFile.DestPath);
+                            try
                             {
-                                writer.Write(reader.ReadToEnd());
+                                if (File.Exists(absDestFile))
+                                {
+                                    File.Delete(absDestFile);
+                                }
                             }
+                            catch { }
+
+                            File.Copy(absSrcFile, absDestFile, true);
                         }
                     }
                 }
             }
         }
-        public void UpdateRegistry(List<Config.Config> envs)
+
+        protected string ExpandEnvironmentValue(string inputStr, ProcessStartInfo procStartInfo)
         {
-            foreach (var itemEnv in envs)
+            string inputStrExpanded = Environment.ExpandEnvironmentVariables(inputStr);
+            string retVal = inputStrExpanded;
+            foreach (Match match in _envVarPattern.Matches(inputStrExpanded))
             {
-                if (itemEnv.RegConfigs == null)
+                string envVarKey = match.Groups["EnvVar"].Value;
+                var foundKey = procStartInfo.Environment.IsExists((enVar) => string.Compare(envVarKey, enVar.Key, true) == 0);
+                if (foundKey)
                 {
-                    continue;
+                    var foundKeyValue = procStartInfo.Environment.First((enVar) => string.Compare(envVarKey, enVar.Key, true) == 0);
+                    retVal = retVal.Replace(match.Value, Environment.ExpandEnvironmentVariables(foundKeyValue.Value));
                 }
+            }
+            return retVal;
+        }
 
-                var regConfig = RegConfig.RegConfigBase.GetConfig(itemEnv.Type);
-
-                foreach (var item in itemEnv.RegConfigs)
+        protected void MergeArguments(StringBuilder toolarguments,List<string> arguments, ProcessStartInfo procStartInfo)
+        {
+            if (arguments != null && arguments.Count > 0)
+            {
+                foreach (var item in arguments)
                 {
-                    if (regConfig != null)
+                    if (Tool.UseShellExecute)
                     {
-                        regConfig.SetSonfig(item);
+                        toolarguments.Append(Environment.ExpandEnvironmentVariables(item));
+                        toolarguments.Append(" ");
+                    }
+                    else
+                    {
+                        bool foundEnvVar = true;
+                        foreach (Match match in _envVarPattern.Matches(item))
+                        {
+                            var foundKey = procStartInfo.Environment.IsExists((enVar) => string.Compare(match.Groups["EnvVar"].Value, enVar.Key, true) == 0);
+                            if (!foundKey)
+                            {
+                                foundEnvVar = false;
+                                break;
+                            }
+                        }
+                        if (foundEnvVar)
+                        {
+                            toolarguments.Append(ExpandEnvironmentValue(item, procStartInfo));
+                            toolarguments.Append(" ");
+                        }
                     }
                 }
             }
         }
 
-        protected void MergeArguments(LaunchConfig config)
+        protected string ResolveArguments(LaunchConfig config, ProcessStartInfo procStartInfo)
         {
             //merge first config which has argument with tool arguments
-            string toolArgument = Environment.ExpandEnvironmentVariables(Tool.Arguments);
-            var foundConfig = config.Configs.FirstOrDefault((item) => !string.IsNullOrWhiteSpace(item.Arguments));
-            if (foundConfig != null)
+            var toolArgument = new StringBuilder();
+
+            //Merge Tool arguments
+            MergeArguments(toolArgument, Tool.Arguments, procStartInfo);
+           
+            //Merge selected config arguments
+            var foundConfig = config.Configs.FirstOrDefault((item) => item.Arguments != null && item.Arguments.Count > 0);
+            if (foundConfig != null && foundConfig.Arguments != null && foundConfig.Arguments.Count > 0)
             {
-                toolArgument = (string.IsNullOrWhiteSpace(toolArgument) ? "" : " ") + Environment.ExpandEnvironmentVariables(foundConfig.Arguments);
+                MergeArguments(toolArgument, foundConfig.Arguments, procStartInfo);
             }
 
-            //merge any existing editor argument passed down, prefer to use dynamicArgument
-            string editorArguments = Environment.ExpandEnvironmentVariables(EditorArguments);
-            EditorArguments += (string.IsNullOrWhiteSpace(editorArguments) ? "" : " ") + toolArgument;
-
+            var retVal = toolArgument.ToString().Trim();
             //merge dynamic Argument
-            editorArguments = EditorArguments;
-            EditorArguments += (string.IsNullOrWhiteSpace(editorArguments) ? "" : " ") + Environment.ExpandEnvironmentVariables(DynamicArgument);
+            retVal += (string.IsNullOrWhiteSpace(retVal) ? "" : " ") + Environment.ExpandEnvironmentVariables(DynamicArgument);
+
+            return retVal;
         }
 
-        public virtual void Launch(LaunchConfig config)
+        protected virtual bool LaunchCustom(LaunchConfig config)
         {
-            MergeArguments(config);
+            return true;
+        }
 
-            config.Arguments = EditorArguments;
-            config.EditorPath = string.IsNullOrWhiteSpace(DynamicEditor) ? RuntimeInfo.Inst.GetToolPath(ToolName) : DynamicEditor;
-            config.WorkingDir = RuntimeInfo.Inst.ToolLaunchDir;
+        public void Launch(LaunchConfig config)
+        {
+            if (Tool == null)
+            {
+                return;
+            }
 
-            GenerateMakeFile(config);
+            var firstConfig = config.Configs.FirstOrDefault();
+            var fullToolPath = ResolveValue.Inst.ResolveFullPath(Tool.ToolPath);
+            Environment.SetEnvironmentVariable("ConfigPath", firstConfig == null ? fullToolPath : ResolveValue.Inst.ResolveFullPath(firstConfig.ConfigPath));
+            Environment.SetEnvironmentVariable("ToolPath", fullToolPath);
+            string workingDir = "";
 
-            LaunchInternal(config);
+            if (Directory.Exists(RuntimeInfo.Inst.OpenFolder))
+            {
+                workingDir = RuntimeInfo.Inst.OpenFolder;
+            }
+            else if (firstConfig != null && !string.IsNullOrWhiteSpace(firstConfig.DefaultWorkspace))
+            {
+                string configWorkspace = ResolveValue.Inst.ResolveFullPath(firstConfig.DefaultWorkspace);
+                if (Directory.Exists(configWorkspace))
+                {
+                    workingDir = configWorkspace;
+                }
+            }
+
+            if (!Directory.Exists(workingDir))
+            {
+                string toolWorkspace = ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.DefaultWorkspace);
+                if (Directory.Exists(toolWorkspace))
+                {
+                    workingDir = toolWorkspace;
+                }
+                else
+                {
+                    workingDir = ResolveValue.Inst.ResolveFullPath("%userprofile%\\Documents");
+                }
+            }
+
+            Environment.SetEnvironmentVariable("OpenFolder", workingDir);
+
+            config.WorkingDir = workingDir;
+
+            switch (config.Verb)
+            {
+                case "updatefiles":
+                    UpdateFiles(config);
+                    break;
+                default:
+                    {
+                        if (LaunchCustom(config))
+                        {
+                            LaunchInternal(config);
+                        }
+                    }
+                    break;
+            }
         }
 
         protected virtual Process LaunchInternal(LaunchConfig config)
@@ -123,24 +233,26 @@ namespace LaunchEnvironment.Editors
             {
                 foreach (var item in Tool.Script)
                 {
-                    var procInfo = new ProcessStartInfo();
+                    var procStartInfo = new ProcessStartInfo();
+
+                    config.EditorPath = Tool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(Tool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(Tool.Name));
 
                     if (Tool.UseShellExecute == false)
                     {
-                        UpdateEnvironmentVariables(procInfo, config);
+                        UpdateEnvironmentVariables(procStartInfo, config);
                     }
 
                     if (!string.IsNullOrWhiteSpace(config.Verb))
                     {
-                        procInfo.Verb = config.Verb;
+                        procStartInfo.Verb = config.Verb;
                     }
 
-                    procInfo.WorkingDirectory = config.WorkingDir;
-                    procInfo.Arguments = config.Arguments;
-                    procInfo.FileName = config.EditorPath;
-                    procInfo.UseShellExecute = Tool.UseShellExecute;
+                    procStartInfo.WorkingDirectory = config.WorkingDir;
+                    procStartInfo.Arguments = ResolveArguments(config, procStartInfo); 
+                    procStartInfo.FileName = config.EditorPath;
+                    procStartInfo.UseShellExecute = Tool.UseShellExecute;
 
-                    var newProc = LaunchProcess(procInfo);
+                    var newProc = LaunchProcess(procStartInfo);
                     newProc.WaitForExit();
                 }
 
@@ -148,30 +260,33 @@ namespace LaunchEnvironment.Editors
             }
             else
             {
-                var procInfo = new ProcessStartInfo();
+                var procStartInfo = new ProcessStartInfo();
+
+                config.EditorPath = Tool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(Tool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(Tool.Name));
 
                 if (Tool.UseShellExecute == false)
                 {
-                    UpdateEnvironmentVariables(procInfo, config);
+                    UpdateEnvironmentVariables(procStartInfo, config);
                 }
 
                 if (!string.IsNullOrWhiteSpace(config.Verb))
                 {
-                    procInfo.Verb = config.Verb;
+                    procStartInfo.Verb = config.Verb;
                 }
 
-                procInfo.WorkingDirectory = config.WorkingDir;
-                procInfo.Arguments = config.Arguments;
-                procInfo.FileName = config.EditorPath;
-                procInfo.UseShellExecute = Tool.UseShellExecute;
+                procStartInfo.WorkingDirectory = config.WorkingDir;
+                procStartInfo.Arguments = ResolveArguments(config, procStartInfo);
+                procStartInfo.FileName = config.EditorPath;
 
-                return LaunchProcess(procInfo);
+                return LaunchProcess(procStartInfo);
             }
         }
         protected virtual Process LaunchProcess(ProcessStartInfo procInfo)
         {
             if (Tool.UseShellExecute == false)
             {
+                procInfo.UseShellExecute = Tool.UseShellExecute;
+
                 var injectProcess = new ProcessEx.CustomProcess();
                 injectProcess.BootstrapProcess = RuntimeInfo.Inst.RunScriptPath;
 
@@ -207,15 +322,15 @@ namespace LaunchEnvironment.Editors
                 return;
             }
 
-            var tempItem = new EnviromentVariable();
+            //var tempItem = new EnviromentVariable();
 
-            tempItem.Name = "CurrentWorkingRootFolderName";
-            tempItem.Action = EnvironmentAction.Overwrite;
-            tempItem.Type = EnvironmentValueType.String;
-            string tempFileName = string.Format(@"{0}\makefile", RuntimeInfo.Inst.ToolLaunchDir);
-            tempItem.Value = Path.GetFileName(Path.GetDirectoryName(tempFileName));
+            //tempItem.Name = "CurrentWorkingRootFolderName";
+            //tempItem.Action = EnvironmentAction.Overwrite;
+            //tempItem.Type = EnvironmentValueType.String;
+            //string tempFileName = string.Format(@"{0}\makefile", RuntimeInfo.Inst.ToolLaunchDir);
+            //tempItem.Value = Path.GetFileName(Path.GetDirectoryName(tempFileName));
 
-            UpdateEnvironmentVariables(procInfo, tempItem);
+            //UpdateEnvironmentVariables(procInfo, tempItem);
 
             if (Tool.Envs != null)
             {
@@ -235,11 +350,17 @@ namespace LaunchEnvironment.Editors
         private static string PreProcessValue(IDictionary<string, string> currentValues, string newValue)
         {
             string retVal = newValue;
-            foreach (KeyValuePair<string, string> item in currentValues)
+            //var matches = from m in _envVarPattern.Matches(newValue).OfType<Match>() group m by m.Value into newM select newM;
+            // duplicate matches may be ineffciant
+            foreach (Match match in _envVarPattern.Matches(newValue))
             {
-                string patten = string.Format("%{0}%", item.Key);
-                string tempVal = retVal;
-                retVal = tempVal.Replace(patten, item.Value);
+                string envVarKey = match.Groups["EnvVar"].Value;
+                var foundKey = currentValues.IsExists((enVar) => string.Compare(envVarKey, enVar.Key, true) == 0);
+                if (foundKey)
+                {
+                    var foundKeyValue = currentValues.First((enVar) => string.Compare(envVarKey, enVar.Key, true) == 0);
+                    retVal = retVal.Replace(match.Value, Environment.ExpandEnvironmentVariables(foundKeyValue.Value));
+                }
             }
             return retVal;
         }
@@ -257,8 +378,9 @@ namespace LaunchEnvironment.Editors
                 switch (item.Action)
                 {
                     case EnvironmentAction.Overwrite:
-
-                        procInfo.Environment[item.Name] = ResolveValue.Inst.ResolveEnvironmentValue(item.Type, PreProcessValue(procInfo.Environment, item.Value));
+                        {
+                            procInfo.Environment[item.Name] = ResolveValue.Inst.ResolveEnvironmentValue(item.Type, PreProcessValue(procInfo.Environment, item.Value));
+                        }
                         break;
                     case EnvironmentAction.Prefix:
                         {
@@ -301,7 +423,7 @@ namespace LaunchEnvironment.Editors
                         continue;
                     }
 
-                    var regConfig = RegConfig.RegConfigBase.GetConfig(itemEnv.Type);
+                    var regConfig = RegConfig.RegConfigBase.GetConfig(itemEnv.Id);
 
                     foreach (var item in itemEnv.RegConfigs)
                     {
@@ -313,5 +435,7 @@ namespace LaunchEnvironment.Editors
                 }
             }
         }
+
+        
     }
 }

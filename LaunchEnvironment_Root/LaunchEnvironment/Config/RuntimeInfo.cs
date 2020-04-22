@@ -19,11 +19,10 @@ namespace LaunchEnvironment.Config
 
         public RuntimeInfo()
         {
-            ToolLaunchDir = null;
+            OpenFolder = null;
             string exePath = Assembly.GetExecutingAssembly().Location;
             LaunchEnvExeDir = Path.GetDirectoryName(exePath);
             RunScriptPath = string.Format(@"{0}\runscript.exe", LaunchEnvExeDir);
-            IsOpenFolder = false;
         }
 
         public const string VSCode = "VSCode";
@@ -40,19 +39,22 @@ namespace LaunchEnvironment.Config
         public const string OpenSSH = "OpenSSH";
         public const string Command = "Command";
 
-        [XmlIgnore]
-        public string RunScriptPath { get; private set; }
-        
+
+        #region Config File Public Entires
+
         public List<EnviromentVariable> Envs { get; set; }
         public bool RunasAdmin { get; set; }
         public bool ShowRunAsForAll { get; set; }
-        public List<Tool> ToolPath { get; set; }
+        public List<Tool> Tools { get; set; }
         public List<MenuBar> MenuBar { get; set; }
         public List<ToolBarItem> ToolBar { get; set; }
+        public string DefaultWorkspace { get; set; }
 
         [XmlArray("ContextMenu")]
         [XmlArrayItem(ElementName = "Menu")]
         public List<string> ContextMenu { get; set; }
+
+        #endregion
 
         private string _launchEnvExeDir = null;
 
@@ -69,11 +71,10 @@ namespace LaunchEnvironment.Config
         }
 
         [XmlIgnore]
-        public string ToolLaunchDir { get; set; }
+        public string OpenFolder { get; set; }
 
         [XmlIgnore]
-        public int VSVersion { get; private set; }
-        
+        public List<Tool> AvailableTools { get; set; }
 
         [XmlIgnore]
         public bool IsElevated
@@ -83,8 +84,6 @@ namespace LaunchEnvironment.Config
                 return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
             }
         }
-        [XmlIgnore]
-        public bool IsOpenFolder { get; set; }
 
         [XmlIgnore]
         public bool Is64Bit
@@ -94,6 +93,9 @@ namespace LaunchEnvironment.Config
                 return IntPtr.Size == 8;
             }
         }
+
+        [XmlIgnore]
+        public string RunScriptPath { get; private set; }
 
         [XmlIgnore]
         public string CurrentTimeStamp
@@ -126,18 +128,16 @@ namespace LaunchEnvironment.Config
             }
         }
 
-        
-
         public bool IsToolAvailable(string toolName)
         {
-            var foundTool = ToolPath.FirstOrDefault((item) => item.Name == toolName);
+            var foundTool = AvailableTools.FirstOrDefault((item) => string.Compare(item.Name, toolName,true) == 0);
             return foundTool != null;
         }
 
         public Tool GetTool(string toolName)
         {
             Tool retVal = null;
-            var foundTool = ToolPath.FirstOrDefault((item) => item.Name == toolName);
+            var foundTool = AvailableTools.FirstOrDefault((item) => item.Name == toolName);
             if (foundTool != null)
             {
                 retVal = foundTool;
@@ -148,7 +148,7 @@ namespace LaunchEnvironment.Config
         public string GetToolPath(string toolName)
         {
             string retVal = "";
-            var foundTool = ToolPath.FirstOrDefault((item) => item.Name == toolName);
+            var foundTool = AvailableTools.FirstOrDefault((item) => item.Name == toolName);
             if(foundTool != null)
             {
                 retVal = foundTool.Path;
@@ -156,99 +156,20 @@ namespace LaunchEnvironment.Config
             return retVal;
         }
 
-        public void AutoDetectToolPath()
-        {
-            var VSSetupRegKey = new List<Tuple<string, string>> {
-                new Tuple<string, string>(@"SOFTWARE\Microsoft\VisualStudio\SxS\VS7","15.0"),
-                new Tuple<string, string>(@"SOFTWARE\Microsoft\VisualStudio\SxS\VS7","12.0"),
-                new Tuple<string, string>(@"SOFTWARE\Microsoft\VisualStudio\SxS\VS7","10.0")
-            };
-            string vsStudioInsallDir = "";
-
-            if(Environment.Is64BitProcess)
-            {
-                using (var localMachine32 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine,RegistryView.Registry32))
-                {
-                    foreach (var item in VSSetupRegKey)
-                    {
-                        using (var vsKey = localMachine32.OpenSubKey(item.Item1))
-                        {
-                            if (vsKey != null)
-                            {
-                                vsStudioInsallDir = vsKey.GetValue(item.Item2, "") as string;
-
-                                if(Directory.Exists(vsStudioInsallDir))
-                                {
-                                    VSVersion =  (int)Double.Parse(item.Item2);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                foreach (var item in VSSetupRegKey)
-                {
-                    using (var vsKey = Registry.LocalMachine.OpenSubKey(item.Item1))
-                    {
-                        if (vsKey != null)
-                        {
-                            vsStudioInsallDir = vsKey.GetValue(item.Item2, "") as string;
-
-                            if (Directory.Exists(vsStudioInsallDir))
-                            {
-                                VSVersion = (int)Double.Parse(item.Item2);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            string devEnvPath = string.Format(@"{0}Common7\IDE\devenv.exe", vsStudioInsallDir);
-
-            if(File.Exists(devEnvPath))
-            {
-                Environment.SetEnvironmentVariable(string.Format("{0}Dir", VSStudio), vsStudioInsallDir.TrimEnd('\\'), EnvironmentVariableTarget.Process);
-            }
-
-            List<string> vsCodeDirs = new List<string> { @"%ProgramFiles(x86)%\Microsoft VS Code", @"%ProgramFiles%\Microsoft VS Code" };
-            string vsCodeDir = "";
-            foreach(var item in vsCodeDirs)
-            {
-                var vsCodeExe = string.Format(@"{0}\Code.exe", ResolveValue.Inst.ResolveFullPath(item));
-                if(File.Exists(vsCodeExe))
-                {
-                    vsCodeDir = item;
-                    break;
-                }
-            }
-
-            if(!string.IsNullOrWhiteSpace(vsCodeDir))
-            {
-                Environment.SetEnvironmentVariable(string.Format("{0}Dir", VSCode), ResolveValue.Inst.ResolveFullPath(vsCodeDir), EnvironmentVariableTarget.Process);
-            }
-
-        }
-
-        public void UpdateMenuBar(MenuStrip menuStrip, List<ActionVerb> actions, EventHandler toolStripClick, EventHandler toolStripActionClick)
+        public void UpdateMenuBar(MenuStrip menuStrip, List<ActionVerb> actions, EventHandler toolStripClick)
         {
             if (this.MenuBar != null && this.MenuBar.Count > 0)
             {
                 foreach (var item in this.MenuBar)
                 {
-                    item.UpdateToolMenu(menuStrip, actions, toolStripClick, toolStripActionClick);
+                    item.UpdateToolMenu(menuStrip, actions, toolStripClick);
                 }
             }
         }
 
         public void ProcessRuntimeInfo()
         {
-            AutoDetectToolPath();
-
-
+            //AutoDetectToolPath();
             if (Envs != null)
             {
                 foreach (var item in Envs)
@@ -286,39 +207,42 @@ namespace LaunchEnvironment.Config
                 }
             }
 
-            if(ToolPath == null)
+            if(AvailableTools == null)
             {
-                ToolPath = new List<Tool>();
+                AvailableTools = new List<Tool>();
             }
 
-            //merge tool bar
-            if(ToolBar != null)
-            {
-                foreach(var item in ToolBar)
-                {
-                    ToolPath.AddRange(item.Group);
-                }
-            }
-
-            //merge editors to tool path
-            if(MenuBar != null)
-            {
-                foreach (var item in MenuBar)
-                {
-                    if (item.Tools != null)
-                    {
-                        ToolPath.AddRange(item.Tools);
-                    }
-                }
-            }
-
-            foreach(var item in ToolPath)
+            foreach(var item in Tools)
             {
                 string newValue = ResolveValue.Inst.ResolveFullPath(item.Path);
                 item.Path = newValue;
 
-                newValue = ResolveValue.Inst.ResolveFullPath(item.BaseDir);
-                item.BaseDir = newValue;
+                newValue = ResolveValue.Inst.ResolveFullPath(item.ToolPath);
+                item.ToolPath = newValue;
+
+                Tool addTool = null;
+
+                if(item.Type == ToolType.RegularApp)
+                {
+                    if(File.Exists(item.Path))
+                    {
+                        addTool = item;
+                    }
+                }
+                else
+                {
+                    addTool = item;
+                }
+
+                if(addTool != null)
+                {
+                    //if editor is not explicitly defined then assume tool name and editor name is same
+                    if(string.IsNullOrWhiteSpace(addTool.Editor))
+                    {
+                        addTool.Editor = addTool.Name;
+                    }
+                    AvailableTools.Add(addTool);
+                }
             }
         }
 

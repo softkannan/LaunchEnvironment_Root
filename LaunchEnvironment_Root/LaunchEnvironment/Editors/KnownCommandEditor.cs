@@ -6,20 +6,108 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LaunchEnvironment.Editors
 {
     public class KnownCommandEditor : EditorDefault
     {
-        private string _cmdName;
-        public KnownCommandEditor(string cmdName) : base(RuntimeInfo.Command)
+        public KnownCommandEditor() :base()
         {
-            _cmdName = cmdName;
+
         }
-        public override void Launch(LaunchConfig config)
+
+        public void UpdateConfigRegistry(List<Config.Config> envs)
         {
-            switch(_cmdName.Trim())
+            foreach (var itemEnv in envs)
+            {
+                if (itemEnv.RegConfigs == null)
+                {
+                    continue;
+                }
+
+                var regConfig = RegConfig.RegConfigBase.GetConfig(itemEnv.Id);
+
+                foreach (var item in itemEnv.RegConfigs)
+                {
+                    if (regConfig != null)
+                    {
+                        regConfig.SetSonfig(item);
+                    }
+                }
+            }
+        }
+
+        //public void GenerateMakeFile(LaunchConfig config)
+        //{
+        //    var activeEnv = config.Configs.FirstOrDefault();
+        //    if (Directory.Exists(RuntimeInfo.Inst.OpenFolder) && activeEnv != null)
+        //    {
+        //        string folderDir = RuntimeInfo.Inst.OpenFolder;
+        //        string fileName = string.Format(@"{0}\makefile", folderDir);
+        //        if (!File.Exists(fileName))
+        //        {
+        //            string srcFolder = string.Format(@"{0}\src", folderDir);
+        //            string goldMakefile = string.Format(@"{0}\OpenFolder_Resource\makefile", folderDir);
+        //            if (Directory.Exists(srcFolder) && File.Exists(goldMakefile))
+        //            {
+        //                using (TextWriter writer = new StreamWriter(fileName))
+        //                {
+        //                    using (TextReader reader = new StreamReader(goldMakefile))
+        //                    {
+        //                        writer.Write(reader.ReadToEnd());
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        private void UpdatePythonScripts(Configs_Root allEnvironments)
+        {
+            foreach (var item in allEnvironments.Configs)
+            {
+                if (!string.IsNullOrWhiteSpace(item.Id) && item.Id.ToLower() == "python")
+                {
+                    string scriptsFolder = string.Format("{0}\\Scripts", ResolveValue.Inst.ResolveFullPath(item.ConfigPath));
+
+                    if (Directory.Exists(scriptsFolder))
+                    {
+                        Regex regExScripts = new Regex("([A-Za-z]:[^\\; \\<\\>\\:\\\"\\|\\?\\*]+)Scripts", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                        Regex regExpython = new Regex("([A-Za-z]:[^\\; \\<\\>\\:\\\"\\|\\?\\*]+)python", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                        string pythonPath = string.Format("{0}\\python", ResolveValue.Inst.ResolveFullPath(item.ConfigPath));
+
+                        foreach (var filename in Directory.GetFiles(scriptsFolder, "*.bat"))
+                        {
+                            try
+                            {
+                                string text = File.ReadAllText(filename);
+
+                                text = regExScripts.Replace(text, scriptsFolder);
+                                text = regExpython.Replace(text, pythonPath);
+
+                                File.WriteAllText(filename, text);
+                            }
+                            catch (Exception ex)
+                            {
+                                ErrorLog.Inst.LogError("Unable to Update file : {0} error : {1}", filename, ex.Message);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ErrorLog.Inst.LogError("Unable to find the scripts folder : {0}", scriptsFolder);
+                    }
+
+                }
+            }
+        }
+
+        protected override bool LaunchCustom(LaunchConfig config)
+        {
+            switch(Tool.Path.Trim())
             {
                 case "RegisterExplorerContextMenu":
                     {
@@ -31,22 +119,26 @@ namespace LaunchEnvironment.Editors
                     break;
                 case "WriteConfigRegistryValues":
                     {
-                        var launchTool = Editors.EditorFactory.Inst.GetEditor(RuntimeInfo.Generic);
-
-                        launchTool.UpdateRegistry(Configs_Root.Inst.Configs);
+                        UpdateConfigRegistry(Configs_Root.Inst.Configs);
 
                         ErrorLog.Inst.ShowInfo("Environment Registry Integration completed");
                     }
                     break;
                 case "UpdatePythonScriptFolder":
                     {
-                        var pythonEnv = new PythonEnvironment();
-                        pythonEnv.UpdateScripts(Configs_Root.Inst);
+                        UpdatePythonScripts(Configs_Root.Inst);
 
                         ErrorLog.Inst.ShowInfo("Updating Python Environment Scripts folder is completed");
                     }
                     break;
+                default:
+                    {
+                        ErrorLog.Inst.ShowError("Unable to find known command: {0}", Tool.Path);
+                    }
+                    break;
             }
+
+            return false;
         }
     }
 }

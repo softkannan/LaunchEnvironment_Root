@@ -10,7 +10,7 @@ namespace LaunchEnvironment.Editors
 {
     public class CodeBlocksEditor : EditorDefault
     {
-        public CodeBlocksEditor() : base(RuntimeInfo.CodeBlocks)
+        public CodeBlocksEditor() : base()
         {
             
         }
@@ -20,9 +20,9 @@ namespace LaunchEnvironment.Editors
         /// --file=<filename>[:line]	Open file in Code::Blocks and optionally jump to a specific line.
         /// </summary>
         /// <param name="config"></param>
-        public override void Launch(LaunchConfig config)
+        protected override bool LaunchCustom(LaunchConfig config)
         {
-            if (RuntimeInfo.Inst.IsOpenFolder)
+            if (Directory.Exists(RuntimeInfo.Inst.OpenFolder))
             {
                 string openfile = "";
 
@@ -55,7 +55,7 @@ namespace LaunchEnvironment.Editors
                 }
             }
 
-            string userData = string.Format(@"{0}\userdata", Tool.BaseDir);
+            string userData = string.Format(@"{0}\userdata", Tool.ToolPath);
 
             if (Directory.Exists(userData))
             {
@@ -64,7 +64,7 @@ namespace LaunchEnvironment.Editors
                 DynamicArgument = string.Format("{0}{1}--user-data-dir=\"{2}\"", currentDynamicArg, string.IsNullOrWhiteSpace(currentDynamicArg) ? "" : " ", userData);
             }
 
-            base.Launch(config);
+            return true;
         }
     }
 }

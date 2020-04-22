@@ -13,9 +13,6 @@ namespace LaunchEnvironment.Config
     {
         public List<Config> Configs { get; set; }
 
-        [XmlAttribute]
-        public string HomePath { get; set; }
-
         public static void LoadEnvironments()
         {
             Configs_Root retVal = null;

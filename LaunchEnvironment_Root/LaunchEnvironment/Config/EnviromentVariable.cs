@@ -18,6 +18,7 @@ namespace LaunchEnvironment.Config
 
         [XmlAttribute]
         public EnvironmentAction Action { get; set; }
+
         [XmlAttribute]
         public EnvironmentValueType Type { get; set; }
         public string Name { get; set; }

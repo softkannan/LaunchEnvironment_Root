@@ -10,7 +10,9 @@ namespace LaunchEnvironment.Config
     public class ToolBarItem
     {
         public string Name { get; set; }
-        [XmlElement("Tool")]
-        public List<Tool> Group { get; set; }
+
+        [XmlArray("Tools")]
+        [XmlArrayItem(ElementName = "Name")]
+        public List<string> Tools { get; set; }
     }
 }
