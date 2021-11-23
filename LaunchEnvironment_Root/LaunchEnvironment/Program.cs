@@ -23,7 +23,7 @@ namespace LaunchEnvironment
         static void Main()
         {
             RuntimeInfo.LoadConfig();
-
+            
             if (RuntimeInfo.Inst.RunasAdmin == false || RuntimeInfo.Inst.IsElevated)
             {
                 Application.EnableVisualStyles();

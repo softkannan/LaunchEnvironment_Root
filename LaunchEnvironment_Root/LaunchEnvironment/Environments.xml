@@ -227,13 +227,67 @@ Action
     </Config>
 
     <!--VCCommand-->
+    <!-- Try "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -? To learn other options -->
     <Config>
       <Name>VisualStudio Command Prompt</Name>
       <Id>VSStudio</Id>
       <ConfigPath>%VS140COMNTOOLS%</ConfigPath>
-      <Arguments>
-        <Arg>/k ""%VS140COMNTOOLS%VsDevCmd.bat""</Arg>
-      </Arguments>
+      <PreBatchFile>
+        <PreBatchFileCmd>call "%VS140COMNTOOLS%VsDevCmd.bat"</PreBatchFileCmd>
+      </PreBatchFile>
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2019 x86</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
+      <PreBatchFile>
+        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=x86</PreBatchFileCmd>
+      </PreBatchFile>
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2019 x64</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
+      <PreBatchFile>
+        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=amd64</PreBatchFileCmd>
+      </PreBatchFile>
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2019 ARM</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
+      <PreBatchFile>
+        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=arm</PreBatchFileCmd>
+      </PreBatchFile>
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2019 ARM64</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
+      <PreBatchFile>
+        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=arm64</PreBatchFileCmd>
+      </PreBatchFile>
+    </Config>
+
+    <!--GCC AVR-->
+    <Config>
+      <Name>AVR</Name>
+      <Id>GCC</Id>
+      <ConfigPath>%SysGCC%\avr_gcc_11</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%SysGCC%\avr_gcc_11</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%SysGCC%\avr_gcc_11\bin</Value>
+        </EnviromentVariable>
+      </Envs>
     </Config>
 
     <!--GCC esp8266-->
@@ -249,66 +303,6 @@ Action
         <EnviromentVariable>
           <Name>PATH</Name>
           <Value>%SysGCC%\esp8266\bin;%SysGCC%\esp8266\xtensa-lx106-elf\bin</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CPATH</Name>
-          <Value>%SysGCC%\esp8266\include;%SysGCC%\esp8266\xtensa-lx106-elf\include;%SysGCC%\esp8266\xtensa-lx106-elf\sys-include;%SysGCC%\esp8266\lib\gcc\xtensa-lx106-elf\5.2.0\include</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>C_INCLUDE_PATH</Name>
-          <Value>%CPATH%</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CPLUS_INCLUDE_PATH</Name>
-          <Value>%CPATH%</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>OBJC_INCLUDE_PATH</Name>
-          <Value>%CPATH%</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>INCLUDE</Name>
-          <Value>%CPATH%</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LIB</Name>
-          <Value>%SysGCC%\esp8266\xtensa-lx106-elf\lib;%SysGCC%\esp8266\lib</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LIBRARY_PATH</Name>
-          <Value>%LIB%</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LIBPATH</Name>
-          <Value>%LIB%</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CC</Name>
-          <Value>g++</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LINK</Name>
-          <Value>g++</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>TARGET_ARCHITECTURE</Name>
-          <Value>ARM</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>TARGET_PLATFORM</Name>
-          <Value>LINUX</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CCFLAGS</Name>
-          <Value>-c</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LINKFLAGS</Name>
-          <Value></Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>DEBUGFLAGS</Name>
-          <Value>-g</Value>
         </EnviromentVariable>
       </Envs>
     </Config>
@@ -327,42 +321,6 @@ Action
           <Name>PATH</Name>
           <Value>%SysGCC%\mingw64\bin;%SysGCC%\mingw64\x86_64-w64-mingw32\bin</Value>
         </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CPATH</Name>
-          <Value>%SysGCC%\mingw64\include;%SysGCC%\mingw64\include\c++\4.7.1;%SysGCC%\mingw64\x86_64-w64-mingw32\include</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LIBRARY_PATH</Name>
-          <Value>%SysGCC%\mingw64\lib;%SysGCC%\mingw64\x86_64-w64-mingw32\lib</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CC</Name>
-          <Value>g++</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LINK</Name>
-          <Value>g++</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>TARGET_ARCHITECTURE</Name>
-          <Value>AMD64</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>TARGET_PLATFORM</Name>
-          <Value>WIN32</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CCFLAGS</Name>
-          <Value>-c</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LINKFLAGS</Name>
-          <Value></Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>DEBUGFLAGS</Name>
-          <Value>-g</Value>
-        </EnviromentVariable>
       </Envs>
     </Config>
 
@@ -380,42 +338,6 @@ Action
           <Name>PATH</Name>
           <Value>%MyTools%\compilers\mingw32\bin;%MyTools%\compilers\mingw32\i686-w64-mingw32\bin</Value>
         </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CPATH</Name>
-          <Value>%MyTools%\compilers\mingw32\lib\gcc\i686-w64-mingw32\6.1.0\include;%MyTools%\compilers\mingw32\lib\gcc\i686-w64-mingw32\6.1.0\include\c++;%MyTools%\compilers\mingw32\include;%MyTools%\compilers\mingw32\i686-w64-mingw32\include</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LIBRARY_PATH</Name>
-          <Value>%MyTools%\compilers\mingw32\lib\gcc\i686-w64-mingw32\6.1.0;%MyTools%\compilers\mingw32\lib;%MyTools%\compilers\mingw32\i686-w64-mingw32\lib</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CC</Name>
-          <Value>g++</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LINK</Name>
-          <Value>g++</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>TARGET_ARCHITECTURE</Name>
-          <Value>WIN32</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>TARGET_PLATFORM</Name>
-          <Value>WIN32</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CCFLAGS</Name>
-          <Value>-c</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LINKFLAGS</Name>
-          <Value></Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>DEBUGFLAGS</Name>
-          <Value>-g</Value>
-        </EnviromentVariable>
       </Envs>
     </Config>
 
@@ -432,42 +354,6 @@ Action
         <EnviromentVariable>
           <Name>PATH</Name>
           <Value>%SysGCC%\Raspberry\bin;%SysGCC%\Raspberry\arm-linux-gnueabihf\bin</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CPATH</Name>
-          <Value>%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\usr\include\c++\4.9;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\usr\include;%SysGCC%\Raspberry\arm-linux-gnueabihf\include;%SysGCC%\Raspberry\arm-linux-gnueabihf\include\c++\4.9;%SysGCC%\Raspberry\lib\gcc\arm-linux-gnueabihf\4.9\include</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LIBRARY_PATH</Name>
-          <Value>%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\lib\arm-linux-gnueabihf;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\lib;%SysGCC%\Raspberry\lib;%SysGCC%\Raspberry\arm-linux-gnueabihf\lib;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\lib;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\usr\lib;%SysGCC%\Raspberry\arm-linux-gnueabihf\sysroot\usr\local\lib</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CC</Name>
-          <Value>g++</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LINK</Name>
-          <Value>g++</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>TARGET_ARCHITECTURE</Name>
-          <Value>ARM</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>TARGET_PLATFORM</Name>
-          <Value>LINUX</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>CCFLAGS</Name>
-          <Value>-c</Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>LINKFLAGS</Name>
-          <Value></Value>
-        </EnviromentVariable>
-        <EnviromentVariable>
-          <Name>DEBUGFLAGS</Name>
-          <Value>-g</Value>
         </EnviromentVariable>
       </Envs>
     </Config>
@@ -502,6 +388,18 @@ Action
         <EnviromentVariable>
           <Name>_NT_SYMBOL_PATH</Name>
           <Value>srv*C:\DebugSymbols\Microsoft*https://msdl.microsoft.com/download/symbols</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+	
+    <Config>
+      <Name>GhostScript</Name>
+      <Id>GhostScript</Id>
+      <ConfigPath>C:\Program Files\gs\bin</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>C:\Program Files\gs\bin</Value>
         </EnviromentVariable>
       </Envs>
     </Config>

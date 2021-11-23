@@ -17,6 +17,7 @@ namespace LaunchEnvironment.Config
             RegConfigs = null;
             Envs = null;
             CopyFiles = null;
+            PreReqBatchFileCmds = null;
         }
         public string Name { get; set; }
         public string Id { get; set; }
@@ -31,5 +32,12 @@ namespace LaunchEnvironment.Config
         public List<string> Arguments { get; set; }
         public List<RegKey> RegConfigs { get; set; }
         public List<EnviromentVariable> Envs { get; set; }
+
+        /// <summary>
+        /// If this value present then the tool will use this value, this takes precedence
+        /// </summary>
+        [XmlArray("PreBatchFile")]
+        [XmlArrayItem(ElementName = "PreBatchFileCmd")]
+        public List<string> PreReqBatchFileCmds { get; set; }
     }
 }

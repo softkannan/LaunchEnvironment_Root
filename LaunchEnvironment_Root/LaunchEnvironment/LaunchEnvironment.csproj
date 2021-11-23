@@ -186,6 +186,9 @@
     <Content Include="Resource\img\Run.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resource\img\terminal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resource\img\WinDbg-32Bit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

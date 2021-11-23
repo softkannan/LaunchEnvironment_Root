@@ -160,7 +160,7 @@ namespace LaunchEnvironment.Editors
             //merge dynamic Argument
             retVal += (string.IsNullOrWhiteSpace(retVal) ? "" : " ") + Environment.ExpandEnvironmentVariables(DynamicArgument);
 
-            return retVal;
+            return retVal; //.Replace("%STARTDIR%",config.WorkingDir);
         }
 
         protected virtual bool LaunchCustom(LaunchConfig config)
@@ -180,7 +180,7 @@ namespace LaunchEnvironment.Editors
             Environment.SetEnvironmentVariable("ConfigPath", firstConfig == null ? fullToolPath : ResolveValue.Inst.ResolveFullPath(firstConfig.ConfigPath));
             Environment.SetEnvironmentVariable("ToolPath", fullToolPath);
             string workingDir = "";
-
+            
             if (Directory.Exists(RuntimeInfo.Inst.OpenFolder))
             {
                 workingDir = RuntimeInfo.Inst.OpenFolder;
@@ -274,9 +274,49 @@ namespace LaunchEnvironment.Editors
                     procStartInfo.Verb = config.Verb;
                 }
 
+                var finalResolvedArgs = ResolveArguments(config, procStartInfo);
+                var firstConfig = config.Configs.FirstOrDefault();
+                var editorPath = config.EditorPath;
+
+                if (firstConfig != null && firstConfig.PreReqBatchFileCmds != null && firstConfig.PreReqBatchFileCmds.Count > 0)
+                {
+                    var cmdTool = RuntimeInfo.Inst.GetTool("Cmd");
+                    if(cmdTool != null)
+                    {
+                        var batchFileName = string.Format("{0}Launch_Environment_Start.bat", Path.GetTempPath());
+                        if(File.Exists(batchFileName))
+                        {
+                            try
+                            {
+                                File.Delete(batchFileName);
+                            }
+                            catch { }
+                        }
+                        using (var batFile = new StreamWriter(batchFileName))
+                        {
+                            foreach(var preCmd in firstConfig.PreReqBatchFileCmds)
+                            {
+                                batFile.WriteLine(Environment.ExpandEnvironmentVariables(preCmd));
+                            }
+
+                            batFile.WriteLine("\"{0}\" {1}", editorPath, finalResolvedArgs);
+                        }
+                        editorPath = cmdTool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(cmdTool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(cmdTool.Name));
+                        finalResolvedArgs = string.Format("/c \"{0}\"", batchFileName);
+                        if (Tool.UseShellExecute == false)
+                        {
+                            procStartInfo.CreateNoWindow = true;
+                        }
+                        else
+                        {
+                            procStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        }
+                    }
+                }
+                
                 procStartInfo.WorkingDirectory = config.WorkingDir;
-                procStartInfo.Arguments = ResolveArguments(config, procStartInfo);
-                procStartInfo.FileName = config.EditorPath;
+                procStartInfo.Arguments = finalResolvedArgs;
+                procStartInfo.FileName = editorPath;
 
                 return LaunchProcess(procStartInfo);
             }

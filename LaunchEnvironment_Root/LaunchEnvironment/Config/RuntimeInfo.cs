@@ -23,6 +23,7 @@ namespace LaunchEnvironment.Config
             string exePath = Assembly.GetExecutingAssembly().Location;
             LaunchEnvExeDir = Path.GetDirectoryName(exePath);
             RunScriptPath = string.Format(@"{0}\runscript.exe", LaunchEnvExeDir);
+            
         }
 
         public const string VSCode = "VSCode";
