@@ -237,7 +237,43 @@ Action
       </PreBatchFile>
     </Config>
 
-    <Config>
+	<Config>
+		<Name>VisualStudio Command Prompt 2022 x86</Name>
+		<Id>VSStudio</Id>
+		<ConfigPath>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools</ConfigPath>
+		<PreBatchFile>
+			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=x86</PreBatchFileCmd>
+		</PreBatchFile>
+	</Config>
+
+	<Config>
+		<Name>VisualStudio Command Prompt 2022 x64</Name>
+		<Id>VSStudio</Id>
+		<ConfigPath>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools</ConfigPath>
+		<PreBatchFile>
+			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=amd64</PreBatchFileCmd>
+		</PreBatchFile>
+	</Config>
+
+	<Config>
+		<Name>VisualStudio Command Prompt 2022 ARM</Name>
+		<Id>VSStudio</Id>
+		<ConfigPath>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools</ConfigPath>
+		<PreBatchFile>
+			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=arm</PreBatchFileCmd>
+		</PreBatchFile>
+	</Config>
+
+	<Config>
+		<Name>VisualStudio Command Prompt 2022 ARM64</Name>
+		<Id>VSStudio</Id>
+		<ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
+		<PreBatchFile>
+			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=arm64</PreBatchFileCmd>
+		</PreBatchFile>
+	</Config>
+
+    <!--<Config>
       <Name>VisualStudio Command Prompt 2019 x86</Name>
       <Id>VSStudio</Id>
       <ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
@@ -271,7 +307,7 @@ Action
       <PreBatchFile>
         <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=arm64</PreBatchFileCmd>
       </PreBatchFile>
-    </Config>
+    </Config>-->
 
     <!--GCC AVR-->
     <Config>
