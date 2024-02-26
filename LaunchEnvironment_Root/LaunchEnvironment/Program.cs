@@ -26,6 +26,7 @@ namespace LaunchEnvironment
             
             if (RuntimeInfo.Inst.RunasAdmin == false || RuntimeInfo.Inst.IsElevated)
             {
+                Application.SetHighDpiMode(HighDpiMode.DpiUnawareGdiScaled);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new mainForm());

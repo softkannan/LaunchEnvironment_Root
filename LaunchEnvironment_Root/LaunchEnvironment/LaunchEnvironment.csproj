@@ -1,17 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AEAB8081-22F8-40A0-A1BB-3037EAD3CCC9}</ProjectGuid>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>LaunchEnvironment</RootNamespace>
-    <AssemblyName>LaunchEnvironment</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -27,28 +17,9 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.2</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -58,107 +29,10 @@
     <ApplicationIcon>mainicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="ProcessEx">
-      <HintPath>..\Common\ProcessEx.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Config\Action.cs" />
-    <Compile Include="Config\EnvironmentAction.cs" />
-    <Compile Include="Config\EnvironmentValueType.cs" />
-    <Compile Include="Config\FileCopy.cs" />
-    <Compile Include="Config\MenuBar.cs" />
-    <Compile Include="Config\ResolveValue.cs" />
-    <Compile Include="Config\Tool.cs" />
-    <Compile Include="Config\ToolBarItem.cs" />
-    <Compile Include="Config\ToolType.cs" />
-    <Compile Include="Editors\CodeBlocksEditor.cs" />
-    <Compile Include="Editors\CodeLiteEditor.cs" />
-    <Compile Include="Editors\EditorFactory.cs" />
-    <Compile Include="Editors\KnownCommandEditor.cs" />
-    <Compile Include="Forms\OptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\OptionsForm.Designer.cs">
-      <DependentUpon>OptionsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="mainFormGUIHelpers.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Config\EnviromentVariable.cs" />
-    <Compile Include="Config\Config.cs" />
-    <Compile Include="Config\Configs.cs" />
-    <Compile Include="Utility\GUIUtility.cs" />
-    <Compile Include="ErrorLog.cs" />
-    <Compile Include="Config\LaunchConfig.cs" />
-    <Compile Include="Editors\EditorDefault.cs" />
-    <Compile Include="Forms\AboutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AboutForm.Designer.cs">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="mainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="mainForm.Designer.cs">
-      <DependentUpon>mainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegConfig\PythonRegConfig.cs" />
-    <Compile Include="Config\RegKey.cs" />
-    <Compile Include="RegConfig\RegConfigBase.cs" />
-    <Compile Include="Config\ConfigType.cs" />
-    <Compile Include="Editors\VSStudioEditor.cs" />
-    <Compile Include="RegConfig\RegistryHive.cs" />
-    <Compile Include="Config\RegValue.cs" />
-    <Compile Include="RegConfig\VCRegConfig.cs" />
-    <Compile Include="Config\RuntimeInfo.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Utility\ShellIntegration.cs" />
-    <Compile Include="Utility\Utility.cs" />
-    <EmbeddedResource Include="Forms\AboutForm.resx">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\OptionsForm.resx">
-      <DependentUpon>OptionsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="mainForm.resx">
-      <DependentUpon>mainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="LaunchEnvironment.exe.manifest" />
-    <None Include="Resource\openfolder_files\makefile">
+    <None Update="Resource\openfolder_files\makefile">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="mainicon.ico" />
@@ -243,17 +117,17 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)..\Common\*.*" "$(TargetDir)"
-xcopy "$(TargetDir)*.*" "$(ProjectDir)..\Release\" /Y /E
-
-
-</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProcessEx\ProcessEx.csproj" />
+  </ItemGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(ProjectDir)..\Common\*.*&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;xcopy &quot;$(TargetDir)*.*&quot; &quot;$(ProjectDir)..\Release\&quot; /Y /E&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+  </Target>
 </Project>

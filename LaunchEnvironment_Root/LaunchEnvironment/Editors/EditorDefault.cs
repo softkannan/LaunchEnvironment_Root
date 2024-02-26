@@ -330,23 +330,24 @@ namespace LaunchEnvironment.Editors
                 var injectProcess = new ProcessEx.CustomProcess();
                 injectProcess.BootstrapProcess = RuntimeInfo.Inst.RunScriptPath;
 
-                var retProc = injectProcess.LaunchProcessSuspended(procInfo, false);
-                if (Tool.ByPassRegistry)
-                {
-                    string bitnessSuffix = "x64";
-                    if (!retProc.Is64BitProcess())
-                    {
-                        bitnessSuffix = "win32";
-                    }
+                var retProc = injectProcess.Launch(procInfo, false);
+                // Newer windows prevent injection
+                //if (Tool.ByPassRegistry)
+                //{
+                //    string bitnessSuffix = "x64";
+                //    if (!retProc.Is64BitProcess())
+                //    {
+                //        bitnessSuffix = "win32";
+                //    }
 
-                    string registryDll = string.Format("{0}\\RegistryHandler_{1}.dll", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), bitnessSuffix);
-                    if (File.Exists(registryDll))
-                    {
-                        DllInject.InjectDll(registryDll, retProc);
-                    }
-                }
+                //    string registryDll = string.Format("{0}\\RegistryHandler_{1}.dll", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), bitnessSuffix);
+                //    if (File.Exists(registryDll))
+                //    {
+                //        DllInject.InjectDll(registryDll, retProc);
+                //    }
+                //}
 
-                injectProcess.ResumeProcess();
+                //injectProcess.ResumeProcess();
                 return retProc;
             }
             else

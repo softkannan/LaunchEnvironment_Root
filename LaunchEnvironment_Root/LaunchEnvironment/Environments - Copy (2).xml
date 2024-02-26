@@ -61,6 +61,90 @@ Action
       <Id>none</Id>
       <ConfigPath>%userprofile%\Desktop</ConfigPath>
     </Config>
+    
+    <!--Anaconda 3.7-->
+    <Config>
+      <Name>Anaconda 3.7</Name>
+      <Id>Python</Id>
+      <ConfigPath>%ToolDir%\Anaconda37</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PYTHONHOME</Name>
+          <Value>%ToolDir%\Anaconda37</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PYTHONHOME</Name>
+          <Value>%PYTHONHOME%</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%PYTHONHOME%;%PYTHONHOME%\Scripts</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--Python 3.8-->
+    <Config>
+      <Name>Python 3.8</Name>
+      <Id>Python</Id>
+      <ConfigPath>%ToolDir%\Python38</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PYTHONHOME</Name>
+          <Value>%ToolDir%\Python38</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PYTHONHOME</Name>
+          <Value>%PYTHONHOME%</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%PYTHONHOME%;%PYTHONHOME%\Scripts</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--Python 3.7-->
+    <Config>
+      <Name>Python 3.7</Name>
+      <Id>Python</Id>
+      <ConfigPath>%ToolDir%\Python37</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PYTHONHOME</Name>
+          <Value>%ToolDir%\Python37</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PYTHONHOME</Name>
+          <Value>%PYTHONHOME%</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%PYTHONHOME%;%PYTHONHOME%\Scripts</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--Python 2.7-->
+    <Config>
+      <Name>Python 2.7</Name>
+      <Id>Python</Id>
+      <ConfigPath>%ToolDir%\python27</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PYTHONHOME</Name>
+          <Value>%ToolDir%\Python27</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PYTHONHOME</Name>
+          <Value>%PYTHONHOME%</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%PYTHONHOME%;%PYTHONHOME%\Scripts</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
 
     <!--JAVA SDK 14-->
     <Config>
@@ -125,6 +209,23 @@ Action
       </Envs>
     </Config> -->
 
+    <!--Portable Apps-->
+    <Config>
+      <Name>Portable Apps</Name>
+      <Id>PortableApps</Id>
+      <ConfigPath>%MyTools%\PortableAppCreators</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%MyTools%\PortableAppCreators\VMware_Thinapp_Enterprise_5.2.3_Build_6945559\App\ThinApp;%MyTools%\PortableAppCreators\Turbo_Studio_18.4.1080\App\Studio;%MyTools%\PortableAppCreators\Turbo_Studio_18.4.1080;%MyTools%\PortableAppCreators\VMware_Thinapp_Enterprise_5.2.3_Build_6945559</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>THINSTALL_BIN</Name>
+          <Value>%MyTools%\PortableAppCreators\VMware_Thinapp_Enterprise_5.2.3_Build_6945559\App\ThinApp</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
     <!--VCCommand-->
     <!-- Try "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -? To learn other options -->
     <Config>
@@ -141,7 +242,7 @@ Action
 		<Id>VSStudio</Id>
 		<ConfigPath>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools</ConfigPath>
 		<PreBatchFile>
-			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" -arch=x86</PreBatchFileCmd>
+			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=x86</PreBatchFileCmd>
 		</PreBatchFile>
 	</Config>
 
@@ -150,7 +251,7 @@ Action
 		<Id>VSStudio</Id>
 		<ConfigPath>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools</ConfigPath>
 		<PreBatchFile>
-			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" -arch=amd64</PreBatchFileCmd>
+			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=amd64</PreBatchFileCmd>
 		</PreBatchFile>
 	</Config>
 
@@ -159,7 +260,7 @@ Action
 		<Id>VSStudio</Id>
 		<ConfigPath>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools</ConfigPath>
 		<PreBatchFile>
-			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" -arch=arm</PreBatchFileCmd>
+			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=arm</PreBatchFileCmd>
 		</PreBatchFile>
 	</Config>
 
@@ -168,7 +269,7 @@ Action
 		<Id>VSStudio</Id>
 		<ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
 		<PreBatchFile>
-			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\vsdevcmd.bat" -arch=arm64</PreBatchFileCmd>
+			<PreBatchFileCmd>call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=arm64</PreBatchFileCmd>
 		</PreBatchFile>
 	</Config>
 
@@ -177,7 +278,7 @@ Action
       <Id>VSStudio</Id>
       <ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
       <PreBatchFile>
-        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\vsdevcmd.bat" -arch=x86</PreBatchFileCmd>
+        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=x86</PreBatchFileCmd>
       </PreBatchFile>
     </Config>
 
@@ -186,7 +287,7 @@ Action
       <Id>VSStudio</Id>
       <ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
       <PreBatchFile>
-        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\vsdevcmd.bat" -arch=amd64</PreBatchFileCmd>
+        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=amd64</PreBatchFileCmd>
       </PreBatchFile>
     </Config>
 
@@ -195,7 +296,7 @@ Action
       <Id>VSStudio</Id>
       <ConfigPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools</ConfigPath>
       <PreBatchFile>
-        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\vsdevcmd.bat" -arch=arm</PreBatchFileCmd>
+        <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=arm</PreBatchFileCmd>
       </PreBatchFile>
     </Config>
 
@@ -207,7 +308,92 @@ Action
         <PreBatchFileCmd>call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=arm64</PreBatchFileCmd>
       </PreBatchFile>
     </Config>-->
-    
+
+    <!--GCC AVR-->
+    <Config>
+      <Name>AVR</Name>
+      <Id>GCC</Id>
+      <ConfigPath>%SysGCC%\avr_gcc_11</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%SysGCC%\avr_gcc_11</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%SysGCC%\avr_gcc_11\bin</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--GCC esp8266-->
+    <Config>
+      <Name>GCC esp8266</Name>
+      <Id>GCC</Id>
+      <ConfigPath>%SysGCC%\esp8266</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%SysGCC%\esp8266</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%SysGCC%\esp8266\bin;%SysGCC%\esp8266\xtensa-lx106-elf\bin</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--GCC mingw64-->
+    <Config>
+      <Name>GCC mingw64</Name>
+      <ConfigPath>%SysGCC%\mingw64</ConfigPath>
+      <Id>GCC</Id>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%SysGCC%\mingw64</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%SysGCC%\mingw64\bin;%SysGCC%\mingw64\x86_64-w64-mingw32\bin</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--GCC mingw32-->
+    <Config>
+      <Name>GCC mingw32</Name>
+      <ConfigPath>%MyTools%\compilers\mingw32</ConfigPath>
+      <Id>GCC</Id>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%MyTools%\compilers\mingw32</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%MyTools%\compilers\mingw32\bin;%MyTools%\compilers\mingw32\i686-w64-mingw32\bin</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <!--GCC raspberrypi-->
+    <Config>
+      <Name>GCC Raspberry</Name>
+      <ConfigPath>%SysGCC%\Raspberry</ConfigPath>
+      <Id>GCC</Id>
+      <Envs>
+        <EnviromentVariable>
+          <Name>ToolchainDir</Name>
+          <Value>%SysGCC%\Raspberry</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%SysGCC%\Raspberry\bin;%SysGCC%\Raspberry\arm-linux-gnueabihf\bin</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
     <!--nodejs-->
     <Config>
       <Name>Node Js</Name>

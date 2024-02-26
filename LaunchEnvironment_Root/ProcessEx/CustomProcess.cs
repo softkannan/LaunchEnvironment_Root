@@ -120,12 +120,27 @@ namespace ProcessEx
 
         public Process Launch(ProcessStartInfo startInfo, bool inheritHandle = false)
         {
-            var retVal = LaunchProcessSuspended(startInfo, inheritHandle);
-            ResumeProcess();
+            return LaunchProcessSuspended(startInfo, inheritHandle, false);
+        }
+        public Process LaunchWithDelay(ProcessStartInfo processInfo, bool inheritHandle,int initialResumeTime = 0)
+        {
+            var retVal = LaunchProcessSuspended(processInfo, inheritHandle);
+
+            if (initialResumeTime > 0 && retVal != null)
+            {
+                NativeMethods.ResumeThread(_threadHandle);
+                System.Threading.Thread.Sleep(initialResumeTime);
+                NativeMethods.SuspendThread(_threadHandle);
+            }
+
             return retVal;
         }
 
-        public Process LaunchProcessSuspended(ProcessStartInfo startInfo, bool inheritHandle = false)
+        public void ResumeProcess()
+        {
+            NativeMethods.ResumeThread(_threadHandle);
+        }
+        public Process LaunchProcessSuspended(ProcessStartInfo startInfo, bool inheritHandle = false, bool createSuspended = true)
         {
             string commandLine;
 
@@ -157,7 +172,7 @@ namespace ProcessEx
             try
             {
                 // set up the creation flags paramater
-                var creationFlags = ProcessCreationFlags.CREATE_SUSPENDED;
+                var creationFlags = createSuspended ? ProcessCreationFlags.CREATE_SUSPENDED : ProcessCreationFlags.ZERO_FLAG;
 
                 if (startInfo.CreateNoWindow) creationFlags |= ProcessCreationFlags.CREATE_NO_WINDOW;
 
@@ -236,23 +251,6 @@ namespace ProcessEx
                 return null;
             }
         }
-        public Process LaunchProcessSuspended(ProcessStartInfo processInfo, bool inheritHandle,int initialResumeTime = 0)
-        {
-            var retVal = LaunchProcessSuspended(processInfo, inheritHandle);
-
-            if (initialResumeTime > 0 && retVal != null)
-            {
-                NativeMethods.ResumeThread(_threadHandle);
-                System.Threading.Thread.Sleep(initialResumeTime);
-                NativeMethods.SuspendThread(_threadHandle);
-            }
-
-            return retVal;
-        }
-
-        public void ResumeProcess()
-        {
-            NativeMethods.ResumeThread(_threadHandle);
-        }
+        
     }
 }
