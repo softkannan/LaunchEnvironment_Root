@@ -280,6 +280,7 @@ namespace LaunchEnvironment.Editors
 
                 if (firstConfig != null && firstConfig.PreReqBatchFileCmds != null && firstConfig.PreReqBatchFileCmds.Count > 0)
                 {
+                    bool forceUseShell = true;
                     var cmdTool = RuntimeInfo.Inst.GetTool("Cmd");
                     if(cmdTool != null)
                     {
@@ -298,18 +299,30 @@ namespace LaunchEnvironment.Editors
                             {
                                 batFile.WriteLine(Environment.ExpandEnvironmentVariables(preCmd));
                             }
-
-                            batFile.WriteLine("\"{0}\" {1}", editorPath, finalResolvedArgs);
+                            if (editorPath.EndsWith(".exe"))
+                            {
+                                //batFile.WriteLine("start \"C:\\Windows\\cmd.exe\" \"{0}\" {1}", editorPath, finalResolvedArgs);
+                                batFile.WriteLine("\"{0}\" {1}", editorPath, finalResolvedArgs);
+                            }
+                            else
+                            {
+                                batFile.WriteLine("\"{0}\" {1}", editorPath, finalResolvedArgs);
+                            }
                         }
                         editorPath = cmdTool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(cmdTool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(cmdTool.Name));
                         finalResolvedArgs = string.Format("/c \"{0}\"", batchFileName);
-                        if (Tool.UseShellExecute == false)
+
+                        if (Tool.UseShellExecute == false && forceUseShell == false)
                         {
                             procStartInfo.CreateNoWindow = true;
                         }
-                        else
+                        else if(forceUseShell == false)
                         {
                             procStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        }
+                        else if (forceUseShell)
+                        {
+                            procStartInfo.UseShellExecute = true;
                         }
                     }
                 }
