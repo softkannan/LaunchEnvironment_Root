@@ -26,7 +26,7 @@ namespace LaunchEnvironment
             
             if (RuntimeInfo.Inst.RunasAdmin == false || RuntimeInfo.Inst.IsElevated)
             {
-                Application.SetHighDpiMode(HighDpiMode.DpiUnawareGdiScaled);
+                //Application.SetHighDpiMode(HighDpiMode.DpiUnawareGdiScaled);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.ThreadException += Application_ThreadException;

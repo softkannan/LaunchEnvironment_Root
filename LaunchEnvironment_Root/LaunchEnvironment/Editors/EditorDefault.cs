@@ -17,7 +17,7 @@ namespace LaunchEnvironment.Editors
 {
     public class EditorDefault
     {
-        private string _toolName;
+        private string _toolName = "";
         private Tool _tool;
 
         protected static Regex _envVarPattern = new Regex("%(?<EnvVar>[a-zA-Z_]+[a-zA-Z0-9_]*)%", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.CultureInvariant);
