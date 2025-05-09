@@ -81,13 +81,13 @@ namespace LaunchEnvironment
                 string toolName = "";
                 string verb = "";
 
-                if(toolNameAndVerb.Length > 0)
+                if (toolNameAndVerb.Length > 0)
                 {
                     toolName = toolNameAndVerb[0];
                 }
 
                 //Check click comes from RunAs context menu item 
-                if(toolName == "ContextMenu")
+                if (toolName == "ContextMenu")
                 {
                     //if runs as context menu is clicked then user selected button infromation is stored in root node of the context menu
                     //the tag value contains the user selected tool name and update the tool name value
@@ -95,7 +95,7 @@ namespace LaunchEnvironment
                 }
 
                 //if menu item contains verb then update verb part
-                if(toolNameAndVerb.Length > 1)
+                if (toolNameAndVerb.Length > 1)
                 {
                     verb = toolNameAndVerb[1];
                 }
@@ -109,24 +109,24 @@ namespace LaunchEnvironment
             if (e.Button == MouseButtons.Right)
             {
                 int x = 0;
-                foreach(ToolStripItem item in _mainToolBar.Items)
+                foreach (ToolStripItem item in _mainToolBar.Items)
                 {
                     x += item.Width;
-                    if(item.Tag == stripItem.Tag)
+                    if (item.Tag == stripItem.Tag)
                     {
                         x -= item.Width;
                         break;
                     }
                 }
                 _runAsContext.Tag = stripItem.Tag;
-                _runAsContext.Show(_mainToolBar, new Point(x, stripItem.Height),ToolStripDropDownDirection.BelowRight);
+                _runAsContext.Show(_mainToolBar, new Point(x, stripItem.Height), ToolStripDropDownDirection.BelowRight);
             }
-            else if(e.Button == MouseButtons.Left)
+            else if (e.Button == MouseButtons.Left)
             {
                 var splitButton = sender as ToolStripSplitButton;
                 if (stripItem != null)
                 {
-                    if(splitButton != null && (!splitButton.ButtonBounds.Contains(e.Location)))
+                    if (splitButton != null && (!splitButton.ButtonBounds.Contains(e.Location)))
                     {
                         return;
                     }
@@ -140,7 +140,7 @@ namespace LaunchEnvironment
         {
             var editorObj = Editors.EditorFactory.Inst.GetEditor(toolName);
 
-            if(editorObj == null)
+            if (editorObj == null)
             {
                 ErrorLog.Inst.ShowError("Unable to find editor for given tool : {0} , verify tools.xml", toolName);
                 return;
@@ -156,6 +156,18 @@ namespace LaunchEnvironment
             editorObj.Launch(config);
         }
 
+        private void _configListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var config = BuildLaunchConfig();
+            var firstConfig = config.Configs.FirstOrDefault();
+            if(firstConfig != null)
+            {
+                Environment.SetEnvironmentVariable("ConfigPath", ResolveValue.Inst.ResolveFullPath(firstConfig.ConfigPath));
+            }
+        }
+
         #endregion
+
+
     }
 }

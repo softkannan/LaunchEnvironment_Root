@@ -68,16 +68,16 @@ Action
     </Tool>
     <Tool>
       <Name>VSCode</Name>
-      <Path>%userprofile%\AppData\Local\Programs\Microsoft VS Code\Code.exe</Path>
-      <ToolPath>%userprofile%\AppData\Local\Programs\Microsoft VS Code</ToolPath>
+      <Path>C:\Program Files\Microsoft VS Code\Code.exe</Path>
+      <ToolPath>C:\Program Files\Microsoft VS Code</ToolPath>
       <Arguments>
         <Arg>"%OpenFolder%"</Arg>
       </Arguments>
     </Tool>
     <Tool>
       <Name>VSStudio</Name>
-      <Path>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe</Path>
-      <ToolPath>C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE</ToolPath>
+      <Path>C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.exe</Path>
+      <ToolPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE</ToolPath>
       <Arguments>
         <Arg>/useenv "%OpenFolder%"</Arg>
       </Arguments>
@@ -99,7 +99,11 @@ Action
     </Tool>
     <Tool>
       <Name>PowerShell</Name>
-      <Path>C:\Program Files\PowerShell\7\pwsh.exe</Path>
+      <Path>%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe</Path>
+    </Tool>
+    <Tool>
+      <Name>PowerShell-32bit</Name>
+      <Path>%SystemRoot%\syswow64\WindowsPowerShell\v1.0\powershell.exe</Path>
     </Tool>
     <Tool>
       <Name>Cmd</Name>
@@ -124,32 +128,66 @@ Action
       <Name>Bash</Name>
       <Path>%SystemRoot%\system32\bash.exe</Path>
     </Tool>
-    <Tool Type="DynamicApp">
-      <Name>WinDbg</Name>
-      <Path>%ConfigPath%\WinDbg.exe</Path>
-       <Arguments>
-        <Arg>-c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
-      </Arguments>
-    </Tool>
-    <Tool Type="DynamicApp">
-      <Name>WinDbg-32Bit</Name>
-      <Path>%ConfigPath%\WinDbg.exe</Path>
+    <Tool>
+      <Name>WinDbg7</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\x64\WinDbg.exe</Path>
+      <ToolPath>%WinDbgDir%\Debuggers_Win7\x64</ToolPath>
       <Arguments>
         <Arg>-c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
       </Arguments>
     </Tool>
+    <Tool>
+      <Name>WinDbg7-32Bit</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\x86\WinDbg.exe</Path>
+      <ToolPath>%WinDbgDir%\Debuggers_Win7\x86\</ToolPath>
+      <Arguments>
+        <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>WinDbg10</Name>
+      <Path>%WinDbgDir%\Debuggers_Win10\x64\WinDbg.exe</Path>
+      <ToolPath>%WinDbgDir%\Debuggers_Win10\x64\</ToolPath>
+      <Arguments>
+        <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>WinDbg10-32Bit</Name>
+      <Path>%WinDbgDir%\Debuggers_Win10\x86\WinDbg.exe</Path>
+      <ToolPath>%WinDbgDir%\Debuggers_Win10\x86\</ToolPath>
+      <Arguments>
+        <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <!--
+    <Tool Type="DynamicApp">
+      <Name>WinDbg7</Name>
+      <Path>%ConfigPath%\x64\WinDbg.exe</Path>
+      <Arguments>
+        <Arg>-c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool Type="DynamicApp">
+      <Name>WinDbg7-32Bit</Name>
+      <Path>%ConfigPath%\x86\WinDbg.exe</Path>
+      <Arguments>
+        <Arg>-c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    -->
     <Tool Type="StoreApp">
       <Name>WinDbgX</Name>
       <Path>WinDbgX.exe</Path>
       <Arguments>
-        <arg>-debugArch amd64</arg>
+        <arg>-debugArch amd64 -c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl_dbg_preview.txt"</arg>
       </Arguments>
     </Tool>
     <Tool Type="StoreApp">
       <Name>WinDbgX-32Bit</Name>
       <Path>WinDbgX.exe</Path>
       <Arguments>
-        <Arg>-debugArch x86</Arg>
+        <Arg>-debugArch x86 -c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl_dbg_preview.txt"</Arg>
       </Arguments>
     </Tool>
     <Tool Type="DynamicApp" UseShellExecute="true">
@@ -168,12 +206,25 @@ Action
       </Arguments>
     </Tool>
     <Tool>
+      <Name>Komodo</Name>
+      <Path>%ToolDir%\komodoportable\tool\KomodoIDEPortable.exe</Path>
+      <ToolPath>%ToolDir%\komodoportable</ToolPath>
+      <Arguments>
+        <Arg>"%OpenFolder%"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
       <Name>Arduino</Name>
       <Path>%ToolDir%\Arduino\tool\Arduino.exe</Path>
       <ToolPath>%ToolDir%\Arduino</ToolPath>
       <Arguments>
         <Arg>"%OpenFolder%"</Arg>
       </Arguments>
+    </Tool>
+    <Tool>
+      <Name>SharpDevelop</Name>
+      <Path>%ToolDir%\sharpdevelop\bin\SharpDevelop.exe</Path>
+      <ToolPath>%ToolDir%\sharpdevelop</ToolPath>
     </Tool>
     <Tool>
       <Name>CodeBlocks</Name>
@@ -185,9 +236,20 @@ Action
       </Arguments>
     </Tool>
     <Tool>
+      <Name>CodeLite</Name>
+      <Path>%ToolDir%\codelite\tool\codelite.exe</Path>
+      <ToolPath>%ToolDir%\codelite</ToolPath>
+      <!--<Envs>
+        <EnviromentVariable Action="Overwrite">
+          <Name>LOCALAPPDATA</Name>
+          <Value>%ToolDir%\codelite\userdata</Value>
+        </EnviromentVariable>
+      </Envs>-->
+    </Tool>
+    <Tool>
       <Name>MobXTerm</Name>
-      <Path>%MyTools%\serial_ssh_tools\MobaXtermPortable\MobaXterm.exe</Path>
-      <ToolPath>%MyTools%\serial_ssh_tools\MobaXtermPortable</ToolPath>
+      <Path>%ProgramFiles(x86)%\Mobatek\MobaXterm\MobaXterm.exe</Path>
+      <ToolPath>%ProgramFiles(x86)%\Mobatek</ToolPath>
       <Arguments>
         <Arg>/openfolder "%OpenFolder%"</Arg>
       </Arguments>
@@ -212,30 +274,30 @@ Action
     </Tool>
     <Tool>
       <Name>Process Explorer</Name>
-      <Path>%WinDbgDir%\tools\procexp.exe</Path>
-      <BaseDir>%WinDbgDir%\tools</BaseDir>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\procexp.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
     </Tool>
-	<Tool>
+    <Tool>
       <Name>Windbg Readme</Name>
       <Path>%windir%\system32\notepad.exe</Path>
-      <BaseDir>%WinDbgDir%\tools</BaseDir>
-	  <Arguments>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+      <Arguments>
         <Arg>%ToolDir%\Debuggers_Scripts\cmdtree\readme.txt</Arg>
       </Arguments>
     </Tool>
-	<Tool>
+    <Tool>
       <Name>Edit Environment XML</Name>
       <Path>C:\Program Files (x86)\Notepad++\notepad++.exe</Path>
-      <BaseDir>%WinDbgDir%\tools</BaseDir>
-	  <Arguments>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+      <Arguments>
         <Arg>%ToolDir%\LaunchEnvironment\Environments.xml</Arg>
       </Arguments>
     </Tool>
-	<Tool>
+    <Tool>
       <Name>Open LaunchEnvironment Folder</Name>
       <Path>%SystemRoot%\explorer.exe</Path>
-      <BaseDir>%WinDbgDir%\tools</BaseDir>
-	  <Arguments>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+      <Arguments>
         <Arg>%LaunchEnvExeDir%</Arg>
       </Arguments>
     </Tool>
@@ -245,39 +307,34 @@ Action
       <Path>windbgx.exe</Path>
     </Tool>
     <Tool>
-       <Name>Process Explorer</Name>
-       <Path>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite\procexp.exe</Path>
-       <BaseDir>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite</BaseDir>
-    </Tool>
-    <Tool>
       <Name>Process Monitor</Name>
-      <Path>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite\Procmon.exe</Path>
-      <BaseDir>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite</BaseDir>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\Procmon.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
     </Tool>
     <Tool>
       <Name>vmmap</Name>
-      <Path>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite\vmmap.exe</Path>
-      <BaseDir>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite</BaseDir>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\vmmap.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
     </Tool>
     <Tool>
       <Name>Winobj</Name>
-      <Path>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite\Winobj.exe</Path>
-      <BaseDir>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite</BaseDir>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\Winobj.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
     </Tool>
     <Tool>
       <Name>DebugView</Name>
-      <Path>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite\DebugView.exe</Path>
-      <BaseDir>%MyTools%\system_tools\wscc\Apps\Sysinternals Suite</BaseDir>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\DebugView.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
     </Tool>
     <Tool>
       <Name>Start_VS_2017_RemoteDebug</Name>
-      <Path>%MyTools%\Debuggers_Tools\VS_RemoteTools_2017Portable\VS_RemoteTools_2017Portable.exe</Path>
-      <BaseDir>%MyTools%\Debuggers_Tools\VS_RemoteTools_2017Portable</BaseDir>
+      <Path>%ToolDir%\Debuggers_Tools\VS_RemoteTools_2017Portable\VS_RemoteTools_2017Portable.exe</Path>
+      <BaseDir>%ToolDir%\Debuggers_Tools\VS_RemoteTools_2017Portable</BaseDir>
     </Tool>
     <Tool>
       <Name>Start_VS_2019_RemoteDebug</Name>
-      <Path>%MyTools%\Debuggers_Tools\VSStudio_Remote_Tools_2019Portable\VSStudio_Remote_Tools_2019Portable.exe</Path>
-      <BaseDir>%MyTools%\Debuggers_Tools\VSStudio_Remote_Tools_2019Portable</BaseDir>
+      <Path>%ToolDir%\Debuggers_Tools\VSStudio_Remote_Tools_2019Portable\VSStudio_Remote_Tools_2019Portable.exe</Path>
+      <BaseDir>%ToolDir%\Debuggers_Tools\VSStudio_Remote_Tools_2019Portable</BaseDir>
     </Tool>
     <Tool Type="DynamicApp" UseShellExecute="true">
       <Name>Start_Remote_Windbg</Name>
@@ -288,8 +345,8 @@ Action
     </Tool>
     <Tool>
       <Name>WinDbg_Kernel_Mode</Name>
-      <Path>%WinDbgDir%\tools\livekd.exe</Path>
-      <BaseDir>%WinDbgDir%\tools</BaseDir>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\livekd.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
     </Tool>
   </Tools>
   <!-- Tools Definition End -->
@@ -298,6 +355,7 @@ Action
     <Menu>VSStudio</Menu>
     <Menu>Terminal</Menu>
     <Menu>Cmd</Menu>
+    <Menu>AWinDbgF7</Menu>
   </ContextMenu>
   <ToolBar>
     <ToolBarItem>
@@ -330,9 +388,9 @@ Action
         <Name>ConEmu-32Bit</Name>
       </Tools>
     </ToolBarItem>
-    <ToolBarItem>
+    <!-- <ToolBarItem>
       <Name>Bash</Name>
-    </ToolBarItem>
+    </ToolBarItem> -->
     <ToolBarItem>
       <!--Default Tool name-->
       <Name>WinDbgX</Name>
@@ -341,6 +399,10 @@ Action
         <Name>WinDbgX-32Bit</Name>
         <Name>WinDbg</Name>
         <Name>WinDbg-32Bit</Name>
+        <Name>WinDbg7</Name>
+        <Name>WinDbg7-32Bit</Name>
+        <Name>WinDbg10</Name>
+        <Name>WinDbg10-32Bit</Name>
       </Tools>
     </ToolBarItem>
     <ToolBarItem>
@@ -374,9 +436,9 @@ Action
         <Name>Winobj</Name>
         <Name>DebugView</Name>
         <Name>WinDbg_Kernel_Mode</Name>
-		<Name>Edit Environment XML</Name>
-		<Name>Open LaunchEnvironment Folder</Name>
-		<Name>Windbg Readme</Name>
+        <Name>Edit Environment XML</Name>
+        <Name>Open LaunchEnvironment Folder</Name>
+        <Name>Windbg Readme</Name>
       </Tools>
     </MenuBar>
     <MenuBar>
@@ -404,20 +466,12 @@ Action
   <!--Apply to all environment variables-->
   <Envs>
     <EnviromentVariable>
-      <Name>PATH</Name>
-      <Value>.</Value>
-    </EnviromentVariable>
-    <EnviromentVariable>
       <Name>ToolDir</Name>
-      <Value>H:\devtools</Value>
+      <Value>..</Value>
     </EnviromentVariable>
     <EnviromentVariable>
-      <Name>MyTools</Name>
-      <Value>H:</Value>
-    </EnviromentVariable>
-      <EnviromentVariable>
       <Name>WinDbgDir</Name>
-      <Value>H:\devtools\Windbg</Value>
+      <Value>..</Value>
     </EnviromentVariable>
   </Envs>
 </RuntimeInfo>

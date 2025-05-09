@@ -28,149 +28,149 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
-            this._configListBox = new System.Windows.Forms.CheckedListBox();
-            this._configListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this._openToolFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._environmentLabel = new System.Windows.Forms.Label();
-            this._mainToolBar = new System.Windows.Forms.ToolStrip();
-            this._mainMenu = new System.Windows.Forms.MenuStrip();
-            this._editorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._integrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._runAsContext = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this._configListContextMenu.SuspendLayout();
-            this._mainMenu.SuspendLayout();
-            this.SuspendLayout();
+            _configListBox = new System.Windows.Forms.CheckedListBox();
+            _configListContextMenu = new System.Windows.Forms.ContextMenuStrip(components);
+            _openToolFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _environmentLabel = new System.Windows.Forms.Label();
+            _mainToolBar = new System.Windows.Forms.ToolStrip();
+            _mainMenu = new System.Windows.Forms.MenuStrip();
+            _editorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _integrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            _runAsContext = new System.Windows.Forms.ContextMenuStrip(components);
+            _configListContextMenu.SuspendLayout();
+            _mainMenu.SuspendLayout();
+            SuspendLayout();
             // 
-            // envList
+            // _configListBox
             // 
-            this._configListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._configListBox.ContextMenuStrip = this._configListContextMenu;
-            this._configListBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._configListBox.FormattingEnabled = true;
-            this._configListBox.Location = new System.Drawing.Point(12, 116);
-            this._configListBox.Name = "envList";
-            this._configListBox.Size = new System.Drawing.Size(524, 32);
-            this._configListBox.TabIndex = 0;
+            _configListBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _configListBox.ContextMenuStrip = _configListContextMenu;
+            _configListBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            _configListBox.FormattingEnabled = true;
+            _configListBox.Location = new System.Drawing.Point(16, 178);
+            _configListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            _configListBox.Name = "_configListBox";
+            _configListBox.Size = new System.Drawing.Size(697, 38);
+            _configListBox.TabIndex = 0;
+            _configListBox.SelectedIndexChanged += _configListBox_SelectedIndexChanged;
             // 
-            // envlistContextMenu
+            // _configListContextMenu
             // 
-            this._configListContextMenu.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._configListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._openToolFolderToolStripMenuItem});
-            this._configListContextMenu.Name = "envListContextMenu";
-            this._configListContextMenu.Size = new System.Drawing.Size(229, 34);
+            _configListContextMenu.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            _configListContextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            _configListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { _openToolFolderToolStripMenuItem });
+            _configListContextMenu.Name = "envListContextMenu";
+            _configListContextMenu.Size = new System.Drawing.Size(274, 40);
             // 
-            // openToolFolderToolStripMenuItem
+            // _openToolFolderToolStripMenuItem
             // 
-            this._openToolFolderToolStripMenuItem.Name = "openToolFolderToolStripMenuItem";
-            this._openToolFolderToolStripMenuItem.Size = new System.Drawing.Size(228, 30);
-            this._openToolFolderToolStripMenuItem.Text = "Open Tool Folder";
-            this._openToolFolderToolStripMenuItem.Click += new System.EventHandler(this.openToolFolderToolStripMenuItem_Click);
+            _openToolFolderToolStripMenuItem.Name = "_openToolFolderToolStripMenuItem";
+            _openToolFolderToolStripMenuItem.Size = new System.Drawing.Size(273, 36);
+            _openToolFolderToolStripMenuItem.Text = "Open Tool Folder";
+            _openToolFolderToolStripMenuItem.Click += openToolFolderToolStripMenuItem_Click;
             // 
-            // environmentLabel
+            // _environmentLabel
             // 
-            this._environmentLabel.AutoSize = true;
-            this._environmentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._environmentLabel.Location = new System.Drawing.Point(9, 90);
-            this._environmentLabel.Name = "environmentLabel";
-            this._environmentLabel.Size = new System.Drawing.Size(149, 16);
-            this._environmentLabel.TabIndex = 1;
-            this._environmentLabel.Text = "Select Environment :";
+            _environmentLabel.AutoSize = true;
+            _environmentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            _environmentLabel.Location = new System.Drawing.Point(12, 138);
+            _environmentLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _environmentLabel.Name = "_environmentLabel";
+            _environmentLabel.Size = new System.Drawing.Size(184, 20);
+            _environmentLabel.TabIndex = 1;
+            _environmentLabel.Text = "Select Environment :";
             // 
-            // mainToolBar
+            // _mainToolBar
             // 
-            this._mainToolBar.AutoSize = false;
-            this._mainToolBar.ImageScalingSize = new System.Drawing.Size(40, 40);
-            this._mainToolBar.Location = new System.Drawing.Point(0, 33);
-            this._mainToolBar.Name = "mainToolBar";
-            this._mainToolBar.Size = new System.Drawing.Size(548, 45);
-            this._mainToolBar.TabIndex = 2;
+            _mainToolBar.AutoSize = false;
+            _mainToolBar.ImageScalingSize = new System.Drawing.Size(40, 40);
+            _mainToolBar.Location = new System.Drawing.Point(0, 42);
+            _mainToolBar.Name = "_mainToolBar";
+            _mainToolBar.Size = new System.Drawing.Size(728, 69);
+            _mainToolBar.TabIndex = 2;
             // 
-            // mainMenu
+            // _mainMenu
             // 
-            this._mainMenu.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._editorsToolStripMenuItem,
-            this._toolsToolStripMenuItem,
-            this._integrationToolStripMenuItem,
-            this._helpToolStripMenuItem});
-            this._mainMenu.Location = new System.Drawing.Point(0, 0);
-            this._mainMenu.Name = "mainMenu";
-            this._mainMenu.Size = new System.Drawing.Size(548, 33);
-            this._mainMenu.TabIndex = 3;
-            this._mainMenu.Text = "menuStrip1";
+            _mainMenu.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            _mainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            _mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { _editorsToolStripMenuItem, _toolsToolStripMenuItem, _integrationToolStripMenuItem, _helpToolStripMenuItem });
+            _mainMenu.Location = new System.Drawing.Point(0, 0);
+            _mainMenu.Name = "_mainMenu";
+            _mainMenu.Padding = new System.Windows.Forms.Padding(8, 3, 0, 3);
+            _mainMenu.Size = new System.Drawing.Size(728, 42);
+            _mainMenu.TabIndex = 3;
+            _mainMenu.Text = "menuStrip1";
             // 
-            // editorsToolStripMenuItem
+            // _editorsToolStripMenuItem
             // 
-            this._editorsToolStripMenuItem.Name = "editorsToolStripMenuItem";
-            this._editorsToolStripMenuItem.Size = new System.Drawing.Size(82, 29);
-            this._editorsToolStripMenuItem.Text = "Editors";
-            this._editorsToolStripMenuItem.Visible = false;
+            _editorsToolStripMenuItem.Name = "_editorsToolStripMenuItem";
+            _editorsToolStripMenuItem.Size = new System.Drawing.Size(100, 36);
+            _editorsToolStripMenuItem.Text = "Editors";
+            _editorsToolStripMenuItem.Visible = false;
             // 
-            // toolsToolStripMenuItem
+            // _toolsToolStripMenuItem
             // 
-            this._toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this._toolsToolStripMenuItem.Size = new System.Drawing.Size(67, 29);
-            this._toolsToolStripMenuItem.Text = "Tools";
-            this._toolsToolStripMenuItem.Visible = false;
+            _toolsToolStripMenuItem.Name = "_toolsToolStripMenuItem";
+            _toolsToolStripMenuItem.Size = new System.Drawing.Size(83, 36);
+            _toolsToolStripMenuItem.Text = "Tools";
+            _toolsToolStripMenuItem.Visible = false;
             // 
-            // integrationToolStripMenuItem
+            // _integrationToolStripMenuItem
             // 
-            this._integrationToolStripMenuItem.Name = "integrationToolStripMenuItem";
-            this._integrationToolStripMenuItem.Size = new System.Drawing.Size(117, 29);
-            this._integrationToolStripMenuItem.Text = "Integration";
-            this._integrationToolStripMenuItem.Visible = false;
+            _integrationToolStripMenuItem.Name = "_integrationToolStripMenuItem";
+            _integrationToolStripMenuItem.Size = new System.Drawing.Size(145, 36);
+            _integrationToolStripMenuItem.Text = "Integration";
+            _integrationToolStripMenuItem.Visible = false;
             // 
-            // helpToolStripMenuItem
+            // _helpToolStripMenuItem
             // 
-            this._helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._aboutToolStripMenuItem});
-            this._helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this._helpToolStripMenuItem.Size = new System.Drawing.Size(63, 29);
-            this._helpToolStripMenuItem.Text = "Help";
+            _helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { _aboutToolStripMenuItem });
+            _helpToolStripMenuItem.Name = "_helpToolStripMenuItem";
+            _helpToolStripMenuItem.Size = new System.Drawing.Size(78, 36);
+            _helpToolStripMenuItem.Text = "Help";
             // 
-            // aboutToolStripMenuItem
+            // _aboutToolStripMenuItem
             // 
-            this._aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this._aboutToolStripMenuItem.Size = new System.Drawing.Size(135, 30);
-            this._aboutToolStripMenuItem.Text = "About";
-            this._aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            _aboutToolStripMenuItem.Name = "_aboutToolStripMenuItem";
+            _aboutToolStripMenuItem.Size = new System.Drawing.Size(167, 36);
+            _aboutToolStripMenuItem.Text = "About";
+            _aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
-            // runAsContext
+            // _runAsContext
             // 
-            this._runAsContext.Name = "runAsContext";
-            this._runAsContext.Size = new System.Drawing.Size(61, 4);
+            _runAsContext.ImageScalingSize = new System.Drawing.Size(20, 20);
+            _runAsContext.Name = "runAsContext";
+            _runAsContext.Size = new System.Drawing.Size(61, 4);
             // 
             // mainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(548, 171);
-            this.Controls.Add(this._mainToolBar);
-            this.Controls.Add(this._mainMenu);
-            this.Controls.Add(this._environmentLabel);
-            this.Controls.Add(this._configListBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this._mainMenu;
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(564, 651);
-            this.Name = "mainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Launch Environment";
-            this.Load += new System.EventHandler(this.mainForm_Load);
-            this._configListContextMenu.ResumeLayout(false);
-            this._mainMenu.ResumeLayout(false);
-            this._mainMenu.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(728, 263);
+            Controls.Add(_mainToolBar);
+            Controls.Add(_mainMenu);
+            Controls.Add(_environmentLabel);
+            Controls.Add(_configListBox);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = _mainMenu;
+            Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            MaximizeBox = false;
+            MaximumSize = new System.Drawing.Size(746, 976);
+            Name = "mainForm";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "Launch Environment";
+            Load += mainForm_Load;
+            _configListContextMenu.ResumeLayout(false);
+            _mainMenu.ResumeLayout(false);
+            _mainMenu.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

@@ -29,6 +29,8 @@ namespace LaunchEnvironment
                 Application.SetHighDpiMode(HighDpiMode.DpiUnawareGdiScaled);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+                Application.ThreadException += Application_ThreadException;
+                Application.ApplicationExit += Application_ApplicationExit;
                 Application.Run(new mainForm());
             }
             else
@@ -91,6 +93,16 @@ namespace LaunchEnvironment
             //        }
             //    }
             //}
+        }
+
+        private static void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            ErrorLog.Inst.LogError("LaunchEnvironment Closed.");
+        }
+
+        private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            ErrorLog.Inst.LogError("Unhandled Exception : {0}", e.Exception.Message);
         }
     }
 }

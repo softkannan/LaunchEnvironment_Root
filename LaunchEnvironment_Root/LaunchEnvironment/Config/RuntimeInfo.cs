@@ -256,7 +256,14 @@ namespace LaunchEnvironment.Config
                 // A FileStream is needed to read the XML document.
                 using (FileStream fs = new FileStream(filePath, FileMode.Open))
                 {
-                    _inst = (RuntimeInfo)serializer.Deserialize(fs);
+                    try
+                    {
+                        _inst = (RuntimeInfo)serializer.Deserialize(fs);
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorLog.Inst.LogError("Unable to load Config file : {0} : {1}", filePath, ex.Message);
+                    }
                 }
             }
 
