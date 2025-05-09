@@ -113,7 +113,7 @@ namespace LaunchEnvironment.Config
             get
             {
                 string fileLocation = Assembly.GetExecutingAssembly().Location;
-                string retVal = string.Format("{0}\\CurrentConfig_{1}.xml", Path.GetDirectoryName(fileLocation), RuntimeInfo.Inst.CurrentTimeStamp);
+                string retVal = string.Format("{0}\\Config\\CurrentConfig_{1}.xml", Path.GetDirectoryName(fileLocation), RuntimeInfo.Inst.CurrentTimeStamp);
                 return retVal;
             }
         }
@@ -124,7 +124,7 @@ namespace LaunchEnvironment.Config
             get
             {
                 string fileLocation = Assembly.GetExecutingAssembly().Location;
-                string retVal = string.Format("{0}\\Tools.xml", Path.GetDirectoryName(fileLocation));
+                string retVal = string.Format("{0}\\Config\\Tools.xml", Path.GetDirectoryName(fileLocation));
                 return retVal;
             }
         }

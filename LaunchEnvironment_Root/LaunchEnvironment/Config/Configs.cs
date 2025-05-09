@@ -18,7 +18,7 @@ namespace LaunchEnvironment.Config
             Configs_Root retVal = null;
 
             string fileLocation = Assembly.GetExecutingAssembly().Location;
-            string envFile = string.Format("{0}\\Environments.xml", Path.GetDirectoryName(fileLocation));
+            string envFile = string.Format("{0}\\Config\\Environments.xml", Path.GetDirectoryName(fileLocation));
             if (File.Exists(envFile))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Configs_Root));
