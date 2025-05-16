@@ -19,27 +19,29 @@ namespace LaunchEnvironment.Config
 
             string fileLocation = Assembly.GetExecutingAssembly().Location;
             string envFile = string.Format("{0}\\Config\\Environments.xml", Path.GetDirectoryName(fileLocation));
-            if (File.Exists(envFile))
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "LaunchEnvironment.Resource.Config.Environments.xml";
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Configs_Root));
+            // A FileStream is needed to read the XML document.
+            using (var fs = File.Exists(envFile) ? new StreamReader(envFile) : new StreamReader(assembly.GetManifestResourceStream(resourceName)))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Configs_Root));
-                // A FileStream is needed to read the XML document.
-                using (var fs = new StreamReader(envFile))
+                try
                 {
-                    try
-                    {
-                        retVal = (Configs_Root)serializer.Deserialize(fs);
-                    }
-                    catch (Exception ex)
-                    {
-                        ErrorLog.Inst.LogError("Unable to load Config file : {0} : {1}", envFile, ex.Message);
-                    }
+                    retVal = (Configs_Root)serializer.Deserialize(fs);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.Inst.LogError("Unable to load Config file : {0} : {1}", envFile, ex.Message);
                 }
             }
-            else
+#if !DEBUG
+            if (!File.Exists(envFile))
             {
-                ErrorLog.Inst.LogError("Unable to file Config file : {0}", envFile);
+                ErrorLog.Inst.ShowInfo("Unable to find `Environments.xml` file : {0}", envFile);
             }
-
+#endif
             _inst = retVal;
         }
 

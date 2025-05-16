@@ -147,7 +147,12 @@ namespace LaunchEnvironment
                     bool toolAvaialble = false;
                     var splitButton = new ToolStripSplitButton();
                     splitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-                    splitButton.Image = Image.FromFile(string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, item.Name));
+                    var imgFile = string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, item.Name);
+                    if (!File.Exists(imgFile))
+                    {
+                        imgFile = string.Format(@"{0}\Resource\img\App.png", RuntimeInfo.Inst.LaunchEnvExeDir);
+                    }
+                    splitButton.Image = Image.FromFile(imgFile);
                     splitButton.Name = string.Format("{0}_toolStripBttn{1}",rootToolStrip.Name,item.Name);
                     splitButton.Text = item.Name;
                     splitButton.Tag = item.Name;
@@ -160,7 +165,12 @@ namespace LaunchEnvironment
                             var tool = RuntimeInfo.Inst.GetTool(splitItem);
                             toolAvaialble = true;
                             var toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-                            toolStripMenuItem.Image = Image.FromFile(string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, tool.Name));
+                            imgFile = string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, tool.Name);
+                            if(!File.Exists(imgFile))
+                            {
+                                imgFile = string.Format(@"{0}\Resource\img\App.png", RuntimeInfo.Inst.LaunchEnvExeDir);
+                            }
+                            toolStripMenuItem.Image = Image.FromFile(imgFile);
                             toolStripMenuItem.Name = string.Format("{0}_toolStripBttn{1}_{2}", rootToolStrip.Name, item.Name, tool.Name);
                             toolStripMenuItem.Text = tool.Name;
                             toolStripMenuItem.Tag = tool.Name;
@@ -193,7 +203,12 @@ namespace LaunchEnvironment
                             var tool = RuntimeInfo.Inst.GetTool(splitItem);
                             ToolStripItem stripButton = new ToolStripButton(); 
                             stripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-                            stripButton.Image = Image.FromFile(string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, tool.Name));
+                            var imgFile = string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, tool.Name);
+                            if (!File.Exists(imgFile))
+                            {
+                                imgFile = string.Format(@"{0}\Resource\img\App.png", RuntimeInfo.Inst.LaunchEnvExeDir);
+                            }
+                            stripButton.Image = Image.FromFile(imgFile);
                             stripButton.Name = string.Format("{0}_toolStripBttn{1}", rootToolStrip.Name, tool.Name);
                             stripButton.Text = tool.Name;
                             stripButton.Tag = tool.Name;

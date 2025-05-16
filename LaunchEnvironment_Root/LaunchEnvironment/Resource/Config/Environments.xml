@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+
+Auto Enviroement variables
+%LaunchEnvExeDir% => LaunchEnvironment.exe folder
+%OpenFolder% => Tool Launch folder
+%ToolPath% => Tool path entry in tool definition
+%ConfigPath% => Config path entry in config definition
+
+<EnviromentVariable Action="Prefix/Append/Overwrite" Type="Path/String">
+Action
+    {
+        //Append value to existing environment value / registry value
+        Append,
+        //ovrwrite the existing environment value / registry value
+        Overwrite,
+        //prefix value to existing environment value / registry value
+        Prefix
+    }
+</EnviromentVariable>
+
+
+<Config>
+  <Name>Config name</Name>
+  <Id>unique environment id(no space)</Id>
+  <ConfigPath>config / enviroment path</ConfigPath>
+  <DefaultWorkspace> for given config working dir / open folder path</DefaultWorkspace>
+  <CopyFiles>
+    <FileCopy>
+      If bellow source file matches given combination then copy that file to destination folder.
+      <SrcPath>launch.%ConfigId%.%ToolId%.json</SrcPath>
+      <DestPath>%OpenFolder%\.VSCode\launch.json</DestPath>
+    </FileCopy>
+  </CopyFiles>
+  <Arguments>
+    <Arg>tool argument, if argument contains environment varible then if all the variable declared then only given argument is included</Arg>
+  </Arguments>
+  <Envs>
+    <EnviromentVariable>
+      <Name>PYTHONHOME</Name>
+      <Value>%ToolDir%\Anaconda37</Value>
+    </EnviromentVariable>
+    <EnviromentVariable>
+      <Name>PYTHONHOME</Name>
+      <Value>%PYTHONHOME%</Value>
+    </EnviromentVariable>
+    <EnviromentVariable>
+      <Name>PATH</Name>
+      <Value>%PYTHONHOME%;%PYTHONHOME%\Scripts</Value>
+    </EnviromentVariable>
+  </Envs>
+</Config>
+
+-->
+<Configs_Root>
+  <Configs>
+
+    <Config>
+      <Name>System Default</Name>
+      <Id>none</Id>
+      <ConfigPath>%userprofile%\Desktop</ConfigPath>
+    </Config>
+
+    <!--JAVA SDK 14-->
+    <!--
+    <Config>
+      <Name>AdoptOpenJDK</Name>
+      <Id>Java</Id>
+      <ConfigPath>%JAVAToolsDir%\AdoptOpenJDK</ConfigPath>
+      <Envs>
+        <EnviromentVariable Action="Overwrite">
+          <Name>JAVA_HOME</Name>
+          <Value>%JAVAToolsDir%\AdoptOpenJDK</Value>
+        </EnviromentVariable>
+        <EnviromentVariable Action="Overwrite">
+          <Name>MAVEN_HOME</Name>
+          <Value>%JAVAToolsDir%\selenium\maven</Value>
+        </EnviromentVariable>
+        <EnviromentVariable Action="Overwrite">
+          <Name>JDK_HOME</Name>
+          <Value>%JAVAToolsDir%\AdoptOpenJDK</Value>
+        </EnviromentVariable>
+        <EnviromentVariable Action="Overwrite">
+          <Name>JRE_HOME</Name>
+          <Value>%JAVAToolsDir%\AdoptOpenJDK\bin</Value>
+        </EnviromentVariable>
+        <EnviromentVariable Action="Overwrite" Type="String">
+          <Name>CLASSPATH</Name>
+          <Value>.;%JAVAToolsDir%\selenium\java\*;%JAVAToolsDir%\selenium\java\libs\*</Value>
+        </EnviromentVariable>
+        <EnviromentVariable Action="Prefix">
+          <Name>PATH</Name>
+          <Value>%JAVAToolsDir%\AdoptOpenJDK\bin;%JAVAToolsDir%\selenium\webdriver;%JAVAToolsDir%\selenium\maven\bin;%JAVAToolsDir%\selenium</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+    -->
+
+    <!--ActivePerl 5.24-->
+    <!-- 
+    <Config>
+      <Name>ActivePerl 5.24</Name>
+      <Id>Perl</Id>
+      <ConfigPath>%PerlToolsDir%\activeperl64_5_24</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%PerlToolsDir%\activeperl64_5_24\site\bin;%PerlToolsDir%\activeperl64_5_24\bin</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+    -->
+
+    <!--ActiveTCL-->
+    <!-- 
+    <Config>
+      <Name>ActiveTCL</Name>
+      <Id>Tcl</Id>
+      <ConfigPath>%TCLToolsDir%\activetcl</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%TCLToolsDir%\activetcl\bin</Value>
+        </EnviromentVariable>
+        <EnviromentVariable Action="Overwrite">
+          <Name>AppData</Name>
+          <Value>%TCLToolsDir%</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+    -->
+
+    <!--VCCommand-->
+    <!-- Try "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -? To learn other options -->
+    <Config>
+      <Name>VisualStudio Command Prompt</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VS140COMNTOOLS%</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VS140COMNTOOLS%VsDevCmd.bat"</BatchCmd>
+        <!-- Prefixing the command line $ indicates this templated string-->
+        <BatchCmd>$start "{editorpath}" "{args}"</BatchCmd>
+      </BatchFile>
+      <Style UseShellExecute="true" />
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2022 x86</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VSSTUDIODIR%\Common7\Tools</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\vsdevcmd.bat" -arch=x86</BatchCmd>
+        <!-- Prefixing the command line $ indicates this templated string-->
+        <BatchCmd>$"{editorpath}" "{args}"</BatchCmd>
+      </BatchFile>
+      <!-- <Style UseShellExecute="true" ExecuteAsAdmin="false" CreateNoWindow="true" WindowStyle="Normal/Hidden/Minimized/Maximized" /> -->
+      <Style UseShellExecute="false" CreateNoWindow="true" WindowStyle="Hidden" />
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2022 x64</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VSSTUDIODIR%\Common7\Tools</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\vsdevcmd.bat" -arch=amd64</BatchCmd>
+        <!-- Prefixing the command line $ indicates this templated string-->
+        <BatchCmd>$"{editorpath}" "{args}"</BatchCmd>
+      </BatchFile>
+      <!-- <Style UseShellExecute="true" ExecuteAsAdmin="false" CreateNoWindow="true" WindowStyle="Normal/Hidden/Minimized/Maximized" /> -->
+      <Style UseShellExecute="false" CreateNoWindow="true" WindowStyle="Hidden" />
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2022 ARM</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VSSTUDIODIR%\Common7\Tools</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\vsdevcmd.bat" -arch=arm</BatchCmd>
+        <!-- Prefixing the command line $ indicates this templated string-->
+        <BatchCmd>$"{editorpath}" "{args}"</BatchCmd>
+      </BatchFile>
+      <!-- <Style UseShellExecute="true" ExecuteAsAdmin="false" CreateNoWindow="true" WindowStyle="Normal/Hidden/Minimized/Maximized" /> -->
+      <Style UseShellExecute="false" CreateNoWindow="true" WindowStyle="Hidden" />
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2022 ARM64</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VSSTUDIODIR%\Common7\Tools</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\vsdevcmd.bat" -arch=arm64</BatchCmd>
+        <!-- Prefixing the command line $ indicates this templated string-->
+        <BatchCmd>$"{editorpath}" "{args}"</BatchCmd>
+      </BatchFile>
+      <!-- <Style UseShellExecute="true" ExecuteAsAdmin="false" CreateNoWindow="true" WindowStyle="Normal/Hidden/Minimized/Maximized" /> -->
+      <Style UseShellExecute="false" CreateNoWindow="true" WindowStyle="Hidden" />
+    </Config>
+
+    <!--
+    <Config>
+      <Name>VisualStudio Command Prompt 2019 x86</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VSSTUDIODIR%\Common7\Tools</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\vsdevcmd.bat" -arch=x86</BatchCmd>
+      </BatchFile>
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2019 x64</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VSSTUDIODIR%\Common7\Tools</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\vsdevcmd.bat" -arch=amd64</BatchCmd>
+      </BatchFile>
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2019 ARM</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VSSTUDIODIR%\Common7\Tools</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\vsdevcmd.bat" -arch=arm</BatchCmd>
+      </BatchFile>
+    </Config>
+
+    <Config>
+      <Name>VisualStudio Command Prompt 2019 ARM64</Name>
+      <Id>VSStudio</Id>
+      <ConfigPath>%VSSTUDIODIR%\Common7\Tools</ConfigPath>
+      <BatchFile>
+        <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\VsDevCmd.bat" -arch=arm64</BatchCmd>
+      </BatchFile>
+    </Config>
+    -->
+
+    <!--nodejs-->
+    <!--
+    <Config>
+      <Name>Node Js</Name>
+      <Id>NodeJS</Id>
+      <ConfigPath>%NodeJSToolsDir%\compilers\nodejs</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%NodeJSToolsDir%\compilers\nodejs</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+    -->
+
+    <!--WinDbg-->
+    <Config>
+      <Name>Windbg</Name>
+      <Id>WinDbg</Id>
+      <ConfigPath>%WinDbgDir%\Debuggers\Windbg</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%WinDbgDir%\Debuggers\Scripts</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>Scripts</Name>
+          <Value>%WinDbgDir%\Debuggers\Scripts</Value>
+        </EnviromentVariable>
+        <EnviromentVariable>
+          <Name>_NT_SYMBOL_PATH</Name>
+          <Value>srv*C:\DebugSymbols\Microsoft*https://msdl.microsoft.com/download/symbols</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+    <Config>
+      <Name>GhostScript</Name>
+      <Id>GhostScript</Id>
+      <ConfigPath>%ProgramFiles%\gs\bin</ConfigPath>
+      <Envs>
+        <EnviromentVariable>
+          <Name>PATH</Name>
+          <Value>%ProgramFiles%\gs\bin</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Config>
+
+  </Configs>
+</Configs_Root>

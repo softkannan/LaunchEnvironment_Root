@@ -17,7 +17,8 @@ namespace LaunchEnvironment.Config
             RegConfigs = null;
             Envs = null;
             CopyFiles = null;
-            PreReqBatchFileCmds = null;
+            BatchCmd = null;
+            Style = null;
         }
         public string Name { get; set; }
         public string Id { get; set; }
@@ -30,14 +31,26 @@ namespace LaunchEnvironment.Config
         [XmlArray("Arguments")]
         [XmlArrayItem(ElementName = "Arg")]
         public List<string> Arguments { get; set; }
+        /// <summary>
+        /// Add registry keys to the system
+        /// </summary>
         public List<RegKey> RegConfigs { get; set; }
+        /// <summary>
+        /// Sets the environment variables for the given process
+        /// </summary>
         public List<EnviromentVariable> Envs { get; set; }
 
         /// <summary>
         /// If this value present then the tool will use this value, this takes precedence
+        /// This will force the editor to create the batch file and launch tool from the batch file
         /// </summary>
-        [XmlArray("PreBatchFile")]
-        [XmlArrayItem(ElementName = "PreBatchFileCmd")]
-        public List<string> PreReqBatchFileCmds { get; set; }
+        [XmlArray("BatchFile")]
+        [XmlArrayItem(ElementName = "BatchCmd")]
+        public List<string> BatchCmd { get; set; }
+
+        /// <summary>
+        /// If the style is set then the tool will use this value, this takes precedence
+        /// </summary>
+        public LaunchStyle Style { get; set; }
     }
 }

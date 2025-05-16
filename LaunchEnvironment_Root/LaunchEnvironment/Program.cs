@@ -97,7 +97,9 @@ namespace LaunchEnvironment
 
         private static void Application_ApplicationExit(object sender, EventArgs e)
         {
+#if DEBUG
             ErrorLog.Inst.LogError("LaunchEnvironment Closed.");
+#endif
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)

@@ -250,23 +250,29 @@ namespace LaunchEnvironment.Config
         public static void LoadConfig()
         {
             string filePath = ToolConfigFile;
-            if (File.Exists(filePath))
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "LaunchEnvironment.Resource.Config.Tools.xml";
+
+            XmlSerializer serializer = new XmlSerializer(typeof(RuntimeInfo));
+            // A FileStream is needed to read the XML document.
+            using (var fs = File.Exists(filePath) ? new StreamReader(filePath) : new StreamReader(assembly.GetManifestResourceStream(resourceName)))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(RuntimeInfo));
-                // A FileStream is needed to read the XML document.
-                using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                try
                 {
-                    try
-                    {
-                        _inst = (RuntimeInfo)serializer.Deserialize(fs);
-                    }
-                    catch (Exception ex)
-                    {
-                        ErrorLog.Inst.LogError("Unable to load Config file : {0} : {1}", filePath, ex.Message);
-                    }
+                    _inst = (RuntimeInfo)serializer.Deserialize(fs);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.Inst.LogError("Unable to load Config file : {0} : {1}", filePath, ex.Message);
                 }
             }
-
+#if !DEBUG
+            if (!File.Exists(filePath))
+            {
+                ErrorLog.Inst.ShowInfo("Unable to find `Tools.xml` Config file : {0}", filePath);
+            }
+#endif
             //if (_inst != null)
             //{
             //    _inst.ProcessRuntimeInfo();

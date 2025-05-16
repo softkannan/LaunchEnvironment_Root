@@ -81,6 +81,7 @@
     <Compile Include="Config\EnvironmentAction.cs" />
     <Compile Include="Config\EnvironmentValueType.cs" />
     <Compile Include="Config\FileCopy.cs" />
+    <Compile Include="Config\LaunchStyle.cs" />
     <Compile Include="Config\MenuBar.cs" />
     <Compile Include="Config\ResolveValue.cs" />
     <Compile Include="Config\Tool.cs" />
@@ -124,7 +125,7 @@
     <Compile Include="Config\RegKey.cs" />
     <Compile Include="RegConfig\RegConfigBase.cs" />
     <Compile Include="Config\ConfigType.cs" />
-    <Compile Include="Editors\VSStudioEditor.cs" />
+    <Compile Include="Editors\VSStudioEditor_Disabled.cs" />
     <Compile Include="RegConfig\RegistryHive.cs" />
     <Compile Include="Config\RegValue.cs" />
     <Compile Include="RegConfig\VCRegConfig.cs" />
@@ -162,6 +163,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="mainicon.ico" />
+    <Content Include="Resource\img\App.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resource\img\Bash.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -204,14 +208,12 @@
     <Content Include="Resource\img\WingIDE.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Tools.xml">
+    <EmbeddedResource Include="Resource\Config\Tools.xml">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Environments.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource\Config\Environments.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Resource\img\Cmd-32Bit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

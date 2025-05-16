@@ -1,0 +1,488 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+
+Auto Enviroement variables
+%LaunchEnvExeDir% => LaunchEnvironment.exe folder
+%OpenFolder% => Tool Launch folder
+%ToolPath% => Tool path entry in tool definition
+%ConfigPath% => Config path entry in config definition
+
+<EnviromentVariable Action="Prefix/Append/Overwrite" Type="Path/String">
+Action
+    {
+        //Append value to existing environment value / registry value
+        Append,
+        //ovrwrite the existing environment value / registry value
+        Overwrite,
+        //prefix value to existing environment value / registry value
+        Prefix
+    }
+</EnviromentVariable>
+
+<Tool Type="RegularApp/Action/DynamicApp/StoreApp" UseShellExecute="false/true" ByPassRegistry="false/true" Editor="Generic/VSCode/VSStudio/Python">
+  <Name>ToolName</Name>
+  <Path>exe path</Path>
+  <ToolPath>tool install folder</ToolPath>
+  <Arguments>
+    <Arg>tool argument, if argument contains environment varible then if all the variable declared then only given argument is included</Arg>
+  </Arguments>
+  <Envs>
+    <EnviromentVariable>
+      <Name>PATH</Name>
+      <Value>.</Value>
+    </EnviromentVariable>
+  </Envs>
+</Tool>
+
+-->
+<RuntimeInfo>
+  <!--To run always as admin then enable this value-->
+  <!--<RunasAdmin>true</RunasAdmin>-->
+  <!--Default working dir / default open folder-->
+  <DefaultWorkspace>%userprofile%\Documents</DefaultWorkspace>
+  <!-- Tools Definition Start -->
+  <Tools>
+    <Tool>
+      <Name>Generic</Name>
+      <!--<Path>%SystemRoot%\system32\cmd.exe</Path>-->
+    </Tool>
+    <Tool Type="Action" Editor ="KnownCommand">
+      <Name>Register Explorer ContextMenu</Name>
+      <Path>RegisterExplorerContextMenu</Path>
+    </Tool>
+    <Tool Type="Action" Editor ="KnownCommand">
+      <Name>Write Config Registry Values</Name>
+      <Path>WriteConfigRegistryValues</Path>
+    </Tool>
+    <Tool Type="Action" Editor ="KnownCommand">
+      <Name>Update Python Script Folder</Name>
+      <Path>UpdatePythonScriptFolder</Path>
+    </Tool>
+    <Tool>
+      <Name>eclipse</Name>
+      <Path>%ToolDir%\eclipse\eclipse.exe</Path>
+      <ToolPath>%ToolDir%\eclipse</ToolPath>
+      <Arguments>
+        <Arg>"%OpenFolder%"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>VSCode</Name>
+      <Path>%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe</Path>
+      <ToolPath>%LOCALAPPDATA%\Programs\Microsoft VS Code</ToolPath>
+      <Arguments>
+        <Arg>%OpenFolder%</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>VSStudio</Name>
+      <Path>%VSSTUDIODIR%\Common7\IDE\devenv.exe</Path>
+      <ToolPath>%VSSTUDIODIR%\Common7\IDE</ToolPath>
+      <Arguments>
+        <Arg>/useenv "%OpenFolder%"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>Run</Name>
+      <Path>%LaunchEnvExeDir%\runscript.exe</Path>
+      <Arguments>
+        <Arg>-rundiag</Arg>
+      </Arguments>
+    </Tool>
+    <Tool Type="StoreApp">
+      <Name>Terminal</Name>
+      <Path>wt.exe</Path>
+      <Path32Bit>wt.exe</Path32Bit>
+      <Arguments>
+        <Arg>-p "PowerShell" -d "%OpenFolder%"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>PowerShell</Name>
+      <Path>%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe</Path>
+    </Tool>
+    <Tool>
+      <Name>PowerShell-32bit</Name>
+      <Path>%SystemRoot%\syswow64\WindowsPowerShell\v1.0\powershell.exe</Path>
+    </Tool>
+    <Tool>
+      <Name>Cmd</Name>
+      <Path>%SystemRoot%\system32\cmd.exe</Path>
+      <Path32Bit>%SystemRoot%\syswow64\cmd.exe</Path32Bit>
+    </Tool>
+    <Tool>
+      <Name>Cmd-32Bit</Name>
+      <Path>%SystemRoot%\syswow64\cmd.exe</Path>
+    </Tool>
+    <Tool>
+      <Name>ConEmu</Name>
+      <Path>%ConToolsDir%\ConEmu\ConEmu64.exe</Path>
+      <ToolPath>%ConToolsDir%\ConEmu</ToolPath>
+    </Tool>
+    <Tool>
+      <Name>ConEmu-32Bit</Name>
+      <Path>%ConToolsDir%\ConEmu\ConEmu.exe</Path>
+      <ToolPath>%ConToolsDir%\ConEmu</ToolPath>
+    </Tool>
+    <Tool>
+      <Name>Bash</Name>
+      <Path>%SystemRoot%\system32\bash.exe</Path>
+    </Tool>
+    <Tool Type="DynamicApp">
+      <Name>WinDbg7</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\x64\WinDbg.exe</Path>
+      <ToolPath>%WinDbgDir%\Debuggers_Win7\x64</ToolPath>
+      <Arguments>
+        <Arg>-c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool Type="DynamicApp">
+      <Name>WinDbg7-32Bit</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\x86\WinDbg.exe</Path>
+      <ToolPath>%WinDbgDir%\Debuggers_Win7\x86\</ToolPath>
+      <Arguments>
+        <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool Type="DynamicApp">
+      <Name>WinDbg10</Name>
+      <Path>%WinDbgDir%\Debuggers_Win10\x64\WinDbg.exe</Path>
+      <ToolPath>%WinDbgDir%\Debuggers_Win10\x64\</ToolPath>
+      <Arguments>
+        <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool Type="DynamicApp">
+      <Name>WinDbg10-32Bit</Name>
+      <Path>%WinDbgDir%\Debuggers_Win10\x86\WinDbg.exe</Path>
+      <ToolPath>%WinDbgDir%\Debuggers_Win10\x86\</ToolPath>
+      <Arguments>
+        <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <!--
+    <Tool Type="DynamicApp">
+      <Name>WinDbg7</Name>
+      <Path>%ConfigPath%\x64\WinDbg.exe</Path>
+      <Arguments>
+        <Arg>-c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool Type="DynamicApp">
+      <Name>WinDbg7-32Bit</Name>
+      <Path>%ConfigPath%\x86\WinDbg.exe</Path>
+      <Arguments>
+        <Arg>-c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
+      </Arguments>
+    </Tool>
+    -->
+    <Tool Type="StoreApp">
+      <Name>WinDbgX</Name>
+      <Path>WinDbgX.exe</Path>
+      <Arguments>
+        <arg>-debugArch amd64 -c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl_dbg_preview.txt"</arg>
+      </Arguments>
+    </Tool>
+    <Tool Type="StoreApp">
+      <Name>WinDbgX-32Bit</Name>
+      <Path>WinDbgX.exe</Path>
+      <Arguments>
+        <Arg>-debugArch x86 -c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl_dbg_preview.txt"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool Type="DynamicApp" UseShellExecute="true">
+      <Name>Python</Name>
+      <Path>%ConfigPath%\pythonw.exe</Path>
+      <Arguments>
+        <Arg>"%ConfigPath%\Lib\idlelib\idle.py"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>CodeLite</Name>
+      <Path>%ToolDir%\codelite\tool\codelite.exe</Path>
+      <ToolPath>%ToolDir%\codelite</ToolPath>
+      <!--<Envs>
+        <EnviromentVariable Action="Overwrite">
+          <Name>LOCALAPPDATA</Name>
+          <Value>%ToolDir%\codelite\userdata</Value>
+        </EnviromentVariable>
+      </Envs>-->
+    </Tool>
+    <Tool>
+      <Name>MobXTerm</Name>
+      <Path>%ConToolsDir%\MobaXterm\MobaXterm.exe</Path>
+      <ToolPath>%ConToolsDir%\Mobatek</ToolPath>
+      
+      <!--
+      <Path>%ProgramFiles(x86)%\Mobatek\MobaXterm\MobaXterm.exe</Path>
+      <ToolPath>%ProgramFiles(x86)%\Mobatek</ToolPath>
+      -->
+      <Arguments>
+        <Arg>/openfolder "%OpenFolder%"</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>Notepad++</Name>
+      <Path>%ProgramFiles%\Notepad++\notepad++.exe</Path>
+      <!--<ByPassRegistry>true</ByPassRegistry>-->
+      <ToolPath>%systemroot%</ToolPath>
+    </Tool>
+    <Tool>
+      <Name>Show Environment</Name>
+      <Path>%LaunchEnvExeDir%\ShowEnvironment.exe</Path>
+      <!--<ByPassRegistry>true</ByPassRegistry>-->
+      <ToolPath>%LaunchEnvExeDir%</ToolPath>
+    </Tool>
+    <Tool>
+      <Name>Testing</Name>
+      <Path>%LaunchEnvExeDir%\Testing.exe</Path>
+      <!--<ByPassRegistry>true</ByPassRegistry>-->
+      <ToolPath>%LaunchEnvExeDir%</ToolPath>
+      <Envs>
+        <EnviromentVariable Action="Overwrite">
+          <Name>LOCALAPPDATA</Name>
+          <Value>%ToolDir%</Value>
+        </EnviromentVariable>
+      </Envs>
+    </Tool>
+    <Tool>
+      <Name>Process Explorer</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\procexp.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+    </Tool>
+    <Tool>
+      <Name>Windbg Readme</Name>
+      <Path>%windir%\system32\notepad.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+      <Arguments>
+        <Arg>%ToolDir%\Debuggers_Scripts\cmdtree\readme.txt</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>Edit Environment XML</Name>
+      <Path>%ProgramFiles(x86)%\Notepad++\notepad++.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+      <Arguments>
+        <Arg>%ToolDir%\LaunchEnvironment\Environments.xml</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>Open LaunchEnvironment Folder</Name>
+      <Path>%SystemRoot%\explorer.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+      <Arguments>
+        <Arg>%LaunchEnvExeDir%</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>WindbgX</Name>
+      <!-- <IsStoreApp>True</IsStoreApp> -->
+      <Path>windbgx.exe</Path>
+    </Tool>
+    <Tool>
+      <Name>Process Monitor</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\Procmon.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+    </Tool>
+    <Tool>
+      <Name>vmmap</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\vmmap.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+    </Tool>
+    <Tool>
+      <Name>Winobj</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\Winobj.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+    </Tool>
+    <Tool>
+      <Name>DebugView</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\DebugView.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+    </Tool>
+    <Tool>
+      <Name>Start_VS_2017_RemoteDebug</Name>
+      <Path>%ToolDir%\Debuggers_Tools\VS_RemoteTools_2017Portable\VS_RemoteTools_2017Portable.exe</Path>
+      <BaseDir>%ToolDir%\Debuggers_Tools\VS_RemoteTools_2017Portable</BaseDir>
+    </Tool>
+    <Tool>
+      <Name>Start_VS_2019_RemoteDebug</Name>
+      <Path>%ToolDir%\Debuggers_Tools\VSStudio_Remote_Tools_2019Portable\VSStudio_Remote_Tools_2019Portable.exe</Path>
+      <BaseDir>%ToolDir%\Debuggers_Tools\VSStudio_Remote_Tools_2019Portable</BaseDir>
+    </Tool>
+    <Tool Type="DynamicApp" UseShellExecute="true">
+      <Name>Start_Remote_Windbg</Name>
+      <Path>%ConfigPath%\dbgsrv.exe</Path>
+      <Arguments>
+        <Arg>-t tcp:port=5004</Arg>
+      </Arguments>
+    </Tool>
+    <Tool>
+      <Name>WinDbg_Kernel_Mode</Name>
+      <Path>%WinDbgDir%\Debuggers_Win7\tools\livekd.exe</Path>
+      <BaseDir>%WinDbgDir%\Debuggers_Win7\tools</BaseDir>
+    </Tool>
+  </Tools>
+  <!-- Tools Definition End -->
+  <ContextMenu>
+    <Menu>VSCode</Menu>
+    <Menu>VSStudio</Menu>
+    <Menu>Terminal</Menu>
+    <Menu>Cmd</Menu>
+    <Menu>WinDbg7</Menu>
+    <Menu>WinDbg10</Menu>
+  </ContextMenu>
+  <ToolBar>
+    <ToolBarItem>
+      <Name>VSCode</Name>
+    </ToolBarItem>
+    <ToolBarItem>
+      <Name>eclipse</Name>
+    </ToolBarItem>
+    <ToolBarItem>
+      <Name>VSStudio</Name>
+    </ToolBarItem>
+    <ToolBarItem>
+      <Name>Run</Name>
+    </ToolBarItem>
+    <ToolBarItem>
+      <!--Default Tool name-->
+      <Name>Terminal</Name>
+    </ToolBarItem>
+    <ToolBarItem>
+      <Name>Cmd</Name>
+      <Tools>
+        <Name>Cmd</Name>
+        <Name>Cmd-32Bit</Name>
+      </Tools>
+    </ToolBarItem>
+    <ToolBarItem>
+      <Name>ConEmu</Name>
+      <Tools>
+        <Name>ConEmu</Name>
+        <Name>ConEmu-32Bit</Name>
+      </Tools>
+    </ToolBarItem>
+    <!-- <ToolBarItem>
+      <Name>Bash</Name>
+    </ToolBarItem> -->
+    <ToolBarItem>
+      <!--Default Tool name-->
+      <Name>WinDbgX</Name>
+      <Tools>
+        <Name>WinDbgX</Name>
+        <Name>WinDbgX-32Bit</Name>
+        <Name>WinDbg</Name>
+        <Name>WinDbg-32Bit</Name>
+        <Name>WinDbg7</Name>
+        <Name>WinDbg7-32Bit</Name>
+        <Name>WinDbg10</Name>
+        <Name>WinDbg10-32Bit</Name>
+      </Tools>
+    </ToolBarItem>
+    <ToolBarItem>
+      <Name>Python</Name>
+      <Tools>
+        <Name>Python</Name>
+        <Name>WingIDE</Name>
+        <Name>Komodo</Name>
+      </Tools>
+    </ToolBarItem>
+  </ToolBar>
+  <MenuBar>
+    <MenuBar>
+      <!--Menu name-->
+      <Name>Integration</Name>
+      <Tools>
+        <!--Tool name-->
+        <Name>Register Explorer ContextMenu</Name>
+        <Name>Write Config Registry Values</Name>
+        <Name>Update Python Script Folder</Name>
+      </Tools>
+    </MenuBar>
+    <MenuBar>
+      <!--Menu name-->
+      <Name>Debug Tools</Name>
+      <Tools>
+        <!--Tool name-->
+        <Name>Process Explorer</Name>
+        <Name>Process Monitor</Name>
+        <Name>vmmap</Name>
+        <Name>Winobj</Name>
+        <Name>DebugView</Name>
+        <Name>WinDbg_Kernel_Mode</Name>
+        <Name>Edit Environment XML</Name>
+        <Name>Open LaunchEnvironment Folder</Name>
+        <Name>Windbg Readme</Name>
+      </Tools>
+    </MenuBar>
+    <MenuBar>
+      <!--Menu name-->
+      <Name>Remote Debug</Name>
+      <Tools>
+        <!--Tool name-->
+        <Name>Start_VS_2017_RemoteDebug</Name>
+        <Name>Start_VS_2019_RemoteDebug</Name>
+        <Name>Start_Remote_Windbg</Name>
+        <Name>CodeLite</Name>
+      </Tools>
+    </MenuBar>
+    <MenuBar>
+      <!--Menu name-->
+      <Name>Tools</Name>
+      <Tools>
+        <!--Tool name-->
+        <Name>Show Environment</Name>
+        <Name>Notepad</Name>
+        <Name>MobXTerm</Name>
+        <Name>Testing</Name>
+      </Tools>
+    </MenuBar>
+  </MenuBar>
+  <!--Apply to all environment variables-->
+  <Envs>
+    <EnviromentVariable>
+      <Name>ToolDir</Name>
+      <Value>C:\Users\krishnkr\Documents\Tools</Value>
+    </EnviromentVariable>
+    <EnviromentVariable>
+      <Name>WinDbgDir</Name>
+      <Value>C:\Users\krishnkr\Documents\Tools\WinDBG</Value>
+    </EnviromentVariable>
+    <EnviromentVariable>
+      <Name>VSSTUDIODIR</Name>
+      <Value>C:\Program Files\Microsoft Visual Studio\2022\Professional</Value>
+    </EnviromentVariable>
+    <EnviromentVariable>
+      <Name>ConToolsDir</Name>
+      <Value>C:\Program Files\Microsoft Visual Studio\2022\Professional</Value>
+    </EnviromentVariable>
+
+    <!--
+    <EnviromentVariable>
+      <Name>JAVAToolsDir</Name>
+      <Value>C:\Program Files\Microsoft Visual Studio\2022\Professional</Value>
+    </EnviromentVariable>
+    -->
+
+    <!--
+    <EnviromentVariable>
+      <Name>PerlToolsDir</Name>
+      <Value>C:\Program Files\Microsoft Visual Studio\2022\Professional</Value>
+    </EnviromentVariable>
+    -->
+
+    <!--
+    <EnviromentVariable>
+      <Name>TCLToolsDir</Name>
+      <Value>C:\Program Files\Microsoft Visual Studio\2022\Professional</Value>
+    </EnviromentVariable>
+    -->
+
+    <!--
+    <EnviromentVariable>
+      <Name>NodeJSToolsDir</Name>
+      <Value>C:\Program Files\Microsoft Visual Studio\2022\Professional</Value>
+    </EnviromentVariable>
+    -->
+  </Envs>
+</RuntimeInfo>
