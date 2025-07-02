@@ -4,7 +4,7 @@
 Auto Enviroement variables
 %LaunchEnvExeDir% => LaunchEnvironment.exe folder
 %OpenFolder% => Tool Launch folder
-%ToolPath% => Tool path entry in tool definition
+%ToolDir% => Tool path entry in tool definition
 %ConfigPath% => Config path entry in config definition
 
 <EnviromentVariable Action="Prefix/Append/Overwrite" Type="Path/String">
@@ -19,13 +19,20 @@ Action
     }
 </EnviromentVariable>
 
-<Tool Type="RegularApp/Action/DynamicApp/StoreApp" UseShellExecute="false/true" ByPassRegistry="false/true" Editor="Generic/VSCode/VSStudio/Python">
+<Tool Type="RegularApp(launch check for existance, default)/Action (inbuilt action)/DynamicApp (file existance not checked)/StoreApp (windows store app)" 
+  ByPassRegistry="false(default)" Editor="Generic(default)/VSCode/VSStudio/Python">
+  <Style UseShellExecute="true" ExecuteAsAdmin="false" CreateNoWindow="true" WindowStyle="Normal/Hidden/Minimized/Maximized" />
   <Name>ToolName</Name>
+  <ToolDir>tool install folder</ToolDir>
   <Path>exe path</Path>
-  <ToolPath>tool install folder</ToolPath>
   <Arguments>
     <Arg>tool argument, if argument contains environment varible then if all the variable declared then only given argument is included</Arg>
   </Arguments>
+  <Script>
+    Launches multiple commands one after another
+    <Cmd>Command 1</Cmd>
+    <Cmd>Command 2</Cmd>
+  </Script>
   <Envs>
     <EnviromentVariable>
       <Name>PATH</Name>
@@ -33,7 +40,6 @@ Action
     </EnviromentVariable>
   </Envs>
 </Tool>
-
 -->
 <RuntimeInfo>
   <!--To run always as admin then enable this value-->
@@ -59,25 +65,20 @@ Action
       <Path>UpdatePythonScriptFolder</Path>
     </Tool>
     <Tool>
-      <Name>eclipse</Name>
-      <Path>%ToolDir%\eclipse\eclipse.exe</Path>
-      <ToolPath>%ToolDir%\eclipse</ToolPath>
-      <Arguments>
-        <Arg>"%OpenFolder%"</Arg>
-      </Arguments>
-    </Tool>
-    <Tool>
       <Name>VSCode</Name>
       <Path>%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe</Path>
-      <ToolPath>%LOCALAPPDATA%\Programs\Microsoft VS Code</ToolPath>
+      <ToolDir>%LOCALAPPDATA%\Programs\Microsoft VS Code</ToolDir>
       <Arguments>
         <Arg>%OpenFolder%</Arg>
       </Arguments>
+      <Warnings>
+        <Warning>IsAlreadRunning:vscode is already running and settings will not be applied, close all vscode and start the vscode with new config</Warning>
+      </Warnings>
     </Tool>
     <Tool>
       <Name>VSStudio</Name>
       <Path>%VSSTUDIODIR%\Common7\IDE\devenv.exe</Path>
-      <ToolPath>%VSSTUDIODIR%\Common7\IDE</ToolPath>
+      <ToolDir>%VSSTUDIODIR%\Common7\IDE</ToolDir>
       <Arguments>
         <Arg>/useenv "%OpenFolder%"</Arg>
       </Arguments>
@@ -117,12 +118,12 @@ Action
     <Tool>
       <Name>ConEmu</Name>
       <Path>%ConToolsDir%\ConEmu\ConEmu64.exe</Path>
-      <ToolPath>%ConToolsDir%\ConEmu</ToolPath>
+      <ToolDir>%ConToolsDir%\ConEmu</ToolDir>
     </Tool>
     <Tool>
       <Name>ConEmu-32Bit</Name>
       <Path>%ConToolsDir%\ConEmu\ConEmu.exe</Path>
-      <ToolPath>%ConToolsDir%\ConEmu</ToolPath>
+      <ToolDir>%ConToolsDir%\ConEmu</ToolDir>
     </Tool>
     <Tool>
       <Name>Bash</Name>
@@ -131,7 +132,7 @@ Action
     <Tool Type="DynamicApp">
       <Name>WinDbg7</Name>
       <Path>%WinDbgDir%\Debuggers_Win7\x64\WinDbg.exe</Path>
-      <ToolPath>%WinDbgDir%\Debuggers_Win7\x64</ToolPath>
+      <ToolDir>%WinDbgDir%\Debuggers_Win7\x64</ToolDir>
       <Arguments>
         <Arg>-c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
       </Arguments>
@@ -139,7 +140,7 @@ Action
     <Tool Type="DynamicApp">
       <Name>WinDbg7-32Bit</Name>
       <Path>%WinDbgDir%\Debuggers_Win7\x86\WinDbg.exe</Path>
-      <ToolPath>%WinDbgDir%\Debuggers_Win7\x86\</ToolPath>
+      <ToolDir>%WinDbgDir%\Debuggers_Win7\x86\</ToolDir>
       <Arguments>
         <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
       </Arguments>
@@ -147,7 +148,7 @@ Action
     <Tool Type="DynamicApp">
       <Name>WinDbg10</Name>
       <Path>%WinDbgDir%\Debuggers_Win10\x64\WinDbg.exe</Path>
-      <ToolPath>%WinDbgDir%\Debuggers_Win10\x64\</ToolPath>
+      <ToolDir>%WinDbgDir%\Debuggers_Win10\x64\</ToolDir>
       <Arguments>
         <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
       </Arguments>
@@ -155,7 +156,7 @@ Action
     <Tool Type="DynamicApp">
       <Name>WinDbg10-32Bit</Name>
       <Path>%WinDbgDir%\Debuggers_Win10\x86\WinDbg.exe</Path>
-      <ToolPath>%WinDbgDir%\Debuggers_Win10\x86\</ToolPath>
+      <ToolDir>%WinDbgDir%\Debuggers_Win10\x86\</ToolDir>
       <Arguments>
         <Arg>-c " .cmdtree %WinDbgDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl.txt"</Arg>
       </Arguments>
@@ -190,17 +191,23 @@ Action
         <Arg>-debugArch x86 -c " .cmdtree %ToolDir%\Debuggers_Scripts\cmdtree\cmdtree_igxl_dbg_preview.txt"</Arg>
       </Arguments>
     </Tool>
-    <Tool Type="DynamicApp" UseShellExecute="true">
+    <Tool Type="StoreApp">
       <Name>Python</Name>
-      <Path>%ConfigPath%\pythonw.exe</Path>
-      <Arguments>
-        <Arg>"%ConfigPath%\Lib\idlelib\idle.py"</Arg>
-      </Arguments>
+      <Path>python.exe</Path>
+      <!-- <Style UseShellExecute="true" /> -->
     </Tool>
     <Tool>
-      <Name>CodeLite</Name>
-      <Path>%ToolDir%\codelite\tool\codelite.exe</Path>
-      <ToolPath>%ToolDir%\codelite</ToolPath>
+      <Name>MobXTerm</Name>
+      <Path>%ConToolsDir%\MobaXterm\MobaXterm.exe</Path>
+      <ToolDir>%ConToolsDir%\Mobatek</ToolDir>
+      
+      <!--
+      <Path>%ProgramFiles(x86)%\Mobatek\MobaXterm\MobaXterm.exe</Path>
+      <ToolDir>%ProgramFiles(x86)%\Mobatek</ToolDir>
+      -->
+      <Arguments>
+        <Arg>/openfolder "%OpenFolder%"</Arg>
+      </Arguments>
       <!--<Envs>
         <EnviromentVariable Action="Overwrite">
           <Name>LOCALAPPDATA</Name>
@@ -209,35 +216,22 @@ Action
       </Envs>-->
     </Tool>
     <Tool>
-      <Name>MobXTerm</Name>
-      <Path>%ConToolsDir%\MobaXterm\MobaXterm.exe</Path>
-      <ToolPath>%ConToolsDir%\Mobatek</ToolPath>
-      
-      <!--
-      <Path>%ProgramFiles(x86)%\Mobatek\MobaXterm\MobaXterm.exe</Path>
-      <ToolPath>%ProgramFiles(x86)%\Mobatek</ToolPath>
-      -->
-      <Arguments>
-        <Arg>/openfolder "%OpenFolder%"</Arg>
-      </Arguments>
-    </Tool>
-    <Tool>
       <Name>Notepad++</Name>
       <Path>%ProgramFiles%\Notepad++\notepad++.exe</Path>
       <!--<ByPassRegistry>true</ByPassRegistry>-->
-      <ToolPath>%systemroot%</ToolPath>
+      <ToolDir>%systemroot%</ToolDir>
     </Tool>
     <Tool>
       <Name>Show Environment</Name>
       <Path>%LaunchEnvExeDir%\ShowEnvironment.exe</Path>
       <!--<ByPassRegistry>true</ByPassRegistry>-->
-      <ToolPath>%LaunchEnvExeDir%</ToolPath>
+      <ToolDir>%LaunchEnvExeDir%</ToolDir>
     </Tool>
     <Tool>
       <Name>Testing</Name>
       <Path>%LaunchEnvExeDir%\Testing.exe</Path>
       <!--<ByPassRegistry>true</ByPassRegistry>-->
-      <ToolPath>%LaunchEnvExeDir%</ToolPath>
+      <ToolDir>%LaunchEnvExeDir%</ToolDir>
       <Envs>
         <EnviromentVariable Action="Overwrite">
           <Name>LOCALAPPDATA</Name>
@@ -309,9 +303,10 @@ Action
       <Path>%ToolDir%\Debuggers_Tools\VSStudio_Remote_Tools_2019Portable\VSStudio_Remote_Tools_2019Portable.exe</Path>
       <BaseDir>%ToolDir%\Debuggers_Tools\VSStudio_Remote_Tools_2019Portable</BaseDir>
     </Tool>
-    <Tool Type="DynamicApp" UseShellExecute="true">
+    <Tool Type="DynamicApp">
       <Name>Start_Remote_Windbg</Name>
       <Path>%ConfigPath%\dbgsrv.exe</Path>
+      <Style UseShellExecute="true" />
       <Arguments>
         <Arg>-t tcp:port=5004</Arg>
       </Arguments>
@@ -323,6 +318,9 @@ Action
     </Tool>
   </Tools>
   <!-- Tools Definition End -->
+  
+  <!-- Context Menu for List Start -->
+  <!-- All the names must be defined above <Tools></Tools> element-->
   <ContextMenu>
     <Menu>VSCode</Menu>
     <Menu>VSStudio</Menu>
@@ -331,6 +329,10 @@ Action
     <Menu>WinDbg7</Menu>
     <Menu>WinDbg10</Menu>
   </ContextMenu>
+  <!-- Context Menu for List End -->
+  
+  <!-- ToolBar Items Start -->
+  <!-- All the names must be defined above <Tools></Tools> element-->
   <ToolBar>
     <ToolBarItem>
       <Name>VSCode</Name>
@@ -388,6 +390,10 @@ Action
       </Tools>
     </ToolBarItem>
   </ToolBar>
+  <!-- ToolBar Items End -->
+  
+  <!-- FileMenu / MenuBar Items Start -->
+  <!-- All the names must be defined above <Tools></Tools> element-->
   <MenuBar>
     <MenuBar>
       <!--Menu name-->
@@ -438,7 +444,10 @@ Action
       </Tools>
     </MenuBar>
   </MenuBar>
-  <!--Apply to all environment variables-->
+  <!-- FileMenu / MenuBar Items End -->
+
+
+  <!--Apply to all environment variables start-->
   <Envs>
     <EnviromentVariable>
       <Name>ToolDir</Name>
@@ -485,4 +494,5 @@ Action
     </EnviromentVariable>
     -->
   </Envs>
+  <!--Apply to all environment variables End-->
 </RuntimeInfo>

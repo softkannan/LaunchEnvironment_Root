@@ -11,14 +11,14 @@ namespace LaunchEnvironment.Config
     {
         public Tool()
         {
-            ByPassRegistry = false;
-            UseShellExecute = false;
-            Arguments = null;
-            Envs = null;
-            ToolPath = "";
-            Path = "";
+            Args = new List<string>();
+            Envs = new List<EnviromentVariable>();
+            ToolDir = string.Empty;
+            Path = string.Empty;
             Type = ToolType.RegularApp;
             Script = new List<string>();
+            Style = new LaunchStyle();
+            Warnings = new List<string>();
         }
 
 
@@ -28,24 +28,27 @@ namespace LaunchEnvironment.Config
         [XmlAttribute]
         public string Editor { get; set; }
 
-        [XmlAttribute]
-        public bool ByPassRegistry { get; set; }
+        /// <summary>
+        /// If the style is set then the tool will use this value, this takes precedence
+        /// </summary>
+        public LaunchStyle Style { get; set; }
 
-        [XmlAttribute]
-        public bool UseShellExecute { get; set; }
-
-        public string ToolPath { get; set; }
+        public string ToolDir { get; set; }
         public string Path { get; set; }
         public string Name { get; set; }
 
-        [XmlArray("Arguments")]
+        [XmlArray("Args")]
         [XmlArrayItem(ElementName = "Arg")]
-        public List<string> Arguments { get; set; }
+        public List<string> Args { get; set; }
 
         [XmlArray("Script")]
         [XmlArrayItem(ElementName = "Cmd")]
         public List<string> Script { get; set; }
 
         public List<EnviromentVariable> Envs { get; set; }
+
+        [XmlArray("Warnings")]
+        [XmlArrayItem(ElementName = "Warning")]
+        public List<string> Warnings { get; set; } 
     }
 }

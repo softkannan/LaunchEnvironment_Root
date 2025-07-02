@@ -15,6 +15,7 @@ namespace LaunchEnvironment.Utility
         {
             foreach (var item in tools)
             {
+                //TODO: dont't check if tool is available, just add it to the menu
                 if (RuntimeInfo.Inst.IsToolAvailable(item))
                 {
                     var tool = RuntimeInfo.Inst.GetTool(item);
@@ -33,6 +34,13 @@ namespace LaunchEnvironment.Utility
                         }
                     }
                     rootMenu.DropDownItems.Add(toolStripMenuItem);
+                }
+                else
+                {
+#if !DEBUG
+                    // Log error if tool is not available
+                    ErrorLog.Inst.LogError("Tool {0} is not available.", item);
+#endif
                 }
             }
         }

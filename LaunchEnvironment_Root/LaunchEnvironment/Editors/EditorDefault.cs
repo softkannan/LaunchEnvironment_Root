@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using LaunchEnvironment.Config;
-using ProcessEx;
 using LaunchEnvironment.Utility;
 using System.Collections.Specialized;
 using System.Windows.Forms;
@@ -33,11 +32,12 @@ namespace LaunchEnvironment.Editors
             DynamicArgument = "";
         }
 
-        public void Initialize(Tool tool)
+        protected Form _mainForm = null;
+        public void Initialize(Tool tool, Form mainForm)
         {
             this._tool = tool;
+            _mainForm = mainForm;
         }
-
 
         protected Tool Tool
         {
@@ -108,13 +108,13 @@ namespace LaunchEnvironment.Editors
             return retVal;
         }
 
-        protected void MergeArguments(StringBuilder toolarguments,List<string> arguments, ProcessStartInfo procStartInfo)
+        protected void MergeArguments(StringBuilder toolarguments, List<string> arguments, ProcessStartInfo procStartInfo)
         {
             if (arguments != null && arguments.Count > 0)
             {
                 foreach (var item in arguments)
                 {
-                    if (Tool.UseShellExecute)
+                    if (Tool.Style.UseShellExecute)
                     {
                         toolarguments.Append(Environment.ExpandEnvironmentVariables(item));
                         toolarguments.Append(" ");
@@ -147,8 +147,8 @@ namespace LaunchEnvironment.Editors
             var toolArgument = new StringBuilder();
 
             //Merge Tool arguments
-            MergeArguments(toolArgument, Tool.Arguments, procStartInfo);
-           
+            MergeArguments(toolArgument, Tool.Args, procStartInfo);
+
             //Merge selected config arguments
             var foundConfig = config.Configs.FirstOrDefault((item) => item.Arguments != null && item.Arguments.Count > 0);
             if (foundConfig != null && foundConfig.Arguments != null && foundConfig.Arguments.Count > 0)
@@ -176,11 +176,11 @@ namespace LaunchEnvironment.Editors
             }
 
             var firstConfig = config.Configs.FirstOrDefault();
-            var fullToolPath = ResolveValue.Inst.ResolveFullPath(Tool.ToolPath);
+            var fullToolPath = ResolveValue.Inst.ResolveFullPath(Tool.ToolDir);
             Environment.SetEnvironmentVariable("ConfigPath", firstConfig == null ? fullToolPath : ResolveValue.Inst.ResolveFullPath(firstConfig.ConfigPath));
             Environment.SetEnvironmentVariable("ToolPath", fullToolPath);
             string workingDir = "";
-            
+
             if (Directory.Exists(RuntimeInfo.Inst.OpenFolder))
             {
                 workingDir = RuntimeInfo.Inst.OpenFolder.Trim();
@@ -237,7 +237,7 @@ namespace LaunchEnvironment.Editors
 
                     config.EditorPath = Tool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(Tool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(Tool.Name));
 
-                    if (Tool.UseShellExecute == false)
+                    if (!Tool.Style.UseShellExecute)
                     {
                         UpdateEnvironmentVariables(procStartInfo, config);
                     }
@@ -248,11 +248,18 @@ namespace LaunchEnvironment.Editors
                     }
 
                     procStartInfo.WorkingDirectory = config.WorkingDir;
-                    procStartInfo.Arguments = ResolveArguments(config, procStartInfo); 
+                    procStartInfo.Arguments = ResolveArguments(config, procStartInfo);
                     procStartInfo.FileName = config.EditorPath;
-                    procStartInfo.UseShellExecute = Tool.UseShellExecute;
+                    procStartInfo.UseShellExecute = Tool.Style.UseShellExecute;
+                    procStartInfo.CreateNoWindow = Tool.Style.CreateNoWindow;
+                    procStartInfo.WindowStyle = Tool.Style.WindowStyle;
+                    if (Tool.Style.ExecuteAsAdmin)
+                    {
+                        procStartInfo.Verb = "runas";
+                    }
 
-                    var newProc = LaunchProcess(procStartInfo);
+                    //var newProc = LaunchProcess(procStartInfo);
+                    var newProc = Process.Start(procStartInfo);
                     newProc.WaitForExit();
                 }
 
@@ -261,7 +268,12 @@ namespace LaunchEnvironment.Editors
             else
             {
                 var procStartInfo = new ProcessStartInfo();
-                procStartInfo.UseShellExecute = Tool.UseShellExecute;
+                procStartInfo.UseShellExecute = Tool.Style.UseShellExecute;
+                procStartInfo.CreateNoWindow = Tool.Style.CreateNoWindow;
+                if (Tool.Style.ExecuteAsAdmin)
+                {
+                    procStartInfo.Verb = "runas";
+                }
 
                 config.EditorPath = Tool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(Tool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(Tool.Name));
                 var firstConfig = config.Configs.FirstOrDefault();
@@ -296,11 +308,11 @@ namespace LaunchEnvironment.Editors
                 {
                     // Tool will be launched using batchfile
                     var cmdTool = RuntimeInfo.Inst.GetTool("Cmd");
-                    if(cmdTool != null)
+                    if (cmdTool != null)
                     {
                         // delete any existing batch file
                         var batchFileName = string.Format("{0}Launch_Environment_Start.bat", Path.GetTempPath());
-                        if(File.Exists(batchFileName))
+                        if (File.Exists(batchFileName))
                         {
                             try
                             {
@@ -311,7 +323,7 @@ namespace LaunchEnvironment.Editors
                         // create a new batch file
                         using (var batFile = new StreamWriter(batchFileName))
                         {
-                            foreach(var preCmd in firstConfig.BatchCmd)
+                            foreach (var preCmd in firstConfig.BatchCmd)
                             {
                                 string preCmdResolved = Environment.ExpandEnvironmentVariables(preCmd);
                                 if (preCmd.Length > 0 && preCmd[0] == '$')
@@ -334,41 +346,52 @@ namespace LaunchEnvironment.Editors
                 procStartInfo.Arguments = finalResolvedArgs;
                 procStartInfo.FileName = editorPath;
 
-                return LaunchProcess(procStartInfo);
+                var procName = Path.GetFileNameWithoutExtension(procStartInfo.FileName);
+                var procs = Process.GetProcessesByName(procName);
+                if (procs != null && procs.Length > 0)
+                {
+                    var warningMsg = Tool.GetWarningMsg("IsAlreadRunning");
+                    if (!string.IsNullOrWhiteSpace(warningMsg))
+                    {
+                        ErrorLog.Inst.ShowInfo(warningMsg, "Process Already Running", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                return Process.Start(procStartInfo);
+                //return LaunchProcess(procStartInfo);
             }
         }
-        protected virtual Process LaunchProcess(ProcessStartInfo procInfo)
-        {
-            if (procInfo.UseShellExecute)
-            {
-                return Process.Start(procInfo);
-            }
-            else 
-            { 
-                var injectProcess = new ProcessEx.CustomProcess();
-                injectProcess.BootstrapProcess = RuntimeInfo.Inst.RunScriptPath;
+        //protected virtual Process LaunchProcess(ProcessStartInfo procInfo)
+        //{
+        //    if (procInfo.UseShellExecute)
+        //    {
+        //        return Process.Start(procInfo);
+        //    }
+        //    else
+        //    {
+        //        var injectProcess = new ProcessEx.CustomProcess();
+        //        injectProcess.BootstrapProcess = RuntimeInfo.Inst.RunScriptPath;
 
-                var retProc = injectProcess.Launch(procInfo, false);
-                // Newer windows prevent injection
-                //if (Tool.ByPassRegistry)
-                //{
-                //    string bitnessSuffix = "x64";
-                //    if (!retProc.Is64BitProcess())
-                //    {
-                //        bitnessSuffix = "win32";
-                //    }
+        //        var retProc = injectProcess.Launch(procInfo, false);
+        //        // Newer windows prevent injection
+        //        //if (Tool.ByPassRegistry)
+        //        //{
+        //        //    string bitnessSuffix = "x64";
+        //        //    if (!retProc.Is64BitProcess())
+        //        //    {
+        //        //        bitnessSuffix = "win32";
+        //        //    }
 
-                //    string registryDll = string.Format("{0}\\RegistryHandler_{1}.dll", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), bitnessSuffix);
-                //    if (File.Exists(registryDll))
-                //    {
-                //        DllInject.InjectDll(registryDll, retProc);
-                //    }
-                //}
+        //        //    string registryDll = string.Format("{0}\\RegistryHandler_{1}.dll", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), bitnessSuffix);
+        //        //    if (File.Exists(registryDll))
+        //        //    {
+        //        //        DllInject.InjectDll(registryDll, retProc);
+        //        //    }
+        //        //}
 
-                //injectProcess.ResumeProcess();
-                return retProc;
-            }
-        }
+        //        //injectProcess.ResumeProcess();
+        //        return retProc;
+        //    }
+        //}
 
         private void UpdateEnvironmentVariables(ProcessStartInfo procInfo, LaunchConfig config)
         {
@@ -387,7 +410,7 @@ namespace LaunchEnvironment.Editors
 
             //UpdateEnvironmentVariables(procInfo, tempItem);
 
-            if (Tool.Envs != null)
+            if (Tool.Envs.Count > 0)
             {
                 UpdateEnvironmentVariables(procInfo, Tool.Envs);
             }
@@ -491,6 +514,6 @@ namespace LaunchEnvironment.Editors
             }
         }
 
-        
+
     }
 }

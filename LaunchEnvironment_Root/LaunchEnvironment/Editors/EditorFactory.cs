@@ -14,6 +14,12 @@ namespace LaunchEnvironment.Editors
         private static EditorFactory _inst = new EditorFactory();
         public static EditorFactory Inst  { get => _inst; }
 
+        private Form _mainForm = null;
+        void Initialize(Form mainForm)
+        {
+            _mainForm = mainForm;
+        }
+
         public EditorDefault GetEditor(string toolName)
         {
             string lookUpName = toolName;
@@ -49,7 +55,7 @@ namespace LaunchEnvironment.Editors
                 retVal = new Editors.EditorDefault();
             }
 
-            retVal.Initialize(tool);
+            retVal.Initialize(tool, _mainForm);
 
             return retVal;
         }

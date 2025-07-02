@@ -218,8 +218,8 @@ namespace LaunchEnvironment.Config
                 string newValue = ResolveValue.Inst.ResolveFullPath(item.Path);
                 item.Path = newValue;
 
-                newValue = ResolveValue.Inst.ResolveFullPath(item.ToolPath);
-                item.ToolPath = newValue;
+                newValue = ResolveValue.Inst.ResolveFullPath(item.ToolDir);
+                item.ToolDir = newValue;
 
                 Tool addTool = null;
 

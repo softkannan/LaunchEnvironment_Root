@@ -24,6 +24,9 @@ namespace LaunchEnvironment.Config
         public string Id { get; set; }
         public string ConfigPath { get; set; }
         public string DefaultWorkspace { get; set; }
+        /// <summary>
+        /// Before launching the tool, copy files from the source to the destination
+        /// </summary>
         public List<FileCopy> CopyFiles { get; set; }
         /// <summary>
         /// If this value present then the tool will use this value, this takes precedence
@@ -43,6 +46,9 @@ namespace LaunchEnvironment.Config
         /// <summary>
         /// If this value present then the tool will use this value, this takes precedence
         /// This will force the editor to create the batch file and launch tool from the batch file
+        /// 
+        /// Prefixing the command line $ indicates this templated string
+        /// 
         /// </summary>
         [XmlArray("BatchFile")]
         [XmlArrayItem(ElementName = "BatchCmd")]

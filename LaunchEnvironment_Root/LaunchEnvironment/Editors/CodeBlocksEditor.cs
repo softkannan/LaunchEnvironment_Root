@@ -55,7 +55,7 @@ namespace LaunchEnvironment.Editors
                 }
             }
 
-            string userData = string.Format(@"{0}\userdata", Tool.ToolPath);
+            string userData = string.Format(@"{0}\userdata", Tool.ToolDir);
 
             if (Directory.Exists(userData))
             {

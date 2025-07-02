@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LaunchEnvironment.Config;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,23 @@ namespace LaunchEnvironment.Utility
 {
     public static class Utility
     {
+        public static string GetWarningMsg(this Tool pThis, string warningType)
+        {
+            if (pThis == null || pThis.Warnings == null || pThis.Warnings.Count == 0)
+            {
+                return "";
+            }
+            StringBuilder retVal = new StringBuilder();
+            foreach (var warning in pThis.Warnings)
+            {
+                if (warning.StartsWith(warningType, StringComparison.OrdinalIgnoreCase))
+                {
+                    string[] parts = warning.Split(new char[] { ':' }, 2);
+                    return parts.Length > 1 ? parts[1].Trim() : warning;
+                }
+            }
+            return "";
+        }
         public static string MatchReplace(this string pThis,string matchStr, string replaceStr,out bool foundMatch)
         {
             foundMatch = false;

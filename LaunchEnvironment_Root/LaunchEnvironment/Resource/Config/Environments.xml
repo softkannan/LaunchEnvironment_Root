@@ -34,10 +34,20 @@ Action
     </FileCopy>
   </CopyFiles>
   <Arguments>
-    <Arg>tool argument, if argument contains environment varible then if all the variable declared then only given argument is included</Arg>
+    <Arg>tool argument, if argument contains environment varible then if all the variables declared then only given argument is included</Arg>
   </Arguments>
+  <RegConfigs>
+    <RegKey RequireAdmin="false(default)" Type="None/String(default)/ExpandString/Binary/DWord/MultiString/QWord/Path" Action="Append/Overwrite(default)/Prefix">
+      <Key>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{GUID}</Key>
+      <Value>UninstallString</Value>
+      <RegValue Type="None/String/ExpandString/Binary/DWord/MultiString/QWord/Path(default)" Action="Append/Overwrite(default)/Prefix">
+        <Name>UninstallString</Name>
+        <Value>msiexec.exe /x {GUID} /qn</Value>
+      </RegValue>
+    </RegKey>
+  </RegConfigs>
   <Envs>
-    <EnviromentVariable>
+    <EnviromentVariable Type="None/String/ExpandString/Binary/DWord/MultiString/QWord/Path(default)" Action="Append/Overwrite/Prefix(default)">
       <Name>PYTHONHOME</Name>
       <Value>%ToolDir%\Anaconda37</Value>
     </EnviromentVariable>
@@ -50,6 +60,12 @@ Action
       <Value>%PYTHONHOME%;%PYTHONHOME%\Scripts</Value>
     </EnviromentVariable>
   </Envs>
+  <BatchFile>
+     <BatchCmd>call "%VSSTUDIODIR%\Common7\Tools\vsdevcmd.bat" -arch=arm</BatchCmd>
+     Prefixing the command line $ indicates this templated string
+     <BatchCmd>$"{editorpath}" "{args}"</BatchCmd>
+  </BatchFile>
+  <Style UseShellExecute="true" ExecuteAsAdmin="false" CreateNoWindow="true" WindowStyle="Normal/Hidden/Minimized/Maximized" />
 </Config>
 
 -->

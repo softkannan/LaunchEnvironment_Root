@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,6 +14,10 @@ namespace LaunchEnvironment.Editors
 {
     public class KnownCommandEditor : EditorDefault
     {
+        [DllImport("shell32.dll", EntryPoint = "#61", CharSet = CharSet.Unicode)]
+        public static extern int RunFileDlg([In] IntPtr hwndOwner, [In] IntPtr hIcon, [In] string workingDirectory, [In] string title, [In] string prompt, [In] uint flags);
+
+
         public KnownCommandEditor() :base()
         {
 
@@ -109,6 +114,11 @@ namespace LaunchEnvironment.Editors
         {
             switch(Tool.Path.Trim())
             {
+                case "Run":
+                    {
+                        RunFileDlg(_mainForm.Handle, IntPtr.Zero, Environment.CurrentDirectory, null, null, 0);
+                    }
+                    break;
                 case "RegisterExplorerContextMenu":
                     {
                         if (ShellIntegration.RegisterContextMenu())

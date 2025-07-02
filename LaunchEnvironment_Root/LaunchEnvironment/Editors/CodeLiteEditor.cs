@@ -39,7 +39,7 @@ namespace LaunchEnvironment.Editors
             }
 
             string toolDir = string.Format("--basedir=\"{0}\"", Path.GetDirectoryName(Tool.Path));
-            string userDataDir = string.Format(@"{0}\userdata", Tool.ToolPath);
+            string userDataDir = string.Format(@"{0}\userdata", Tool.ToolDir);
             if (Directory.Exists(userDataDir))
             {
                 string currentDynamicArg = toolDir;
