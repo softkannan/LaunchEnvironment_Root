@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using LaunchEnvironment.Config.EnvConfig;
 
 namespace LaunchEnvironment.Editors
 {
@@ -17,7 +18,7 @@ namespace LaunchEnvironment.Editors
         protected override bool LaunchCustom(LaunchConfig config)
         {
             string openfileName = "";
-            if (Directory.Exists(RuntimeInfo.Inst.OpenFolder))
+            if (Directory.Exists(UserConfig.Inst.OpenFolder))
             {
                 if (string.IsNullOrWhiteSpace(openfileName))
                 {

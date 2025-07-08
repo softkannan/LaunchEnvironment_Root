@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaunchEnvironment.Config
+namespace LaunchEnvironment.Config.EnvConfig
 {
     public enum ConfigType23
     {

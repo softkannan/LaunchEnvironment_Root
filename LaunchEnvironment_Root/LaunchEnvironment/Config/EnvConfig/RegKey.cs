@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace LaunchEnvironment.Config
+namespace LaunchEnvironment.Config.EnvConfig
 {
     public class RegKey
     {

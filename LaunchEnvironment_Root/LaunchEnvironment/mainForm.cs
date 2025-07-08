@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using LaunchEnvironment.Config;
 using LaunchEnvironment.Utility;
+using LaunchEnvironment.Config.EnvConfig;
 
 namespace LaunchEnvironment
 {
@@ -31,9 +32,9 @@ namespace LaunchEnvironment
         {
             this.CenterToScreen();
 
-            _environmentLabel.Text = string.Format("Select Environment for : {0}", RuntimeInfo.Inst.OpenFolder);
+            _environmentLabel.Text = string.Format("Select Environment for : {0}", UserConfig.Inst.OpenFolder);
 
-            if (RuntimeInfo.Inst.IsElevated)
+            if (UserConfig.Inst.IsElevated)
             {
                 this.Text = "Launch Environment (administrator)";
             }
@@ -48,7 +49,7 @@ namespace LaunchEnvironment
             if (_configListBox.SelectedItem != null)
             {
                 var envName = _configListBox.SelectedItem as string;
-                var envItem = Configs_Root.Inst.Configs.FirstOrDefault((item) => item.Name == envName);
+                var envItem = EnvConfigs.Inst.Configs.FirstOrDefault((item) => item.Name == envName);
                 if (envItem != null)
                 {
                     if (Directory.Exists(ResolveValue.Inst.ResolveFullPath(envItem.ConfigPath)))

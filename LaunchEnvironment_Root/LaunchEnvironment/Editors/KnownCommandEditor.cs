@@ -1,4 +1,5 @@
 ﻿using LaunchEnvironment.Config;
+using LaunchEnvironment.Config.EnvConfig;
 using LaunchEnvironment.Utility;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace LaunchEnvironment.Editors
 
         }
 
-        public void UpdateConfigRegistry(List<Config.Config> envs)
+        public void UpdateConfigRegistry(List<Config.EnvConfig.Config> envs)
         {
             foreach (var itemEnv in envs)
             {
@@ -69,7 +70,7 @@ namespace LaunchEnvironment.Editors
         //    }
         //}
 
-        private void UpdatePythonScripts(Configs_Root allEnvironments)
+        private void UpdatePythonScripts(EnvConfigs allEnvironments)
         {
             foreach (var item in allEnvironments.Configs)
             {
@@ -129,14 +130,14 @@ namespace LaunchEnvironment.Editors
                     break;
                 case "WriteConfigRegistryValues":
                     {
-                        UpdateConfigRegistry(Configs_Root.Inst.Configs);
+                        UpdateConfigRegistry(EnvConfigs.Inst.Configs);
 
                         ErrorLog.Inst.ShowInfo("Environment Registry Integration completed");
                     }
                     break;
                 case "UpdatePythonScriptFolder":
                     {
-                        UpdatePythonScripts(Configs_Root.Inst);
+                        UpdatePythonScripts(EnvConfigs.Inst);
 
                         ErrorLog.Inst.ShowInfo("Updating Python Environment Scripts folder is completed");
                     }

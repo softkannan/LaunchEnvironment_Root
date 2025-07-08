@@ -26,7 +26,7 @@ namespace LaunchEnvironment.RegConfig
         //C:\Users\softk\AppData\Local\Microsoft\VisualStudio\15.0_b59ee41d
         private const string VSVerTag = "15.0_b59ee41d";
 
-        public override void SetSonfig(Config.RegKey regConfig)
+        public override void SetSonfig(Config.EnvConfig.RegKey regConfig)
         {
             //skip the private registry write if it is already running
             //if (IsRunning)

@@ -28,7 +28,7 @@ namespace LaunchEnvironment.Editors
                 lookUpName = toolName.Substring(0, toolName.LastIndexOf("-32Bit"));
             }
 
-            var tool = RuntimeInfo.Inst.GetTool(lookUpName);
+            var tool = UserConfig.Inst.GetTool(lookUpName);
 
             if(tool == null)
             {

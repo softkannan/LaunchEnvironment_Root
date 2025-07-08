@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace LaunchEnvironment.Config
+namespace LaunchEnvironment.Config.EnvConfig
 {
     public class LaunchConfig
     {
@@ -30,7 +30,7 @@ namespace LaunchEnvironment.Config
         
         public static void SaveCurrentConfig(LaunchConfig config)
         {
-            string currentConfigFile = RuntimeInfo.Inst.CurrentConfigFile;
+            string currentConfigFile = UserConfig.Inst.CurrentConfigFile;
             if (File.Exists(currentConfigFile))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(LaunchConfig));

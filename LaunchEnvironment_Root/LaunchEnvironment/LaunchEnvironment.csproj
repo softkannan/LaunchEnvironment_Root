@@ -58,6 +58,10 @@
     <ApplicationIcon>mainicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -71,10 +75,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\Action.cs" />
+    <Compile Include="Config\EnvConfig\Action.cs" />
     <Compile Include="Config\EnvironmentAction.cs" />
     <Compile Include="Config\EnvironmentValueType.cs" />
-    <Compile Include="Config\FileCopy.cs" />
+    <Compile Include="Config\EnvConfig\FileCopy.cs" />
     <Compile Include="Config\LaunchStyle.cs" />
     <Compile Include="Config\MenuBar.cs" />
     <Compile Include="Config\ResolveValue.cs" />
@@ -95,11 +99,11 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Config\EnviromentVariable.cs" />
-    <Compile Include="Config\Config.cs" />
-    <Compile Include="Config\Configs.cs" />
+    <Compile Include="Config\EnvConfig\Config.cs" />
+    <Compile Include="Config\EnvConfig\Configs.cs" />
     <Compile Include="Utility\GUIUtility.cs" />
     <Compile Include="ErrorLog.cs" />
-    <Compile Include="Config\LaunchConfig.cs" />
+    <Compile Include="Config\EnvConfig\LaunchConfig.cs" />
     <Compile Include="Editors\EditorDefault.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
@@ -116,14 +120,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegConfig\PythonRegConfig.cs" />
-    <Compile Include="Config\RegKey.cs" />
+    <Compile Include="Config\EnvConfig\RegKey.cs" />
     <Compile Include="RegConfig\RegConfigBase.cs" />
-    <Compile Include="Config\ConfigType.cs" />
+    <Compile Include="Config\EnvConfig\ConfigType.cs" />
     <Compile Include="Editors\VSStudioEditor_Disabled.cs" />
     <Compile Include="RegConfig\RegistryHive.cs" />
-    <Compile Include="Config\RegValue.cs" />
+    <Compile Include="Config\EnvConfig\RegValue.cs" />
     <Compile Include="RegConfig\VCRegConfig.cs" />
-    <Compile Include="Config\RuntimeInfo.cs" />
+    <Compile Include="Config\UserConfig.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utility\ShellIntegration.cs" />
     <Compile Include="Utility\Utility.cs" />
@@ -148,6 +152,8 @@
     </Compile>
     <EmbeddedResource Include="LaunchEnvironment.exe.manifest" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Resource\Config\UserConfig.json" />
+    <EmbeddedResource Include="Resource\Config\Environments.json" />
     <None Include="Resource\openfolder_files\makefile">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -157,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="mainicon.ico" />
+    <EmbeddedResource Include="Resource\Assembly\Newtonsoft.Json.dll" />
     <Content Include="Resource\img\App.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -202,7 +209,7 @@
     <Content Include="Resource\img\WingIDE.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Resource\Config\Tools.xml">
+    <EmbeddedResource Include="Resource\Config\UserConfig.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource\Config\Environments.xml">
@@ -249,7 +256,6 @@ xcopy "$(TargetDir)*.*" "$(ProjectDir)..\Release\" /Y /E
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>copy $(ProjectDir)..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll $(ProjectDir)Resource\Assembly\.</PreBuildEvent>
   </PropertyGroup>
 </Project>

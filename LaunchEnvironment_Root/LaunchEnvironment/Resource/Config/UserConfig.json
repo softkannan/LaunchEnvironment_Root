@@ -1,0 +1,460 @@
+﻿/*
+Auto Enviroement variables
+%LaunchEnvExeDir% => LaunchEnvironment.exe folder
+%OpenFolder% => Tool Launch folder
+%ToolDir% => Tool path entry in tool definition
+%ConfigPath% => Config path entry in config definition
+{
+"Name": "Tool Name",
+"ToolDir": "tool install folder",
+"Type": "RegularApp(launch check for existance, default)/Action (inbuilt action)/DynamicApp (file existance not checked)/StoreApp (windows store app)",
+"Style": {
+"UseShellExecute": true,
+"ExecuteAsAdmin": false,
+"CreateNoWindow": true,
+"WindowStyle": "Normal/Hidden/Minimized/Maximized"
+},
+"Path": "exe path, accepts expandable string"
+"Args": [
+"tool argument, if argument contains environment varible then if all the variable declared then only given argument is included",
+"arg2",
+"arg3",
+]
+"Script": [
+"Launches multiple commands one after another",
+"Command 1",
+"Command 2"
+],
+"Envs": [
+{
+"Name": "Env Name",
+"Value": "Env Value, accepts expandable string",
+"Action": "Append/Overwrite/Prefix",
+"Type": "Path/String"
+},
+{
+"Name": "Env Name 2",
+"Value": "Env Value 2, accepts expandable string",
+// Optional, if not given then default action is Append
+//Append value to existing environment value / registry value
+//ovrwrite the existing environment value / registry value
+//prefix value to existing environment value / registry value
+"Action": "Append/Overwrite/Prefix",
+// Optional, if not given then default type is Path
+"Type": "Path/String"
+}
+],
+}
+*/
+{
+  // To run always as admin then enable this value
+  // "RunasAdmin": true
+  // Default working dir / default open folder
+  "DefaultWorkspace": "%userprofile%\\Documents",
+  // Tools Definition Start
+  "Tools": [
+    {
+      "Name": "Generic",
+      "Path": "%SystemRoot%\\system32\\cmd.exe"
+    },
+    {
+      "Name": "Register Explorer ContextMenu",
+      "Path": "RegisterExplorerContextMenu",
+      "Type": "Action",
+      "Editor": "KnownCommand"
+    },
+    {
+      "Name": "Write Config Registry Values",
+      "Path": "WriteConfigRegistryValues",
+      "Type": "Action",
+      "Editor": "KnownCommand"
+    },
+    {
+      "Name": "Update Python Script Folder",
+      "Path": "UpdatePythonScriptFolder",
+      "Type": "Action",
+      "Editor": "KnownCommand"
+    },
+    {
+      "Name": "VSCode",
+      "Path": "%LOCALAPPDATA%\\Programs\\Microsoft VS Code\\Code.exe",
+      "ToolDir": "%LOCALAPPDATA%\\Programs\\Microsoft VS Code",
+      "Args": [
+        "%OpenFolder%"
+      ],
+      "Warnings": [
+        "IsAlreadRunning:vscode is already running and settings will not be applied, close all vscode and start the vscode with new config"
+      ]
+    },
+    {
+      "Name": "VSStudio",
+      "Path": "%VSSTUDIODIR%\\Common7\\IDE\\devenv.exe",
+      "ToolDir": "%VSSTUDIODIR%\\Common7\\IDE",
+      "Args": [
+        "/useenv \"%OpenFolder%\""
+      ]
+    },
+    {
+      "Name": "Run",
+      "Path": "%LaunchEnvExeDir%\runscript.exe",
+      "Args": [
+        "-rundiag"
+      ]
+    },
+    {
+      "Name": "Terminal",
+      "Path": "wt.exe",
+      "Path32Bit": "wt.exe",
+      "Type": "StoreApp",
+      "Args": [
+        "-p \"PowerShell\" -d \"%OpenFolder%\""
+      ]
+    },
+    {
+      "Name": "PowerShell",
+      "Path": "%SystemRoot%\\system32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    },
+    {
+      "Name": "PowerShell-32bit",
+      "Path": "%SystemRoot%\\system32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    },
+    {
+      "Name": "Cmd",
+      "Path": "%SystemRoot%\\system32\\cmd.exe",
+      "Path32Bit": "%SystemRoot%\\syswow64\\cmd.exe"
+    },
+    {
+      "Name": "Cmd-32Bit",
+      "Path": "%SystemRoot%\\syswow64\\cmd.exe"
+    },
+    {
+      "Name": "ConEmu",
+      "Path": "%ConToolsDir%\\ConEmu\\ConEmu64.exe",
+      "ToolDir": "%ConToolsDir%\\ConEmu"
+    },
+    {
+      "Name": "ConEmu-32Bit",
+      "Path": "%ConToolsDir%\\ConEmu\\ConEmu.exe",
+      "ToolDir": "%ConToolsDir%\\ConEmu"
+    },
+    {
+      "Name": "Bash",
+      "Path": "%SystemRoot%\\system32\\bash.exe",
+      "ToolDir": "%SystemRoot%\\system32"
+    },
+    {
+      "Name": "WinDbg7",
+      "Path": "%WinDbgDir%\\Debuggers_Win7\\x64\\WinDbg.exe",
+      "ToolDir": "%WinDbgDir%\\Debuggers_Win7\\x64",
+      "Args": [
+        "-c \".cmdtree %ToolDir%\\Debuggers_Scripts\\cmdtree\\cmdtree_igxl.txt\""
+      ],
+      "Type": "DynamicApp"
+    },
+    {
+      "Name": "WinDbg7-32Bit",
+      "Path": "%WinDbgDir%\\Debuggers_Win7\\x86\\WinDbg.exe",
+      "ToolDir": "%WinDbgDir%\\Debuggers_Win7\\x86",
+      "Args": [
+        "-c \".cmdtree %WinDbgDir%\\Debuggers_Scripts\\cmdtree\\cmdtree_igxl.txt\""
+      ],
+      "Type": "DynamicApp"
+    },
+    {
+      "Name": "WinDbg10",
+      "Path": "%WinDbgDir%\\Debuggers_Win10\\x64\\WinDbg.exe",
+      "ToolDir": "%WinDbgDir%\\Debuggers_Win10\\x64",
+      "Args": [
+        "-c \".cmdtree %WinDbgDir%\\Debuggers_Scripts\\cmdtree\\cmdtree_igxl.txt\""
+      ],
+      "Type": "DynamicApp"
+    },
+    {
+      "Name": "WinDbg10-32Bit",
+      "Path": "%WinDbgDir%\\Debuggers_Win10\\x86\\WinDbg.exe",
+      "ToolDir": "%WinDbgDir%\\Debuggers_Win10\\x86",
+      "Args": [
+        "-c \".cmdtree %WinDbgDir%\\Debuggers_Scripts\\cmdtree\\cmdtree_igxl.txt\""
+      ],
+      "Type": "DynamicApp"
+    },
+    {
+      "Name": "WinDbgX",
+      "Path": "WinDbgX.exe",
+      "Type": "StoreApp",
+      "Args": [
+        "-debugArch amd64 -c \".cmdtree %ToolDir%\\Debuggers_Scripts\\cmdtree\\cmdtree_igxl_dbg_preview.txt\""
+      ]
+    },
+    {
+      "Name": "WinDbgX-32Bit",
+      "Path": "WinDbgX.exe",
+      "Type": "StoreApp",
+      "Args": [
+        "-debugArch x86 -c \".cmdtree %ToolDir%\\Debuggers_Scripts\\cmdtree\\cmdtree_igxl_dbg_preview.txt\""
+      ]
+    },
+    {
+      "Name": "Python",
+      "Path": "python.exe",
+      "Type": "StoreApp"
+    },
+    {
+      "Name": "MobXTerm",
+      "Path": "%ConToolsDir%\\MobaXterm\\MobaXterm.exe",
+      "ToolDir": "%ConToolsDir%\\Mobatek",
+      "Args": [
+        "/openfolder \"%OpenFolder%\""
+      ]
+    },
+    {
+      "Name": "Notepad++",
+      "Path": "%ProgramFiles%\\Notepad++\\notepad++.exe",
+      "ToolDir": "%systemroot%"
+    },
+    {
+      "Name": "Show Environment",
+      "Path": "%LaunchEnvExeDir%\\ShowEnvironment.exe",
+      "ToolDir": "%LaunchEnvExeDir%"
+    },
+    {
+      "Name": "Testing",
+      "Path": "%LaunchEnvExeDir%\\Testing.exe",
+      "ToolDir": "%LaunchEnvExeDir%",
+      "Envs": [
+        {
+          "Name": "LOCALAPPDATA",
+          "Value": "%ToolDir%",
+          "Action": "Overwrite"
+        }
+      ]
+    },
+    {
+      "Name": "Process Explorer",
+      "Path": "%WinDbgDir%\\Debuggers_Win7\\tools\\procexp.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools"
+    },
+    {
+      "Name": "Windbg Readme",
+      "Path": "%windir%\\system32\\notepad.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools",
+      "Args": [
+        "%ToolDir%\\Debuggers_Scripts\\cmdtree\\readme.txt"
+      ]
+    },
+    {
+      "Name": "Edit Environment XML",
+      "Path": "%ProgramFiles(x86)%\\Notepad++\\notepad++.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools",
+      "Args": [
+        "%ToolDir%\\LaunchEnvironment\\Environments.xml"
+      ]
+    },
+    {
+      "Name": "Open LaunchEnvironment Folder",
+      "Path": "%SystemRoot%\\explorer.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools",
+      "Args": [
+        "%LaunchEnvExeDir%"
+      ]
+    },
+    {
+      "Name": "Process Monitor",
+      "Path": "%WinDbgDir%\\Debuggers_Win7\\tools\\Procmon.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools"
+    },
+    {
+      "Name": "vmmap",
+      "Path": "%WinDbgDir%\\Debuggers_Win7\\tools\\vmmap.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools"
+    },
+    {
+      "Name": "Winobj",
+      "Path": "%WinDbgDir%\\Debuggers_Win7\\tools\\Winobj.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools"
+    },
+    {
+      "Name": "DebugView",
+      "Path": "%WinDbgDir%\\Debuggers_Win7\\tools\\DebugView.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools"
+    },
+    {
+      "Name": "Start_VS_2017_RemoteDebug",
+      "Path": "%ToolDir%\\Debuggers_Tools\\VS_RemoteTools_2017Portable\\VS_RemoteTools_2017Portable.exe",
+      "BaseDir": "%ToolDir%\\Debuggers_Tools\\VS_RemoteTools_2017Portable"
+    },
+    {
+      "Name": "Start_VS_2019_RemoteDebug",
+      "Path": "%ToolDir%\\Debuggers_Tools\\VSStudio_Remote_Tools_2019Portable\\VSStudio_Remote_Tools_2019Portable.exe",
+      "BaseDir": "%ToolDir%\\Debuggers_Tools\\VSStudio_Remote_Tools_2019Portable"
+    },
+    {
+      "Name": "Start_Remote_Windbg",
+      "Path": "%ConfigPath%\\dbgsrv.exe",
+      "Type": "DynamicApp",
+      "Style": {
+        "UseShellExecute": true
+      },
+      "Args": [
+        "-t tcp:port=5004"
+      ]
+    },
+    {
+      "Name": "WinDbg_Kernel_Mode",
+      "Path": "%WinDbgDir%\\Debuggers_Win7\\tools\\livekd.exe",
+      "BaseDir": "%WinDbgDir%\\Debuggers_Win7\\tools"
+    }
+  ],
+  // Tools Definition End
+
+  // Context Menu for List Start
+  // All the names must be defined above "Tools" section
+  "ContextMenu": [
+    "VSCode",
+    "VSStudio",
+    "Terminal",
+    "Cmd",
+    "WinDbg7",
+    "WinDbg10"
+  ],
+  // Context Menu for List End
+
+  // ToolBar Items Start
+  // All the names must be defined above "Tools" section
+  "ToolBar": [
+    {
+      "Name": "VSCode"
+    },
+    {
+      "Name": "eclipse"
+    },
+    {
+      "Name": "VSStudio"
+    },
+    {
+      "Name": "Run"
+    },
+    {
+      "Name": "Terminal"
+    },
+    {
+      "Name": "Cmd",
+      "Tools": [
+        "Cmd",
+        "Cmd-32Bit"
+      ]
+    },
+    {
+      "Name": "ConEmu",
+      "Tools": [
+        "ConEmu",
+        "ConEmu-32Bit"
+      ]
+    },
+    {
+      "Name": "WinDbgX",
+      "Tools": [
+        "WinDbgX",
+        "WinDbgX-32Bit",
+        "WinDbg",
+        "WinDbg-32Bit",
+        "WinDbg7",
+        "WinDbg7-32Bit",
+        "WinDbg10",
+        "WinDbg10-32Bit"
+      ]
+    },
+    {
+      "Name": "Python",
+      "Tools": [
+        "Python",
+        "WingIDE",
+        "Komodo"
+      ]
+    }
+  ],
+  // ToolBar Items End
+
+  // FileMenu / MenuBar Items Start
+  // All the names must be defined above "Tools" section
+  "MenuBar": [
+    {
+      "Name": "Integration",
+      "Tools": [
+        "Register Explorer ContextMenu",
+        "Write Config Registry Values",
+        "Update Python Script Folder"
+      ]
+    },
+    {
+      "Name": "Debug Tools",
+      "Tools": [
+        "Process Explorer",
+        "Process Monitor",
+        "vmmap",
+        "Winobj",
+        "DebugView",
+        "WinDbg_Kernel_Mode",
+        "Edit Environment XML",
+        "Open LaunchEnvironment Folder",
+        "Windbg Readme"
+      ]
+    },
+    {
+      "Name": "Remote Debug",
+      "Tools": [
+        "Start_VS_2017_RemoteDebug",
+        "Start_VS_2019_RemoteDebug",
+        "Start_Remote_Windbg",
+        "CodeLite"
+      ]
+    },
+    {
+      "Name": "Tools",
+      "Tools": [
+        "Show Environment",
+        "Notepad",
+        "MobXTerm",
+        "Testing"
+      ]
+    }
+  ],
+  // FileMenu / MenuBar Items End
+
+  // Apply to all environment variables start
+  "Envs": [
+    {
+      "Name": "ToolDir",
+      "Value": "C:\\Users\\krishnkr\\Documents\\Tools"
+    },
+    {
+      "Name": "WinDbgDir",
+      "Value": "C:\\Users\\krishnkr\\Documents\\Tools\\WinDBG"
+    },
+    {
+      "Name": "VSSTUDIODIR",
+      "Value": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional"
+    },
+    {
+      "Name": "ConToolsDir",
+      "Value": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional"
+    },
+    {
+      "Name": "JAVAToolsDir",
+      "Value": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional"
+    },
+    {
+      "Name": "PerlToolsDir",
+      "Value": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional"
+    },
+    {
+      "Name": "TCLToolsDir",
+      "Value": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional"
+    },
+    {
+      "Name": "NodeJSToolsDir",
+      "Value": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional"
+    }
+  ]
+  // Apply to all environment variables End
+}

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace LaunchEnvironment.Config
+namespace LaunchEnvironment.Config.EnvConfig
 {
     public class Config
     {
@@ -13,11 +13,11 @@ namespace LaunchEnvironment.Config
         {
             Id = "generic";
             Name = "Unknown";
-            Arguments = null;
+            Args = null;
             RegConfigs = null;
             Envs = null;
             CopyFiles = null;
-            BatchCmd = null;
+            Script = null;
             Style = null;
         }
         public string Name { get; set; }
@@ -33,7 +33,7 @@ namespace LaunchEnvironment.Config
         /// </summary>
         [XmlArray("Arguments")]
         [XmlArrayItem(ElementName = "Arg")]
-        public List<string> Arguments { get; set; }
+        public List<string> Args { get; set; }
         /// <summary>
         /// Add registry keys to the system
         /// </summary>
@@ -52,7 +52,7 @@ namespace LaunchEnvironment.Config
         /// </summary>
         [XmlArray("BatchFile")]
         [XmlArrayItem(ElementName = "BatchCmd")]
-        public List<string> BatchCmd { get; set; }
+        public List<string> Script { get; set; }
 
         /// <summary>
         /// If the style is set then the tool will use this value, this takes precedence

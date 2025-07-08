@@ -1,4 +1,5 @@
 ﻿using LaunchEnvironment.Config;
+using LaunchEnvironment.Config.EnvConfig;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,16 +17,16 @@ namespace LaunchEnvironment.Utility
             foreach (var item in tools)
             {
                 //TODO: dont't check if tool is available, just add it to the menu
-                if (RuntimeInfo.Inst.IsToolAvailable(item))
+                if (UserConfig.Inst.IsToolAvailable(item))
                 {
-                    var tool = RuntimeInfo.Inst.GetTool(item);
+                    var tool = UserConfig.Inst.GetTool(item);
                     var toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
                     toolStripMenuItem.Name = string.Format("{0}_{1}", rootMenu.Name, tool.Name);
                     toolStripMenuItem.Text = tool.Name;
                     toolStripMenuItem.Tag = tool.Name;
                     //toolStripMenuItem.Click += EditorsToolStripMenuItem_Click;
                     toolStripMenuItem.Click += toolStripClick;
-                    if (RuntimeInfo.Inst.ShowRunAsForAll)
+                    if (UserConfig.Inst.ShowRunAsForAll)
                     {
                         var retMenu = GenerateContextActionMenus(toolStripMenuItem.Name, toolStripMenuItem.Tag as string, actions, toolStripClick);
                         if (retMenu.Length > 0)

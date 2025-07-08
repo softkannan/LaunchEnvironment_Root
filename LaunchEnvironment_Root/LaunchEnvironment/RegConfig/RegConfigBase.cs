@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LaunchEnvironment.Config;
 using System.Reflection;
+using LaunchEnvironment.Config.EnvConfig;
 
 namespace LaunchEnvironment.RegConfig
 {
@@ -36,11 +37,11 @@ namespace LaunchEnvironment.RegConfig
             get { return Registry.CurrentUser; }
         }
 
-        public virtual void SetSonfig(Config.RegKey regConfig)
+        public virtual void SetSonfig(Config.EnvConfig.RegKey regConfig)
         {
             if (regConfig.RequireAdmin)
             {
-                if (!RuntimeInfo.Inst.IsElevated)
+                if (!UserConfig.Inst.IsElevated)
                 {
                     return;
                 }
@@ -53,7 +54,7 @@ namespace LaunchEnvironment.RegConfig
                     string regKey = regConfig.Key.Replace(@"HKEY_LOCAL_MACHINE\","");
 
                     RegistryKey rootKey = CurrentUser;
-                    if(RuntimeInfo.Inst.IsElevated)
+                    if(UserConfig.Inst.IsElevated)
                     {
                         rootKey = LocalMachine;
                     }
@@ -94,7 +95,7 @@ namespace LaunchEnvironment.RegConfig
             }
         }
 
-        private static void WriteKey(RegistryKey rootKey, string subkey, Config.RegKey regKey)
+        private static void WriteKey(RegistryKey rootKey, string subkey, Config.EnvConfig.RegKey regKey)
         {
             if(rootKey == null)
             {
@@ -172,7 +173,7 @@ namespace LaunchEnvironment.RegConfig
             }
         }
 
-        private static void WriteKey(string key, Config.RegKey regConfig)
+        private static void WriteKey(string key, Config.EnvConfig.RegKey regConfig)
         {
             Registry.SetValue(key, "", string.IsNullOrWhiteSpace(regConfig.Value) ? "" : regConfig.Value);
 
@@ -187,7 +188,7 @@ namespace LaunchEnvironment.RegConfig
             }
         }
 
-        public virtual void CleanConfig(LaunchConfig config, Config.RegKey regConfig)
+        public virtual void CleanConfig(LaunchConfig config, Config.EnvConfig.RegKey regConfig)
         {
             //if (!string.IsNullOrWhiteSpace(regConfig.Key))
             //{

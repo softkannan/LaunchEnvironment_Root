@@ -1,6 +1,8 @@
 ﻿using LaunchEnvironment.Config;
+using LaunchEnvironment.Config.EnvConfig;
 using LaunchEnvironment.Utility;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,10 +16,10 @@ using System.Xml.Serialization;
 
 namespace LaunchEnvironment.Config
 {
-    public class RuntimeInfo
+    public class UserConfig
     {
 
-        public RuntimeInfo()
+        public UserConfig()
         {
             OpenFolder = null;
             string exePath = Assembly.GetExecutingAssembly().Location;
@@ -63,7 +65,7 @@ namespace LaunchEnvironment.Config
         public string LaunchEnvExeDir
         {
             get { return _launchEnvExeDir; }
-            set
+            private set
             {
                 _launchEnvExeDir = ResolveValue.Inst.ResolveFullPath(value);
                 Environment.SetEnvironmentVariable("LaunchEnvExeDir", _launchEnvExeDir, EnvironmentVariableTarget.Process);
@@ -72,10 +74,11 @@ namespace LaunchEnvironment.Config
         }
 
         [XmlIgnore]
+        [JsonIgnore]
         public string OpenFolder { get; set; }
 
         [XmlIgnore]
-        public List<Tool> AvailableTools { get; set; }
+        public List<Tool> AvailableTools { get; private set; }
 
         [XmlIgnore]
         public bool IsElevated
@@ -113,18 +116,18 @@ namespace LaunchEnvironment.Config
             get
             {
                 string fileLocation = Assembly.GetExecutingAssembly().Location;
-                string retVal = string.Format("{0}\\Config\\CurrentConfig_{1}.xml", Path.GetDirectoryName(fileLocation), RuntimeInfo.Inst.CurrentTimeStamp);
+                string retVal = string.Format("{0}\\Config\\CurrentConfig_{1}.xml", Path.GetDirectoryName(fileLocation), UserConfig.Inst.CurrentTimeStamp);
                 return retVal;
             }
         }
 
         [XmlIgnore]
-        private static string ToolConfigFile
+        private static string ConfigFile
         {
             get
             {
                 string fileLocation = Assembly.GetExecutingAssembly().Location;
-                string retVal = string.Format("{0}\\Config\\Tools.xml", Path.GetDirectoryName(fileLocation));
+                string retVal = string.Format("{0}\\Config\\UserConfig.json", Path.GetDirectoryName(fileLocation));
                 return retVal;
             }
         }
@@ -168,7 +171,7 @@ namespace LaunchEnvironment.Config
             }
         }
 
-        public void ProcessRuntimeInfo()
+        public void Process()
         {
             //AutoDetectToolPath();
             if (Envs != null)
@@ -249,56 +252,86 @@ namespace LaunchEnvironment.Config
 
         public static void LoadConfig()
         {
-            string filePath = ToolConfigFile;
+            LoadConfigJson();
+        }
 
+        private static void LoadConfigJson()
+        {
+            string filePath = ConfigFile;
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "LaunchEnvironment.Resource.Config.Tools.xml";
+            var resourceName = "LaunchEnvironment.Resource.Config.UserConfig.json";
 
-            XmlSerializer serializer = new XmlSerializer(typeof(RuntimeInfo));
             // A FileStream is needed to read the XML document.
             using (var fs = File.Exists(filePath) ? new StreamReader(filePath) : new StreamReader(assembly.GetManifestResourceStream(resourceName)))
             {
                 try
                 {
-                    _inst = (RuntimeInfo)serializer.Deserialize(fs);
+                    var json = fs.ReadToEnd();
+                    var settings = new JsonSerializerSettings
+                    {
+                        MissingMemberHandling = MissingMemberHandling.Ignore,
+                        ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver
+                        {
+                            NamingStrategy = new Newtonsoft.Json.Serialization.DefaultNamingStrategy()
+                        }
+                    };
+                    UserConfig obj = JsonConvert.DeserializeObject<UserConfig>(json, settings);
+                    Inst = obj;
                 }
                 catch (Exception ex)
                 {
-                    ErrorLog.Inst.LogError("Unable to load Config file : {0} : {1}", filePath, ex.Message);
+                    ErrorLog.Inst.LogError($"Unable to load Config file : {filePath} : {ex.Message}");
                 }
             }
 #if !DEBUG
             if (!File.Exists(filePath))
             {
-                ErrorLog.Inst.ShowInfo("Unable to find `Tools.xml` Config file : {0}", filePath);
+                ErrorLog.Inst.ShowInfo($"Unable to find `{Path.GetFileName(filePath)}` Config file : {filePath}");
             }
 #endif
-            //if (_inst != null)
-            //{
-            //    _inst.ProcessRuntimeInfo();
-            //}
+        }
+
+        private static void LoadConfigXml()
+        {
+            string filePath = ConfigFile;
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "LaunchEnvironment.Resource.Config.UserConfig.xml";
+
+            XmlSerializer serializer = new XmlSerializer(typeof(UserConfig));
+            // A FileStream is needed to read the XML document.
+            using (var fs = File.Exists(filePath) ? new StreamReader(filePath) : new StreamReader(assembly.GetManifestResourceStream(resourceName)))
+            {
+                try
+                {
+                    Inst = (UserConfig)serializer.Deserialize(fs);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLog.Inst.LogError($"Unable to load Config file : {filePath} : {ex.Message}");
+                }
+            }
+#if !DEBUG
+            if (!File.Exists(filePath))
+            {
+                ErrorLog.Inst.ShowInfo($"Unable to find `{Path.GetFileName(filePath)}` Config file : {filePath}");
+            }
+#endif
         }
 
         public static void SaveConfig()
         {
-            string filePath = ToolConfigFile;
+            string filePath = ConfigFile;
             if (File.Exists(filePath))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(RuntimeInfo));
+                XmlSerializer serializer = new XmlSerializer(typeof(UserConfig));
                 // A FileStream is needed to read the XML document.
                 using (FileStream fs = new FileStream(filePath, FileMode.Open))
                 {
-                    serializer.Serialize(fs, _inst);
+                    serializer.Serialize(fs, Inst);
                 }
             }
         }
-        static RuntimeInfo _inst = new RuntimeInfo();
-        public static RuntimeInfo Inst
-        {
-            get
-            {
-                return _inst;
-            }
-        }
+        public static UserConfig Inst { get; private set; } = null;
     }
 }

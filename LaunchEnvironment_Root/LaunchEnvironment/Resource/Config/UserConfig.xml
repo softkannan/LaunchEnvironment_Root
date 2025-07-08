@@ -41,7 +41,7 @@ Action
   </Envs>
 </Tool>
 -->
-<RuntimeInfo>
+<UserConfig>
   <!--To run always as admin then enable this value-->
   <!--<RunasAdmin>true</RunasAdmin>-->
   <!--Default working dir / default open folder-->
@@ -495,4 +495,4 @@ Action
     -->
   </Envs>
   <!--Apply to all environment variables End-->
-</RuntimeInfo>
+</UserConfig>

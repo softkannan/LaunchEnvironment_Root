@@ -19,18 +19,44 @@ namespace LaunchEnvironment
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
+
+        #region Embedding References
+        private static readonly string[] embeddedAssemblies = new string[]
+        {
+            "Newtonsoft.Json",
+        };
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var assemblyName = args.Name.Split(',')[0]; // Get the assembly name without version and culture info
+            if (embeddedAssemblies.Length > 0 && embeddedAssemblies.Contains(assemblyName, StringComparer.OrdinalIgnoreCase))
+            {
+                var resourceName = $"LaunchEnvironment.Resource.Assembly.{assemblyName}.dll";
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                {
+                    var assemblyData = new Byte[stream.Length];
+                    stream.Read(assemblyData, 0, assemblyData.Length);
+                    return Assembly.Load(assemblyData);
+                }
+            }
+            return null; // Return null to indicate that the assembly could not be resolved
+        }
+        #endregion
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
             if (Environment.OSVersion.Version.Major >= 6)
                 SetProcessDPIAware();
 
-            RuntimeInfo.LoadConfig();
+            UserConfig.LoadConfig();
             
-            if (RuntimeInfo.Inst.RunasAdmin == false || RuntimeInfo.Inst.IsElevated)
+            if (UserConfig.Inst.RunasAdmin == false || UserConfig.Inst.IsElevated)
             {
                 //Application.SetHighDpiMode(HighDpiMode.DpiUnawareGdiScaled);
                 Application.EnableVisualStyles();

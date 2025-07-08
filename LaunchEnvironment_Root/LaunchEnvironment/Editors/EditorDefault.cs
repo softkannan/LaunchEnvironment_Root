@@ -11,6 +11,7 @@ using LaunchEnvironment.Utility;
 using System.Collections.Specialized;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using LaunchEnvironment.Config.EnvConfig;
 
 namespace LaunchEnvironment.Editors
 {
@@ -45,7 +46,7 @@ namespace LaunchEnvironment.Editors
             {
                 if (this._tool == null)
                 {
-                    _tool = RuntimeInfo.Inst.GetTool(ToolName);
+                    _tool = UserConfig.Inst.GetTool(ToolName);
                 }
                 return _tool;
             }
@@ -150,10 +151,10 @@ namespace LaunchEnvironment.Editors
             MergeArguments(toolArgument, Tool.Args, procStartInfo);
 
             //Merge selected config arguments
-            var foundConfig = config.Configs.FirstOrDefault((item) => item.Arguments != null && item.Arguments.Count > 0);
-            if (foundConfig != null && foundConfig.Arguments != null && foundConfig.Arguments.Count > 0)
+            var foundConfig = config.Configs.FirstOrDefault((item) => item.Args != null && item.Args.Count > 0);
+            if (foundConfig != null && foundConfig.Args != null && foundConfig.Args.Count > 0)
             {
-                MergeArguments(toolArgument, foundConfig.Arguments, procStartInfo);
+                MergeArguments(toolArgument, foundConfig.Args, procStartInfo);
             }
 
             var retVal = toolArgument.ToString().Trim();
@@ -181,9 +182,9 @@ namespace LaunchEnvironment.Editors
             Environment.SetEnvironmentVariable("ToolPath", fullToolPath);
             string workingDir = "";
 
-            if (Directory.Exists(RuntimeInfo.Inst.OpenFolder))
+            if (Directory.Exists(UserConfig.Inst.OpenFolder))
             {
-                workingDir = RuntimeInfo.Inst.OpenFolder.Trim();
+                workingDir = UserConfig.Inst.OpenFolder.Trim();
             }
             else if (firstConfig != null && !string.IsNullOrWhiteSpace(firstConfig.DefaultWorkspace))
             {
@@ -196,7 +197,7 @@ namespace LaunchEnvironment.Editors
 
             if (!Directory.Exists(workingDir))
             {
-                string toolWorkspace = ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.DefaultWorkspace);
+                string toolWorkspace = ResolveValue.Inst.ResolveFullPath(UserConfig.Inst.DefaultWorkspace);
                 if (Directory.Exists(toolWorkspace))
                 {
                     workingDir = toolWorkspace.Trim();
@@ -235,7 +236,7 @@ namespace LaunchEnvironment.Editors
                 {
                     var procStartInfo = new ProcessStartInfo();
 
-                    config.EditorPath = Tool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(Tool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(Tool.Name));
+                    config.EditorPath = Tool.Type == ToolType.StoreApp ? UserConfig.Inst.GetToolPath(Tool.Name) : ResolveValue.Inst.ResolveFullPath(UserConfig.Inst.GetToolPath(Tool.Name));
 
                     if (!Tool.Style.UseShellExecute)
                     {
@@ -275,7 +276,7 @@ namespace LaunchEnvironment.Editors
                     procStartInfo.Verb = "runas";
                 }
 
-                config.EditorPath = Tool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(Tool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(Tool.Name));
+                config.EditorPath = Tool.Type == ToolType.StoreApp ? UserConfig.Inst.GetToolPath(Tool.Name) : ResolveValue.Inst.ResolveFullPath(UserConfig.Inst.GetToolPath(Tool.Name));
                 var firstConfig = config.Configs.FirstOrDefault();
 
                 if (firstConfig != null && firstConfig.Style != null)
@@ -304,10 +305,10 @@ namespace LaunchEnvironment.Editors
                 var editorPath = config.EditorPath;
                 var finalResolvedArgs = ResolveArguments(config, procStartInfo).Trim();
 
-                if (firstConfig != null && firstConfig.BatchCmd != null && firstConfig.BatchCmd.Count > 0)
+                if (firstConfig != null && firstConfig.Script != null && firstConfig.Script.Count > 0)
                 {
                     // Tool will be launched using batchfile
-                    var cmdTool = RuntimeInfo.Inst.GetTool("Cmd");
+                    var cmdTool = UserConfig.Inst.GetTool("Cmd");
                     if (cmdTool != null)
                     {
                         // delete any existing batch file
@@ -323,7 +324,7 @@ namespace LaunchEnvironment.Editors
                         // create a new batch file
                         using (var batFile = new StreamWriter(batchFileName))
                         {
-                            foreach (var preCmd in firstConfig.BatchCmd)
+                            foreach (var preCmd in firstConfig.Script)
                             {
                                 string preCmdResolved = Environment.ExpandEnvironmentVariables(preCmd);
                                 if (preCmd.Length > 0 && preCmd[0] == '$')
@@ -337,7 +338,7 @@ namespace LaunchEnvironment.Editors
                         }
 
                         // get the `cmd.exe` path and pass batch file as argument
-                        editorPath = cmdTool.Type == ToolType.StoreApp ? RuntimeInfo.Inst.GetToolPath(cmdTool.Name) : ResolveValue.Inst.ResolveFullPath(RuntimeInfo.Inst.GetToolPath(cmdTool.Name));
+                        editorPath = cmdTool.Type == ToolType.StoreApp ? UserConfig.Inst.GetToolPath(cmdTool.Name) : ResolveValue.Inst.ResolveFullPath(UserConfig.Inst.GetToolPath(cmdTool.Name));
                         finalResolvedArgs = string.Format("/c \"{0}\"", batchFileName);
                     }
                 }

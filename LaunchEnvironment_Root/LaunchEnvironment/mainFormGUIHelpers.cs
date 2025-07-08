@@ -16,6 +16,7 @@ using LaunchEnvironment.Config;
 using LaunchEnvironment.Utility;
 using LaunchEnvironment.Properties;
 using LaunchEnvironment.Editors;
+using LaunchEnvironment.Config.EnvConfig;
 
 namespace LaunchEnvironment
 {
@@ -29,9 +30,9 @@ namespace LaunchEnvironment
             this._mainMenu.SuspendLayout();
             this.SuspendLayout();
 
-            Config.Configs_Root.LoadEnvironments();
+            Config.EnvConfig.EnvConfigs.LoadConfig();
 
-            RuntimeInfo.Inst.ProcessRuntimeInfo();
+            UserConfig.Inst.Process();
 
             string workingDir = "";
             if (Environment.GetCommandLineArgs().Length > 1)
@@ -39,10 +40,10 @@ namespace LaunchEnvironment
                 workingDir = Environment.GetCommandLineArgs()[1];
             }
 
-            RuntimeInfo.Inst.OpenFolder = null;
+            UserConfig.Inst.OpenFolder = null;
             if (Directory.Exists(workingDir))
             {
-                RuntimeInfo.Inst.OpenFolder = ResolveValue.Inst.ResolveEnvironmentValue(EnvironmentValueType.Path, workingDir.Trim('\"')); 
+                UserConfig.Inst.OpenFolder = ResolveValue.Inst.ResolveEnvironmentValue(EnvironmentValueType.Path, workingDir.Trim('\"')); 
             }
 
             BuildControls();
@@ -57,7 +58,7 @@ namespace LaunchEnvironment
         }
         private void BuildEnvironmentListBox()
         {
-            if (Configs_Root.Inst == null)
+            if (EnvConfigs.Inst == null)
             {
                 return;
             }
@@ -68,7 +69,7 @@ namespace LaunchEnvironment
 
             //envList.Items.Add("System Default", false);
 
-            foreach (var itemEnv in Configs_Root.Inst.Configs)
+            foreach (var itemEnv in EnvConfigs.Inst.Configs)
             {
                 _configListBox.Items.Add(itemEnv.Name, false);
             }
@@ -78,7 +79,7 @@ namespace LaunchEnvironment
                 _configListBox.SelectedIndex = 0;
             }
 
-            var newHeight = currentHeight + (Configs_Root.Inst.Configs.Count * multiplier);
+            var newHeight = currentHeight + (EnvConfigs.Inst.Configs.Count * multiplier);
             if(newHeight > formMaxHeight)
             {
                 this.Height = formMaxHeight;
@@ -95,7 +96,7 @@ namespace LaunchEnvironment
             List<ActionVerb> actions = new List<ActionVerb>();
 
             actions.Add(new ActionVerb() { Name = "Run", Verb = "" });
-            if (!RuntimeInfo.Inst.IsElevated)
+            if (!UserConfig.Inst.IsElevated)
             {
                 actions.Add(new ActionVerb() { Name = "RunAs Admin", Verb = "runas" });
             }
@@ -105,18 +106,18 @@ namespace LaunchEnvironment
             _runAsContext.Items.AddRange(runAsContextMenuItems);
 
             //Build main tool bar
-            if (RuntimeInfo.Inst.ToolBar != null && RuntimeInfo.Inst.ToolBar.Count > 0)
+            if (UserConfig.Inst.ToolBar != null && UserConfig.Inst.ToolBar.Count > 0)
             {
-                GenerateToolbar(_mainToolBar, RuntimeInfo.Inst.ToolBar, actions);
+                GenerateToolbar(_mainToolBar, UserConfig.Inst.ToolBar, actions);
             }
 
             //Build main menu bar Tools, Editors, Integration
-            RuntimeInfo.Inst.UpdateMenuBar(_mainMenu, actions, ToolButtonOrContextMenuItem_Click);
+            UserConfig.Inst.UpdateMenuBar(_mainMenu, actions, ToolButtonOrContextMenuItem_Click);
 
             //Build config context menu
-            if (RuntimeInfo.Inst.ContextMenu != null && RuntimeInfo.Inst.ContextMenu.Count > 0)
+            if (UserConfig.Inst.ContextMenu != null && UserConfig.Inst.ContextMenu.Count > 0)
             {
-                GenerateContextMenu(_configListContextMenu, RuntimeInfo.Inst.ContextMenu);
+                GenerateContextMenu(_configListContextMenu, UserConfig.Inst.ContextMenu);
             }
         }
 
@@ -124,7 +125,7 @@ namespace LaunchEnvironment
         {
             foreach(var item in menuItems)
             {
-                if (RuntimeInfo.Inst.IsToolAvailable(item))
+                if (UserConfig.Inst.IsToolAvailable(item))
                 {
                     var toolStripMenuItem = new ToolStripMenuItem();
                     toolStripMenuItem.Name = string.Format("{0}_{1}", rootMenu.Name, item);
@@ -147,10 +148,10 @@ namespace LaunchEnvironment
                     bool toolAvaialble = false;
                     var splitButton = new ToolStripSplitButton();
                     splitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-                    var imgFile = string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, item.Name);
+                    var imgFile = string.Format(@"{0}\Resource\img\{1}.png", UserConfig.Inst.LaunchEnvExeDir, item.Name);
                     if (!File.Exists(imgFile))
                     {
-                        imgFile = string.Format(@"{0}\Resource\img\App.png", RuntimeInfo.Inst.LaunchEnvExeDir);
+                        imgFile = string.Format(@"{0}\Resource\img\App.png", UserConfig.Inst.LaunchEnvExeDir);
                     }
                     splitButton.Image = Image.FromFile(imgFile);
                     splitButton.Name = string.Format("{0}_toolStripBttn{1}",rootToolStrip.Name,item.Name);
@@ -160,22 +161,22 @@ namespace LaunchEnvironment
 
                     foreach(var splitItem in item.Tools)
                     {
-                        if (RuntimeInfo.Inst.IsToolAvailable(splitItem))
+                        if (UserConfig.Inst.IsToolAvailable(splitItem))
                         {
-                            var tool = RuntimeInfo.Inst.GetTool(splitItem);
+                            var tool = UserConfig.Inst.GetTool(splitItem);
                             toolAvaialble = true;
                             var toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-                            imgFile = string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, tool.Name);
+                            imgFile = string.Format(@"{0}\Resource\img\{1}.png", UserConfig.Inst.LaunchEnvExeDir, tool.Name);
                             if(!File.Exists(imgFile))
                             {
-                                imgFile = string.Format(@"{0}\Resource\img\App.png", RuntimeInfo.Inst.LaunchEnvExeDir);
+                                imgFile = string.Format(@"{0}\Resource\img\App.png", UserConfig.Inst.LaunchEnvExeDir);
                             }
                             toolStripMenuItem.Image = Image.FromFile(imgFile);
                             toolStripMenuItem.Name = string.Format("{0}_toolStripBttn{1}_{2}", rootToolStrip.Name, item.Name, tool.Name);
                             toolStripMenuItem.Text = tool.Name;
                             toolStripMenuItem.Tag = tool.Name;
                             toolStripMenuItem.Click += ToolButtonOrContextMenuItem_Click;
-                            if (RuntimeInfo.Inst.ShowRunAsForAll)
+                            if (UserConfig.Inst.ShowRunAsForAll)
                             {
                                 var retMenu = GUIUtility.GenerateContextActionMenus(toolStripMenuItem.Name, toolStripMenuItem.Tag as string, actions, ToolButtonOrContextMenuItem_Click);
                                 if (retMenu.Length > 0)
@@ -198,15 +199,15 @@ namespace LaunchEnvironment
                     var splitItem = item.Tools != null && item.Tools.Count > 0 ? item.Tools.FirstOrDefault() : item.Name;
                     if (splitItem != null)
                     {
-                        if (RuntimeInfo.Inst.IsToolAvailable(splitItem))
+                        if (UserConfig.Inst.IsToolAvailable(splitItem))
                         {
-                            var tool = RuntimeInfo.Inst.GetTool(splitItem);
+                            var tool = UserConfig.Inst.GetTool(splitItem);
                             ToolStripItem stripButton = new ToolStripButton(); 
                             stripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-                            var imgFile = string.Format(@"{0}\Resource\img\{1}.png", RuntimeInfo.Inst.LaunchEnvExeDir, tool.Name);
+                            var imgFile = string.Format(@"{0}\Resource\img\{1}.png", UserConfig.Inst.LaunchEnvExeDir, tool.Name);
                             if (!File.Exists(imgFile))
                             {
-                                imgFile = string.Format(@"{0}\Resource\img\App.png", RuntimeInfo.Inst.LaunchEnvExeDir);
+                                imgFile = string.Format(@"{0}\Resource\img\App.png", UserConfig.Inst.LaunchEnvExeDir);
                             }
                             stripButton.Image = Image.FromFile(imgFile);
                             stripButton.Name = string.Format("{0}_toolStripBttn{1}", rootToolStrip.Name, tool.Name);
@@ -225,8 +226,8 @@ namespace LaunchEnvironment
         private LaunchConfig BuildLaunchConfig()
         {
             LaunchConfig config = new LaunchConfig();
-            config.WorkingDir = RuntimeInfo.Inst.OpenFolder;
-            config.Configs = new List<Config.Config>();
+            config.WorkingDir = UserConfig.Inst.OpenFolder;
+            config.Configs = new List<Config.EnvConfig.Config>();
 
             for (int index = 0; index < _configListBox.Items.Count; index++)
             {
@@ -235,7 +236,7 @@ namespace LaunchEnvironment
                     string envName = _configListBox.Items[index] as string;
                     if (envName != null)
                     {
-                        var item = Configs_Root.Inst.Configs.FirstOrDefault((a) => string.Compare(a.Name, envName, true) == 0);
+                        var item = EnvConfigs.Inst.Configs.FirstOrDefault((a) => string.Compare(a.Name, envName, true) == 0);
                         if (item != null)
                         {
                             config.Configs.Add(item);
@@ -251,7 +252,7 @@ namespace LaunchEnvironment
                     string envName = _configListBox.SelectedItem as string;
                     if (envName != null)
                     {
-                        var item = Configs_Root.Inst.Configs.FirstOrDefault((a) => string.Compare(a.Name, envName, true) == 0);
+                        var item = EnvConfigs.Inst.Configs.FirstOrDefault((a) => string.Compare(a.Name, envName, true) == 0);
                         if (item != null)
                         {
                             config.Configs.Add(item);
@@ -271,10 +272,10 @@ namespace LaunchEnvironment
 
             foreach (var item in allFiles)
             {
-                Config.LaunchConfig localConfig = null;
+                Config.EnvConfig.LaunchConfig localConfig = null;
                 if (File.Exists(item))
                 {
-                    localConfig = Config.LaunchConfig.LoadCurrentConfig(item);
+                    localConfig = Config.EnvConfig.LaunchConfig.LoadCurrentConfig(item);
 
                     try
                     {
@@ -288,7 +289,7 @@ namespace LaunchEnvironment
 
                 if (localConfig != null)
                 {
-                    var genericTool = Editors.EditorFactory.Inst.GetEditor(RuntimeInfo.Generic);
+                    var genericTool = Editors.EditorFactory.Inst.GetEditor(UserConfig.Generic);
                     genericTool.CleanConfig(localConfig);
                 }
             }

@@ -14,7 +14,7 @@ namespace LaunchEnvironment.Utility
     {
         public static bool RegisterContextMenu()
         {
-            if (!Debugger.IsAttached && RuntimeInfo.Inst.IsElevated)
+            if (!Debugger.IsAttached && UserConfig.Inst.IsElevated)
             {
                 //Registry.SetValue(@"HKEY_CLASSES_ROOT\Folder\shell\LaunchEnvironment\command", "", string.Format("{0} \"%1\"", Assembly.GetExecutingAssembly().Location));
 
@@ -26,7 +26,7 @@ namespace LaunchEnvironment.Utility
 
                 return true;
             }
-            else if (!Debugger.IsAttached && !RuntimeInfo.Inst.IsElevated)
+            else if (!Debugger.IsAttached && !UserConfig.Inst.IsElevated)
             {
 
                 Registry.SetValue(@"HKEY_CURRENT_USER\Software\Classes\Directory\shell\LaunchEnvironment\command", "", string.Format("{0} \"%V\"", Assembly.GetExecutingAssembly().Location));

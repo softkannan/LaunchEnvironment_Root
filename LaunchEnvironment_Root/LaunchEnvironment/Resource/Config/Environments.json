@@ -1,0 +1,177 @@
+/*
+Auto Enviroement variables
+%LaunchEnvExeDir% => LaunchEnvironment.exe folder
+%OpenFolder% => Tool Launch folder
+%ToolPath% => Tool path entry in tool definition
+%ConfigPath% => Config path entry in config definition
+
+// Config entry
+{
+  "Name": "Config name",
+  "Id": "unique environment id(no space)",
+  "ConfigPath": "config / enviroment path",
+  "DefaultWorkspace": " for given config working dir / open folder path",
+  "CopyFiles": [
+    {
+      //If bellow source file matches given combination then copy that file to destination folder.
+      "SrcPath": "launch.%ConfigId%.%ToolId%.json",
+      "DestPath": "%OpenFolder%\\.VSCode\\launch.json"
+    }
+  ],
+  "Args": [
+    "tool argument, if argument contains environment varible then if all the variables declared then only given argument is included",
+    "Arg2"
+  ],
+  "RegConfigs": [
+    {
+      //default false
+      "RequireAdmin": false,
+      "Type": "None/String(default)/ExpandString/Binary/DWord/MultiString/QWord/Path",
+      "Action": "Append/Overwrite(default)/Prefix",
+      "Key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{GUID}",
+      "Value": "UninstallString",
+      "RegValue": {
+        "Type": "None/String/ExpandString/Binary/DWord/MultiString/QWord/Path(default)",
+        "Action": "Append/Overwrite(default)/Prefix",
+        "Name": "UninstallString",
+        "Value": "msiexec.exe /x {GUID} /qn"
+      }
+    }
+  ],
+  "Envs": [
+    {
+      "Type": "None/String/ExpandString/Binary/DWord/MultiString/QWord/Path(default)",
+      "Action": "Append/Overwrite/Prefix(default)",
+      "Name": "PYTHONHOME",
+      "Value": "%ToolDir%\\Anaconda37"
+    },
+    {
+      "Name": "PYTHONHOME",
+      "Value": "%PYTHONHOME%"
+    },
+    {
+      "Name": "PATH",
+      "Value": "%PYTHONHOME%;%PYTHONHOME%\\Scripts"
+    }
+  ],
+  "Script": [
+    "call \\\"%VSSTUDIODIR%\\Common7\\Tools\\vsdevcmd.bat\\\" -arch=arm",
+    //Prefixing the command line $ indicates this templated string
+    "$\"{editorpath}\" \"{args}\""
+  ],
+  "Style": {
+    "UseShellExecute": true,
+    "ExecuteAsAdmin": false,
+    "CreateNoWindow": true,
+    "WindowStyle": "Normal/Hidden/Minimized/Maximized"
+  }
+},
+
+*/
+{
+  "Configs": [
+    {
+      "Name": "System Default",
+      "Id": "none",
+      "ConfigPath": "%userprofile%\\Desktop"
+    },
+    {
+      "Name": "VisualStudio Command Prompt",
+      "Id": "VSStudio",
+      "ConfigPath": "%VS140COMNTOOLS%",
+      "Script": [
+        "call \"%VS140COMNTOOLS%VsDevCmd.bat\"",
+        "$start \"{editorpath}\" \"{args}\""
+      ],
+      "Style": {
+        "UseShellExecute": "true"
+      }
+    },
+    {
+      "Name": "VisualStudio Command Prompt 2022 x86",
+      "Id": "VSStudio",
+      "ConfigPath": "%VSSTUDIODIR%\\Common7\\Tools",
+      "BatchFile": [
+        "call \"%VSSTUDIODIR%\\Common7\\Tools\\vsdevcmd.bat\" -arch=x86",
+        "$\"{editorpath}\" \"{args}\""
+      ],
+      "Style": {
+        "UseShellExecute": "false",
+        "CreateNoWindow": "true",
+        "WindowStyle": "Hidden"
+      }
+    },
+    {
+      "Name": "VisualStudio Command Prompt 2022 x64",
+      "Id": "VSStudio",
+      "ConfigPath": "%VSSTUDIODIR%\\Common7\\Tools",
+      "BatchFile": [
+        "call \"%VSSTUDIODIR%\\Common7\\Tools\\vsdevcmd.bat\" -arch=amd64",
+        "$\"{editorpath}\" \"{args}\""
+      ],
+      "Style": {
+        "UseShellExecute": "false",
+        "CreateNoWindow": "true",
+        "WindowStyle": "Hidden"
+      }
+    },
+    {
+      "Name": "VisualStudio Command Prompt 2022 ARM",
+      "Id": "VSStudio",
+      "ConfigPath": "%VSSTUDIODIR%\\Common7\\Tools",
+      "BatchFile": [
+        "call \"%VSSTUDIODIR%\\Common7\\Tools\\vsdevcmd.bat\" -arch=arm",
+        "$\"{editorpath}\" \"{args}\""
+      ],
+      "Style": {
+        "UseShellExecute": "false",
+        "CreateNoWindow": "true",
+        "WindowStyle": "Hidden"
+      }
+    },
+    {
+      "Name": "VisualStudio Command Prompt 2022 ARM64",
+      "Id": "VSStudio",
+      "ConfigPath": "%VSSTUDIODIR%\\Common7\\Tools",
+      "BatchFile": [
+        "call \"%VSSTUDIODIR%\\Common7\\Tools\\vsdevcmd.bat\" -arch=arm64",
+        "$\"{editorpath}\" \"{args}\""
+      ],
+      "Style": {
+        "UseShellExecute": "false",
+        "CreateNoWindow": "true",
+        "WindowStyle": "Hidden"
+      }
+    },
+    {
+      "Name": "Windbg",
+      "Id": "WinDbg",
+      "ConfigPath": "%WinDbgDir%\\Debuggers\\Windbg",
+      "Envs": [
+        {
+          "Name": "PATH",
+          "Value": "%WinDbgDir%\\Debuggers\\Scripts"
+        },
+        {
+          "Name": "Scripts",
+          "Value": "%WinDbgDir%\\Debuggers\\Scripts"
+        },
+        {
+          "Name": "_NT_SYMBOL_PATH",
+          "Value": "srv*C:\\DebugSymbols\\Microsoft*https://msdl.microsoft.com/download/symbols"
+        }
+      ]
+    },
+    {
+      "Name": "GhostScript",
+      "Id": "GhostScript",
+      "ConfigPath": "%ProgramFiles%\\gs\\bin",
+      "Envs": [
+        {
+          "Name": "PATH",
+          "Value": "%ProgramFiles%\\gs\\bin"
+        }
+      ]
+    }
+  ]
+}
